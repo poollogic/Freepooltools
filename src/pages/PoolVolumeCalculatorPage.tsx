@@ -366,63 +366,85 @@ const SlopeProfile: React.FC<SlopeProfileProps> = ({
   const yShallow = depthToY(shallowDepthFt);
   const yDeep = depthToY(deepDepthFt);
 
-  const draggingRef = React.useRef<'shallow' | 'deep' | null>(null);
-  // Distance (in ft) between where the finger grabbed and the handle's actual
-  // position, captured on pointer-down. Applied during the drag so the handle
-  // tracks the finger *relatively* — no jump when you grab the strip a little
-  // off-center from the dot. This is what makes touch dragging feel clean.
-  const grabOffsetRef = React.useRef(0);
+  // Active-drag state. Captured on pointer-down and held in a ref so the
+  // window-level listeners below read it without re-binding each render.
+  // `total` and `other` (the non-dragged handle) don't change during a single
+  // drag, so capturing them once avoids any stale-closure math.
+  const draggingRef = React.useRef<{
+    which: 'shallow' | 'deep';
+    /** ft between where the finger grabbed and the handle's actual position —
+        applied during the drag so the handle tracks the finger relatively (no
+        jump when you grab the strip a little off-center from the dot). */
+    grabOffsetFt: number;
+    total: number;
+    other: number;
+  } | null>(null);
 
-  const pointerToFt = (e: React.PointerEvent) => {
+  // `onChange` can change identity between renders; keep the latest in a ref so
+  // the once-bound window listeners never call a stale closure.
+  const onChangeRef = React.useRef(onChange);
+  onChangeRef.current = onChange;
+
+  const clientXToFt = (clientX: number, total: number) => {
     const rect = svgRef.current!.getBoundingClientRect();
-    const svgX = ((e.clientX - rect.left) / rect.width) * VB_W;
-    return xToFt(svgX);
+    const svgX = ((clientX - rect.left) / rect.width) * VB_W;
+    return total > 0 ? ((svgX - PAD_X) / innerW) * total : 0;
   };
+
+  // Bound to `window` for the duration of a drag (see onPointerDown) rather than
+  // relying on the SVG's own pointer handlers + setPointerCapture, which is
+  // unreliable on iOS Safari: capture on SVG elements can drop mid-gesture, so
+  // the handle "stuck" until you lifted and re-tapped. window listeners always
+  // fire, so the drag is continuous.
+  const handleWindowMove = React.useCallback((e: PointerEvent) => {
+    const d = draggingRef.current;
+    if (!d || !svgRef.current) return;
+    const ft = Math.max(0, Math.min(d.total, clientXToFt(e.clientX, d.total) + d.grabOffsetFt));
+    if (d.which === 'shallow') {
+      const maxLs = Math.max(0, d.total - d.other);
+      onChangeRef.current(Math.min(ft, maxLs), d.other);
+    } else {
+      const ld = Math.max(0, Math.min(d.total - ft, d.total - d.other));
+      onChangeRef.current(d.other, ld);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Only attached during an active drag, so it can unconditionally
+  // preventDefault to stop iOS treating the drag as a page scroll/rubber-band.
+  // (touch-action:none is unreliable on SVG in WebKit, and React's onTouchMove
+  // is passive so it can't preventDefault — we attach this natively.)
+  const blockScroll = React.useCallback((e: TouchEvent) => {
+    e.preventDefault();
+  }, []);
+
+  const endDrag = React.useCallback(() => {
+    draggingRef.current = null;
+    window.removeEventListener('pointermove', handleWindowMove);
+    window.removeEventListener('pointerup', endDrag);
+    window.removeEventListener('pointercancel', endDrag);
+    document.removeEventListener('touchmove', blockScroll);
+  }, [handleWindowMove, blockScroll]);
 
   const onPointerDown = (which: 'shallow' | 'deep') => (e: React.PointerEvent) => {
     if (!svgRef.current) return;
     e.preventDefault();
     const handleFt = which === 'shallow' ? shallowLenFt : totalLenFt - deepLenFt;
-    grabOffsetRef.current = handleFt - pointerToFt(e);
-    // Capture on the SVG itself so subsequent pointermove/pointerup fire on the
-    // SVG handlers even if the finger slides off the strip.
-    svgRef.current.setPointerCapture?.(e.pointerId);
-    draggingRef.current = which;
+    draggingRef.current = {
+      which,
+      grabOffsetFt: handleFt - clientXToFt(e.clientX, totalLenFt),
+      total: totalLenFt,
+      other: which === 'shallow' ? deepLenFt : shallowLenFt,
+    };
     onInteract?.();
-  };
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!draggingRef.current || !svgRef.current) return;
-    const ft = Math.max(0, Math.min(totalLenFt, pointerToFt(e) + grabOffsetRef.current));
-    if (draggingRef.current === 'shallow') {
-      // shallow length: can't exceed total - current deep
-      const maxLs = Math.max(0, totalLenFt - deepLenFt);
-      onChange(Math.min(ft, maxLs), deepLenFt);
-    } else {
-      // deep start in ft → deep length = total - start
-      const ld = Math.max(0, Math.min(totalLenFt - ft, totalLenFt - shallowLenFt));
-      onChange(shallowLenFt, ld);
-    }
-  };
-  const onPointerUp = () => {
-    draggingRef.current = null;
+    window.addEventListener('pointermove', handleWindowMove);
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+    document.addEventListener('touchmove', blockScroll, { passive: false });
   };
 
-  // iOS Safari does NOT reliably honor `touch-action: none` on SVG elements
-  // (a long-standing WebKit quirk — it's respected on HTML, ignored on SVG).
-  // Without this, dragging a handle is read as a page scroll: iOS fires
-  // pointercancel and the handle stops tracking the finger. A non-passive
-  // native touchmove listener that preventDefaults *only while dragging* stops
-  // the scroll so the pointer drag survives. (React's onTouchMove is passive,
-  // so it can't preventDefault — we must attach this manually.)
-  React.useEffect(() => {
-    const el = svgRef.current;
-    if (!el) return;
-    const blockScrollWhileDragging = (e: TouchEvent) => {
-      if (draggingRef.current) e.preventDefault();
-    };
-    el.addEventListener('touchmove', blockScrollWhileDragging, { passive: false });
-    return () => el.removeEventListener('touchmove', blockScrollWhileDragging);
-  }, []);
+  // Clean up listeners if the component unmounts mid-drag.
+  React.useEffect(() => endDrag, [endDrag]);
 
   // Pool outline path — reused for the water fill AND as a clip so the ripple
   // texture never spills outside the water.
@@ -444,10 +466,7 @@ const SlopeProfile: React.FC<SlopeProfileProps> = ({
       role="img"
       aria-label="Pool side profile — drag the handles to set the shallow and deep sections"
       className="w-full h-auto touch-none select-none"
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerLeave={onPointerUp}
-      onPointerCancel={onPointerUp}
+      style={{ touchAction: 'none' }}
     >
       <defs>
         {/* Water body: bright near the surface, deepening toward the floor. */}
@@ -839,6 +858,11 @@ const PoolVolumeCalculatorInner = () => {
   // length, re-derived on the fly from the current length input.
   const [shallowLenFt, setShallowLenFt] = useState<number | null>(null);
   const [deepLenFt, setDeepLenFt] = useState<number | null>(null);
+  // Which section-length field is being typed into. While focused the input
+  // shows the user's raw keystrokes (so decimals type cleanly); otherwise it
+  // mirrors the live value from the drag handles.
+  const [editingSection, setEditingSection] = useState<null | 'shallow' | 'deep'>(null);
+  const [sectionDraft, setSectionDraft] = useState('');
 
   // Top-level mode (Pool / Pool + Spa / Spa). Drives which fields render.
   const [calcMode, setCalcMode] = useState<CalcMode>('pool');
@@ -1505,28 +1529,94 @@ const PoolVolumeCalculatorInner = () => {
                     <div className="rounded-xl border border-line bg-card p-3 sm:p-4">
                       {totalLenFt > 0 && shallowDepthFt > 0 && deepDepthFt > 0 ? (
                         <>
-                          {/* Live section readouts — ABOVE the diagram so they're
+                          {/* Section lengths — ABOVE the diagram so they're
                               readable and never hidden under your finger while
-                              dragging. Update in real time as the handles move. */}
-                          <div className="grid grid-cols-3 gap-2 mb-3">
-                            {(
-                              [
-                                ['Shallow', effShallowLenFt],
-                                ['Slope', Math.max(0, totalLenFt - effShallowLenFt - effDeepLenFt)],
-                                ['Deep', effDeepLenFt],
-                              ] as [string, number][]
-                            ).map(([label, ft]) => (
-                              <div key={label} className="rounded-lg border border-line bg-card-2 px-2 py-2 text-center">
-                                <div className="text-[10px] font-semibold uppercase tracking-wide text-subtle">
-                                  {label}
+                              dragging. Shallow + Deep are editable (type exact
+                              values as an alternative to dragging); Slope is
+                              derived. All update live as the handles move. */}
+                          {(() => {
+                            const ftToUser = (ft: number) => (unitL === 'm' ? ft / FT_PER_M : ft);
+                            const userToFt = (v: number) => (unitL === 'm' ? v * FT_PER_M : v);
+                            const round1 = (n: number) => Math.round(n * 10) / 10;
+                            const slopeFt = Math.max(0, totalLenFt - effShallowLenFt - effDeepLenFt);
+                            const cellCls =
+                              'rounded-lg border border-line bg-card-2 px-2 py-2 text-center';
+                            const labelCls =
+                              'text-[10px] font-semibold uppercase tracking-wide text-subtle';
+                            const inputCls =
+                              'w-full bg-transparent text-center text-sm sm:text-base font-bold text-fg ' +
+                              'tabular-nums leading-tight mt-0.5 outline-none rounded ' +
+                              'focus:ring-2 focus:ring-brand-orange/60';
+                            const onEdit =
+                              (which: 'shallow' | 'deep') =>
+                              (e: React.ChangeEvent<HTMLInputElement>) => {
+                                const v = e.target.value;
+                                setSectionDraft(v);
+                                const n = parseFloat(v);
+                                if (!Number.isFinite(n) || n < 0) return;
+                                const ft = userToFt(n);
+                                if (which === 'shallow') {
+                                  setShallowLenFt(Math.min(ft, Math.max(0, totalLenFt - effDeepLenFt)));
+                                } else {
+                                  setDeepLenFt(Math.min(ft, Math.max(0, totalLenFt - effShallowLenFt)));
+                                }
+                              };
+                            const fieldValue = (which: 'shallow' | 'deep', ft: number) =>
+                              editingSection === which ? sectionDraft : String(round1(ftToUser(ft)));
+                            return (
+                              <div className="grid grid-cols-3 gap-2 mb-3">
+                                <div className={cellCls}>
+                                  <label htmlFor="shallowLen" className={labelCls}>Shallow</label>
+                                  <div className="flex items-baseline justify-center">
+                                    <input
+                                      id="shallowLen"
+                                      type="number"
+                                      inputMode="decimal"
+                                      min="0"
+                                      value={fieldValue('shallow', effShallowLenFt)}
+                                      onFocus={() => {
+                                        setEditingSection('shallow');
+                                        setSectionDraft(String(round1(ftToUser(effShallowLenFt))));
+                                      }}
+                                      onChange={onEdit('shallow')}
+                                      onBlur={() => setEditingSection(null)}
+                                      className={inputCls}
+                                      aria-label={`Shallow section length in ${unitL}`}
+                                    />
+                                    <span className="text-subtle font-medium text-xs ml-0.5">{unitL}</span>
+                                  </div>
                                 </div>
-                                <div className="text-sm sm:text-base font-bold text-fg tabular-nums leading-tight mt-0.5">
-                                  {(unitL === 'm' ? ft / FT_PER_M : ft).toFixed(1)}
-                                  <span className="text-subtle font-medium text-xs ml-0.5">{unitL}</span>
+                                <div className={cellCls}>
+                                  <div className={labelCls}>Slope</div>
+                                  <div className="text-sm sm:text-base font-bold text-fg tabular-nums leading-tight mt-0.5">
+                                    {round1(ftToUser(slopeFt))}
+                                    <span className="text-subtle font-medium text-xs ml-0.5">{unitL}</span>
+                                  </div>
+                                </div>
+                                <div className={cellCls}>
+                                  <label htmlFor="deepLen" className={labelCls}>Deep</label>
+                                  <div className="flex items-baseline justify-center">
+                                    <input
+                                      id="deepLen"
+                                      type="number"
+                                      inputMode="decimal"
+                                      min="0"
+                                      value={fieldValue('deep', effDeepLenFt)}
+                                      onFocus={() => {
+                                        setEditingSection('deep');
+                                        setSectionDraft(String(round1(ftToUser(effDeepLenFt))));
+                                      }}
+                                      onChange={onEdit('deep')}
+                                      onBlur={() => setEditingSection(null)}
+                                      className={inputCls}
+                                      aria-label={`Deep section length in ${unitL}`}
+                                    />
+                                    <span className="text-subtle font-medium text-xs ml-0.5">{unitL}</span>
+                                  </div>
                                 </div>
                               </div>
-                            ))}
-                          </div>
+                            );
+                          })()}
                           <SlopeProfile
                             totalLenFt={totalLenFt}
                             widthFt={widthFt}
@@ -1545,7 +1635,7 @@ const PoolVolumeCalculatorInner = () => {
                             }}
                           />
                           <p className="text-xs text-subtle mt-2 text-center">
-                            Drag the orange handles to set where the slope starts and ends.
+                            Drag the orange handles to set where the slope starts and ends — or type the Shallow and Deep lengths above.
                           </p>
                         </>
                       ) : (
