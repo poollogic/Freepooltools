@@ -19,6 +19,7 @@ type State = {
   ta: string;
   ch: string;
   temp: string;
+  cya: string;
   poolType: PoolType;
 };
 
@@ -27,6 +28,7 @@ const DEFAULTS: State = {
   ta: '90',
   ch: '300',
   temp: '80',
+  cya: '0',
   poolType: 'chlorine',
 };
 
@@ -35,6 +37,7 @@ const SCHEMA = {
   ta: { param: 'ta', ...codecs.numStr() },
   ch: { param: 'ch', ...codecs.numStr() },
   temp: { param: 't', ...codecs.numStr() },
+  cya: { param: 'cya', ...codecs.numStr() },
   poolType: { param: 'type', ...codecs.oneOf(['chlorine', 'salt'] as const) },
 } satisfies ShareSchema<State>;
 
@@ -48,7 +51,7 @@ const ZONE_COLOR: Record<LsiZone, string> = {
 };
 
 const READINGS: {
-  key: 'ph' | 'ta' | 'ch' | 'temp';
+  key: 'ph' | 'ta' | 'ch' | 'temp' | 'cya';
   label: string;
   unit: string;
   min: number;
@@ -56,11 +59,14 @@ const READINGS: {
   step: number;
   majorEvery: number;
   ideal: string;
+  optional?: boolean;
+  hint?: string;
 }[] = [
   { key: 'ph', label: 'pH', unit: '', min: 6.2, max: 8.6, step: 0.1, majorEvery: 5, ideal: '7.4–7.6' },
   { key: 'ta', label: 'Total alkalinity', unit: 'ppm', min: 0, max: 240, step: 10, majorEvery: 5, ideal: '60–120 ppm' },
   { key: 'ch', label: 'Calcium hardness', unit: 'ppm', min: 0, max: 800, step: 25, majorEvery: 4, ideal: '200–400 ppm' },
   { key: 'temp', label: 'Water temperature', unit: '°F', min: 40, max: 104, step: 2, majorEvery: 5, ideal: '—' },
+  { key: 'cya', label: 'Cyanuric acid (CYA)', unit: 'ppm', min: 0, max: 120, step: 10, majorEvery: 5, ideal: '30–50 ppm', optional: true, hint: 'Optional — set 0 if you don’t use stabilizer. Above 0 we subtract the cyanurate share from alkalinity for a truer LSI.' },
 ];
 
 const FAQS: { q: string; a: string }[] = [
@@ -74,7 +80,11 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'How is the LSI calculated?',
-    a: 'LSI = pH + temperature factor + calcium factor + alkalinity factor − a TDS constant. The three factors come from the NSPF/industry standard lookup tables (each reading maps to a factor), and the TDS constant is 12.1 for traditional pools or 12.2 for saltwater pools. This calculator does all of that for you — just slide in your test readings and read the result.',
+    a: 'LSI = pH + temperature factor + calcium factor + alkalinity factor − a TDS constant. The three factors come from the NSPF/industry standard lookup tables (each reading maps to a factor), and the TDS constant is 12.1 for traditional pools or 12.2 for saltwater pools. If you enter cyanuric acid, the calculator first subtracts its share from your alkalinity (see below) so the alkalinity factor uses true carbonate alkalinity. Just slide in your readings and read the result.',
+  },
+  {
+    q: 'Does cyanuric acid (CYA) affect the LSI?',
+    a: 'Yes, indirectly. A total-alkalinity test also titrates cyanurate, so CYA makes your TA read higher than the carbonate alkalinity the LSI actually depends on. The fix is to subtract the cyanurate portion before computing the alkalinity factor — roughly a third of your CYA at typical pH, and the exact share rises with pH. Enter your CYA above (it’s optional) and this calculator does that correction for you, which matters most for high-stabilizer pools (CYA 80+ ppm), where ignoring it makes the water look more scaling than it really is.',
   },
   {
     q: 'How do I raise or lower my LSI?',
@@ -126,12 +136,13 @@ export const LsiCalculatorPage = () => {
   });
 
   const { state, set, shareUrl } = useShareableState<State>(DEFAULTS, SCHEMA);
-  const { ph, ta, ch, temp, poolType } = state;
+  const { ph, ta, ch, temp, cya, poolType } = state;
 
   const result = useMemo(
-    () => computeLsi({ ph: num(ph), ta: num(ta), ch: num(ch), tempF: num(temp), poolType }),
-    [ph, ta, ch, temp, poolType],
+    () => computeLsi({ ph: num(ph), ta: num(ta), ch: num(ch), tempF: num(temp), cya: num(cya), poolType }),
+    [ph, ta, ch, temp, cya, poolType],
   );
+  const cyaCorrected = num(cya) > 0 && result.cyanurateAlk > 0;
 
   const color = ZONE_COLOR[result.zone];
   const isBalanced = result.zone === 'balanced';
@@ -175,7 +186,12 @@ export const LsiCalculatorPage = () => {
               return (
                 <div key={r.key} className="rounded-2xl border border-line bg-card-2/50 p-4">
                   <div className="flex items-baseline justify-between gap-3">
-                    <label className="text-sm font-semibold text-muted">{r.label}</label>
+                    <label className="text-sm font-semibold text-muted inline-flex items-center gap-2">
+                      {r.label}
+                      {r.optional && (
+                        <span className="rounded-full border border-line bg-card-3 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-subtle">Optional</span>
+                      )}
+                    </label>
                     <div className="flex items-baseline gap-1.5">
                       <span className="font-display font-bold text-fg text-2xl tabular-nums">{display}</span>
                       {r.unit && <span className="text-sm text-subtle">{r.unit}</span>}
@@ -190,9 +206,11 @@ export const LsiCalculatorPage = () => {
                     value={num(state[r.key])}
                     onChange={(n) => set(r.key, String(n))}
                   />
-                  {r.ideal !== '—' && (
+                  {r.hint ? (
+                    <p className="mt-1.5 text-[11px] text-subtle">{r.hint}</p>
+                  ) : r.ideal !== '—' ? (
                     <p className="mt-1.5 text-[11px] text-subtle">Typical target: {r.ideal}</p>
-                  )}
+                  ) : null}
                 </div>
               );
             })}
@@ -242,6 +260,11 @@ export const LsiCalculatorPage = () => {
               <span className="text-subtle transition-transform duration-200 group-open:rotate-45 group-open:text-brand-orange"><Plus className="w-4 h-4" /></span>
             </summary>
             <div className="px-4 pb-4">
+              {cyaCorrected && (
+                <p className="font-mono text-sm text-muted break-words mb-2">
+                  carbonate alk = TA − cyanurate = {num(ta).toFixed(0)} − {result.cyanurateAlk} = {result.carbonateTa} ppm
+                </p>
+              )}
               <p className="font-mono text-sm text-muted break-words">
                 LSI = pH + TF + CF + AF − TDS<br />
                 = {result.factors.ph.toFixed(2)} + {result.factors.tf.toFixed(2)} + {result.factors.cf.toFixed(2)} + {result.factors.af.toFixed(2)} − {result.factors.k.toFixed(1)} = {formatLsi(result.value)}
@@ -249,6 +272,7 @@ export const LsiCalculatorPage = () => {
               <p className="text-[11px] text-subtle mt-2 leading-relaxed">
                 TF, CF and AF are the NSPF temperature, calcium-hardness and alkalinity factors (looked up from
                 the industry tables and interpolated). TDS = {result.factors.k.toFixed(1)} for a {poolType === 'salt' ? 'saltwater' : 'chlorine'} pool.
+                {cyaCorrected && ` AF here uses carbonate alkalinity (${result.carbonateTa} ppm) — your CYA contributed ~${result.cyanurateAlk} ppm to the total-alkalinity test, which we subtract.`}
               </p>
             </div>
           </details>
@@ -273,7 +297,7 @@ export const LsiCalculatorPage = () => {
             )}
             <p className="flex items-start gap-2 text-xs leading-relaxed rounded-lg px-3 py-2 border border-line bg-card-2 text-muted">
               <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-              <span>Cyanuric acid (CYA) and borates also nudge true LSI slightly. For everyday balancing the four factors above are what matter — get them right first.</span>
+              <span>{cyaCorrected ? 'CYA is factored in above (we use carbonate alkalinity, not raw TA). Borates, if you dose them, nudge it slightly further — they aren’t included here.' : 'Using stabilizer? Add your CYA above for a truer reading — it inflates the alkalinity test without being part of the carbonate balance.'}</span>
             </p>
           </div>
         </div>

@@ -60,6 +60,27 @@ export type PoolType = 'chlorine' | 'salt';
 /** TDS constant: chlorine pools 12.1, salt pools 12.2 (higher dissolved solids). */
 export const tdsConstant = (poolType: PoolType): number => (poolType === 'salt' ? 12.2 : 12.1);
 
+// ─── Cyanuric-acid (CYA) correction ──────────────────────────────────────────
+// A total-alkalinity titration also counts cyanurate, which contributes to the
+// measured TA without being part of the carbonate balance the LSI cares about.
+// So before computing the alkalinity factor we subtract the cyanurate share.
+// How much of the CYA reads as alkalinity is pH-dependent: it's the fraction of
+// cyanuric acid that's ionized at the sample pH (first dissociation, pKa₁≈6.88),
+// scaled by the CaCO₃-equivalent weight ratio (50.04 / 129.07).
+// Refs: Wojtowicz, J. Swimming Pool & Spa Chem.; TFP/PoolMath carbonate-alk model.
+
+/** First acid-dissociation constant of cyanuric acid at 25 °C. */
+export const CYA_PKA1 = 6.88;
+/** ppm CYA → ppm CaCO₃ when fully ionized (equivalent-weight ratio). */
+export const CYA_EQ_FACTOR = 50.04 / 129.07;
+
+/** Cyanurate's contribution to a measured total-alkalinity reading, in ppm CaCO₃. */
+export function cyanurateAlkalinity(cyaPpm: number, ph: number): number {
+  if (cyaPpm <= 0) return 0;
+  const ionizedFraction = 1 / (1 + Math.pow(10, CYA_PKA1 - ph));
+  return cyaPpm * CYA_EQ_FACTOR * ionizedFraction;
+}
+
 export type LsiZone = 'corrosive' | 'slightlyCorrosive' | 'balanced' | 'slightlyScaling' | 'scaling';
 
 export interface LsiResult {
@@ -69,6 +90,10 @@ export interface LsiResult {
   label: string;
   /** Individual factor contributions, for the "show the math" breakdown. */
   factors: { ph: number; tf: number; cf: number; af: number; k: number };
+  /** Carbonate alkalinity actually used (TA minus the cyanurate share), ppm. */
+  carbonateTa: number;
+  /** How much alkalinity the cyanuric acid accounted for, ppm. */
+  cyanurateAlk: number;
 }
 
 export interface LsiInputs {
@@ -77,6 +102,8 @@ export interface LsiInputs {
   ch: number;       // calcium hardness, ppm
   tempF: number;    // water temperature, °F
   poolType: PoolType;
+  /** Optional cyanuric acid (stabilizer), ppm — corrects TA when > 0. */
+  cya?: number;
 }
 
 const ZONE_LABEL: Record<LsiZone, string> = {
@@ -97,15 +124,25 @@ export function lsiZone(value: number): LsiZone {
 }
 
 /** Compute the Langelier Saturation Index from raw water-test readings. */
-export function computeLsi({ ph, ta, ch, tempF, poolType }: LsiInputs): LsiResult {
+export function computeLsi({ ph, ta, ch, tempF, poolType, cya = 0 }: LsiInputs): LsiResult {
+  // Subtract the cyanurate share so the alkalinity factor uses carbonate alkalinity.
+  const cyanurateAlk = cyanurateAlkalinity(cya, ph);
+  const carbonateTa = Math.max(0, ta - cyanurateAlk);
   const tf = lsiTempFactor(tempF);
   const cf = lsiCalciumFactor(ch);
-  const af = lsiAlkalinityFactor(ta);
+  const af = lsiAlkalinityFactor(carbonateTa);
   const k = tdsConstant(poolType);
   const raw = ph + tf + cf + af - k;
   const value = Math.round(raw * 100) / 100;
   const zone = lsiZone(value);
-  return { value, zone, label: ZONE_LABEL[zone], factors: { ph, tf, cf, af, k } };
+  return {
+    value,
+    zone,
+    label: ZONE_LABEL[zone],
+    factors: { ph, tf, cf, af, k },
+    carbonateTa: Math.round(carbonateTa),
+    cyanurateAlk: Math.round(cyanurateAlk),
+  };
 }
 
 /** Format an LSI value with an explicit sign (+0.12 / −0.34 / 0.00). */
