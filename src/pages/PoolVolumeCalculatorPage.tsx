@@ -407,6 +407,23 @@ const SlopeProfile: React.FC<SlopeProfileProps> = ({
     draggingRef.current = null;
   };
 
+  // iOS Safari does NOT reliably honor `touch-action: none` on SVG elements
+  // (a long-standing WebKit quirk — it's respected on HTML, ignored on SVG).
+  // Without this, dragging a handle is read as a page scroll: iOS fires
+  // pointercancel and the handle stops tracking the finger. A non-passive
+  // native touchmove listener that preventDefaults *only while dragging* stops
+  // the scroll so the pointer drag survives. (React's onTouchMove is passive,
+  // so it can't preventDefault — we must attach this manually.)
+  React.useEffect(() => {
+    const el = svgRef.current;
+    if (!el) return;
+    const blockScrollWhileDragging = (e: TouchEvent) => {
+      if (draggingRef.current) e.preventDefault();
+    };
+    el.addEventListener('touchmove', blockScrollWhileDragging, { passive: false });
+    return () => el.removeEventListener('touchmove', blockScrollWhileDragging);
+  }, []);
+
   // Pool outline path — reused for the water fill AND as a clip so the ripple
   // texture never spills outside the water.
   const poolPath = `M ${PAD_X} ${POOL_TOP} L ${VB_W - PAD_X} ${POOL_TOP} L ${VB_W - PAD_X} ${yDeep} L ${deepStartX} ${yDeep} L ${shallowEndX} ${yShallow} L ${PAD_X} ${yShallow} Z`;
@@ -430,6 +447,7 @@ const SlopeProfile: React.FC<SlopeProfileProps> = ({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerLeave={onPointerUp}
+      onPointerCancel={onPointerUp}
     >
       <defs>
         {/* Water body: bright near the surface, deepening toward the floor. */}
