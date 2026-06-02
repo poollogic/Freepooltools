@@ -9,9 +9,10 @@
     "build:ssr": "vite build --ssr src/entry-server.tsx --outDir dist-ssr",
     "prerender": "node scripts/prerender.mjs",
     "build": "npm run build:client && npm run build:ssr && npm run prerender",
-    "preview": "vite preview",
+    "preview": "npm run build:client && wrangler dev",
     "clean": "rm -rf dist dist-ssr",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "deploy": "npm run build:client && wrangler deploy"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
@@ -26,9 +27,11 @@
     "vite": "^6.2.0"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.39.1",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
     "tailwindcss": "^4.1.14",
-    "typescript": "~5.8.2"
+    "typescript": "~5.8.2",
+    "wrangler": "^4.96.0"
   }
 }
