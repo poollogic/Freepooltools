@@ -311,6 +311,18 @@
   .logo-mark { animation: none; }
 }
 
+/* Active pill of a segmented control (unit / depth / shape toggles).
+   In dark mode the card-3 surface reads fine against the darker container.
+   In LIGHT mode the active pill is white (card-3) on an ~88%-white container,
+   so it's nearly invisible — add elevation + a hairline outline via box-shadow
+   (no border, so there's no active/inactive layout shift). */
+.seg-active {
+  background-color: var(--color-card-3);
+}
+.light .seg-active {
+  box-shadow: 0 1px 3px rgba(16, 42, 67, 0.18), 0 0 0 1px var(--color-line-strong);
+}
+
 /* Pool diagram caustics — a slow opacity pulse so the water shimmers gently.
    Opacity-only (no transform), so it's cheap and isn't affected by the mobile
    force-static-motion safety net. Disabled under reduced-motion. */

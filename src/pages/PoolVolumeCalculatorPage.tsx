@@ -1313,7 +1313,7 @@ const PoolVolumeCalculatorInner = () => {
                     onClick={() => setLengthUnit(u)}
                     aria-pressed={lengthUnit === u}
                     className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
-                      lengthUnit === u ? 'bg-card-3 text-fg' : 'text-muted hover:text-fg'
+                      lengthUnit === u ? 'seg-active text-fg' : 'text-muted hover:text-fg'
                     }`}
                   >
                     {u === 'ft' ? 'Feet' : 'Meters'}
@@ -1328,7 +1328,7 @@ const PoolVolumeCalculatorInner = () => {
                     onClick={() => setVolumeUnit(u)}
                     aria-pressed={volumeUnit === u}
                     className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${
-                      volumeUnit === u ? 'bg-card-3 text-fg' : 'text-muted hover:text-fg'
+                      volumeUnit === u ? 'seg-active text-fg' : 'text-muted hover:text-fg'
                     }`}
                   >
                     {u === 'gal' ? 'Gallons' : 'Liters'}
@@ -1512,7 +1512,7 @@ const PoolVolumeCalculatorInner = () => {
                         onClick={() => setDepthMode(mode)}
                         aria-pressed={depthMode === mode}
                         className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${
-                          depthMode === mode ? 'bg-card-3 text-fg' : 'text-muted hover:text-fg'
+                          depthMode === mode ? 'seg-active text-fg' : 'text-muted hover:text-fg'
                         }`}
                       >
                         {mode === 'avg' && 'Average'}
@@ -1687,7 +1687,7 @@ const PoolVolumeCalculatorInner = () => {
                               onClick={() => updateSection(sec.id, { shape: s })}
                               aria-pressed={sec.shape === s}
                               className={`px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
-                                sec.shape === s ? 'bg-card-3 text-fg' : 'text-muted hover:text-fg'
+                                sec.shape === s ? 'seg-active text-fg' : 'text-muted hover:text-fg'
                               }`}
                             >
                               {s === 'rectangle' ? 'Rect' : 'Round'}
@@ -1780,7 +1780,7 @@ const PoolVolumeCalculatorInner = () => {
                             onClick={() => setSpaShape(s)}
                             aria-pressed={spaShape === s}
                             className={`px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
-                              spaShape === s ? 'bg-card-3 text-fg' : 'text-muted hover:text-fg'
+                              spaShape === s ? 'seg-active text-fg' : 'text-muted hover:text-fg'
                             }`}
                           >
                             {s === 'round' ? 'Round' : 'Rectangle'}
