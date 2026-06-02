@@ -64,7 +64,7 @@ export const TOOLS: Tool[] = [
     title: 'Pool Heating Cost Calculator',
     blurb: 'Estimate the cost and time to heat your pool — gas heater vs. electric heat pump.',
     icon: Thermometer,
-    status: 'soon',
+    status: 'live',
   },
   {
     path: '/lsi-calculator',
