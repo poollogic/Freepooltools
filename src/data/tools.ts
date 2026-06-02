@@ -71,7 +71,7 @@ export const TOOLS: Tool[] = [
     title: 'Water Balance (LSI) Calculator',
     blurb: 'Check your Langelier Saturation Index so water isn’t scaling or corroding.',
     icon: Beaker,
-    status: 'soon',
+    status: 'live',
   },
 ];
 

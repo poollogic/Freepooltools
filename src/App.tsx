@@ -18,6 +18,9 @@ const CyaCalculatorPage = lazy(() =>
 const SaltCalculatorPage = lazy(() =>
   import('@/pages/SaltCalculatorPage').then((m) => ({ default: m.SaltCalculatorPage })),
 );
+const LsiCalculatorPage = lazy(() =>
+  import('@/pages/LsiCalculatorPage').then((m) => ({ default: m.LsiCalculatorPage })),
+);
 // Guides are their own lazy chunks — opening a calculator never loads guide code.
 const GuidesHubPage = lazy(() =>
   import('@/pages/guides/GuidesHubPage').then((m) => ({ default: m.GuidesHubPage })),
@@ -50,6 +53,7 @@ export default function App() {
           <Route path="/chlorine-calculator" element={<ChlorineCalculatorPage />} />
           <Route path="/cya-calculator" element={<CyaCalculatorPage />} />
           <Route path="/salt-calculator" element={<SaltCalculatorPage />} />
+          <Route path="/lsi-calculator" element={<LsiCalculatorPage />} />
           <Route path="/guides" element={<GuidesHubPage />} />
           <Route path="/guides/cyanuric-acid-and-chlorine" element={<CyaChlorineGuide />} />
           {/* Catch-all 404 — must be last. */}
