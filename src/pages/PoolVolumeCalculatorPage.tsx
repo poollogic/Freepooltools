@@ -42,7 +42,7 @@ type CalcMode = 'pool' | 'pool+spa' | 'spa';
 type Shape = 'rectangle' | 'round' | 'oval' | 'kidney' | 'roman' | 'grecian' | 'octagon' | 'freeform';
 type LenUnit = 'ft' | 'm';
 type VolUnit = 'gal' | 'L';
-type DepthMode = 'avg' | 'slope' | 'sections';
+type DepthMode = 'avg' | 'sections';
 type FreeformSectionShape = 'rectangle' | 'round';
 
 interface FreeformSection {
@@ -191,26 +191,33 @@ const volumeGallons = (
   return area > 0 ? area * d * GAL_PER_CUFT : 0;
 };
 
-// Section-accurate rectangle volume: a pool modeled as shallow flat + slope
-// wedge + deep flat. A wedge averages to the midpoint of its two depths, so
-// the total in cubic feet is W × (Ls·Ds + Lslope·(Ds+Dd)/2 + Ld·Dd). All
-// inputs in feet. Returns gallons.
-const volumeSlopedSections = (
-  totalLenFt: number,
-  widthFt: number,
+// Sloped-sections model: a pool modeled along its main axis as a shallow flat
+// + slope wedge + deep flat. The wedge averages to the midpoint of its two
+// depths, so the LENGTH-WEIGHTED AVERAGE depth over the axis is
+//   (Ls·Ds + Lslope·(Ds+Dd)/2 + Ld·Dd) / axisLen.
+// Multiplying that average by the shape's real surface area gives volume — the
+// same prismatic assumption the rectangle uses, generalized to any shape with a
+// single deep-end axis (round/oval/grecian/octagon). All lengths in feet.
+const sectionsAvgDepthFt = (
+  axisLenFt: number,
   shallowLenFt: number,
   deepLenFt: number,
   shallowDepthFt: number,
   deepDepthFt: number,
 ) => {
-  if (!totalLenFt || !widthFt || !shallowDepthFt || !deepDepthFt) return 0;
-  const Ls = Math.max(0, Math.min(shallowLenFt, totalLenFt));
-  const Ld = Math.max(0, Math.min(deepLenFt, totalLenFt - Ls));
-  const Lslope = Math.max(0, totalLenFt - Ls - Ld);
+  if (!axisLenFt || !shallowDepthFt || !deepDepthFt) return 0;
+  const Ls = Math.max(0, Math.min(shallowLenFt, axisLenFt));
+  const Ld = Math.max(0, Math.min(deepLenFt, axisLenFt - Ls));
+  const Lslope = Math.max(0, axisLenFt - Ls - Ld);
   const wedgeAvg = (shallowDepthFt + deepDepthFt) / 2;
-  const cuft = widthFt * (Ls * shallowDepthFt + Lslope * wedgeAvg + Ld * deepDepthFt);
-  return cuft * GAL_PER_CUFT;
+  return (Ls * shallowDepthFt + Lslope * wedgeAvg + Ld * deepDepthFt) / axisLenFt;
 };
+
+// Shapes that support the sloped-sections model: those with a single, clear
+// deep-end axis. Kidney/roman (irregular footprints) and freeform (its own
+// multi-section model) are excluded — they offer Average depth only.
+const SECTIONS_SHAPES: Shape[] = ['rectangle', 'round', 'oval', 'grecian', 'octagon'];
+const shapeSupportsSections = (s: Shape) => SECTIONS_SHAPES.includes(s);
 
 const formatGallons = (g: number, unit: VolUnit) =>
   Math.round(unit === 'L' ? g * L_PER_GAL : g).toLocaleString('en-US');
@@ -940,7 +947,9 @@ const PoolVolumeCalculatorInner = () => {
     const v = params.get('v');
     if (v === 'L' || v === 'gal') setVolumeUnit(v);
     const mode = params.get('mode');
-    if (mode === 'slope' || mode === 'avg' || mode === 'sections') setDepthMode(mode);
+    // 'slope' (Shallow + Deep) was removed; legacy links fall back to Average.
+    if (mode === 'slope') setDepthMode('avg');
+    else if (mode === 'avg' || mode === 'sections') setDepthMode(mode);
     const ls = parseFloat(params.get('ls') || '');
     const ld = parseFloat(params.get('ld') || '');
     if (Number.isFinite(ls) && ls >= 0) setShallowLenFt(ls);
@@ -999,7 +1008,6 @@ const PoolVolumeCalculatorInner = () => {
   // Gallons for the active shape.
   // Total length in feet (used by the sloped-sections diagram + math).
   const totalLenFt = useMemo(() => toFeet(num(length), lengthUnit), [length, lengthUnit]);
-  const widthFt = useMemo(() => toFeet(num(width), lengthUnit), [width, lengthUnit]);
   const shallowDepthFt = useMemo(
     () => toFeet(num(shallowDepth), lengthUnit),
     [shallowDepth, lengthUnit],
@@ -1009,18 +1017,37 @@ const PoolVolumeCalculatorInner = () => {
     [deepDepth, lengthUnit],
   );
 
-  // Effective section lengths. Defaults to a 30/40/30 split of total length;
+  // The axis the slope runs along (used by the sloped-sections diagram + math).
+  // It's the `length` field for rectangle/oval/grecian, but the `diameter`
+  // field for round (its diameter) and octagon (its width across flats) — those
+  // shapes have no separate length input.
+  const sectionAxisFt = useMemo(
+    () =>
+      shape === 'round' || shape === 'octagon'
+        ? toFeet(num(diameter), lengthUnit)
+        : totalLenFt,
+    [shape, diameter, lengthUnit, totalLenFt],
+  );
+
+  // Effective section lengths. Defaults to a 30/40/30 split of the slope axis;
   // overridden by user-set values from the draggable handles.
   const effShallowLenFt = useMemo(() => {
-    if (shallowLenFt !== null) return Math.max(0, Math.min(shallowLenFt, totalLenFt));
-    return totalLenFt * 0.3;
-  }, [shallowLenFt, totalLenFt]);
+    if (shallowLenFt !== null) return Math.max(0, Math.min(shallowLenFt, sectionAxisFt));
+    return sectionAxisFt * 0.3;
+  }, [shallowLenFt, sectionAxisFt]);
   const effDeepLenFt = useMemo(() => {
     if (deepLenFt !== null) {
-      return Math.max(0, Math.min(deepLenFt, totalLenFt - effShallowLenFt));
+      return Math.max(0, Math.min(deepLenFt, sectionAxisFt - effShallowLenFt));
     }
-    return totalLenFt * 0.3;
-  }, [deepLenFt, totalLenFt, effShallowLenFt]);
+    return sectionAxisFt * 0.3;
+  }, [deepLenFt, sectionAxisFt, effShallowLenFt]);
+
+  // Safety net: if we ever land on 'sections' for a shape that doesn't support
+  // it (e.g. a legacy/shared link with mode=sections + a kidney shape), fall
+  // back to Average so the depth UI stays valid.
+  React.useEffect(() => {
+    if (depthMode === 'sections' && !shapeSupportsSections(shape)) setDepthMode('avg');
+  }, [depthMode, shape]);
 
   const gallons = useMemo(() => {
     // In spa-only mode the pool doesn't contribute to the total.
@@ -1042,15 +1069,20 @@ const PoolVolumeCalculatorInner = () => {
         0,
       );
     }
-    if (shape === 'rectangle' && depthMode === 'sections') {
-      return volumeSlopedSections(
-        totalLenFt,
-        widthFt,
+    if (depthMode === 'sections' && shapeSupportsSections(shape)) {
+      // Sloped sections: length-weighted average depth × the shape's real
+      // surface area. We get the area for free by feeding the average depth
+      // through the same per-shape volume formula used for Average mode.
+      const avgFt = sectionsAvgDepthFt(
+        sectionAxisFt,
         effShallowLenFt,
         effDeepLenFt,
         shallowDepthFt,
         deepDepthFt,
       );
+      if (!avgFt) return 0;
+      const avgUser = lengthUnit === 'm' ? avgFt / FT_PER_M : avgFt;
+      return volumeGallons(shape, { length, width, diameter, depth: String(avgUser) }, lengthUnit);
     }
     return volumeGallons(shape, { length, width, diameter, depth: depthStr }, lengthUnit);
   }, [
@@ -1063,8 +1095,7 @@ const PoolVolumeCalculatorInner = () => {
     lengthUnit,
     sections,
     depthMode,
-    totalLenFt,
-    widthFt,
+    sectionAxisFt,
     effShallowLenFt,
     effDeepLenFt,
     shallowDepthFt,
@@ -1121,11 +1152,9 @@ const PoolVolumeCalculatorInner = () => {
     if (width) params.set('w', width);
     if (diameter) params.set('d', diameter);
     if (depthMode === 'avg' && avgDepth) params.set('s', avgDepth);
-    if (depthMode === 'slope' || depthMode === 'sections') {
+    if (depthMode === 'sections') {
       if (shallowDepth) params.set('shallow', shallowDepth);
       if (deepDepth) params.set('deep', deepDepth);
-    }
-    if (depthMode === 'sections') {
       params.set('ls', effShallowLenFt.toFixed(2));
       params.set('ld', effDeepLenFt.toFixed(2));
     }
@@ -1163,20 +1192,25 @@ const PoolVolumeCalculatorInner = () => {
   const formula = useMemo(() => {
     const u = lengthUnit === 'm' ? 'm' : 'ft';
     const x = (s: string) => num(s).toString();
-    // Section-accurate rectangle formula in sloped-sections mode.
-    if (shape === 'rectangle' && depthMode === 'sections') {
+    // In sloped-sections mode the depth is the length-weighted average over the
+    // slope axis; the per-shape lines below then multiply it by the shape's
+    // area. So we just build the right depth string `d` for each mode.
+    let d: string;
+    if (depthMode === 'sections' && shapeSupportsSections(shape)) {
       const toUserLen = (ft: number) =>
         (lengthUnit === 'm' ? ft / FT_PER_M : ft).toFixed(1);
       const Ls = toUserLen(effShallowLenFt);
-      const Lslope = toUserLen(Math.max(0, totalLenFt - effShallowLenFt - effDeepLenFt));
+      const Lslope = toUserLen(Math.max(0, sectionAxisFt - effShallowLenFt - effDeepLenFt));
       const Ld = toUserLen(effDeepLenFt);
       const Ds = x(shallowDepth);
       const Dd = x(deepDepth);
-      return `W × (Ls·Ds + Lslope·((Ds+Dd)/2) + Ld·Dd) × 7.48 → ${x(width)} × (${Ls}·${Ds} + ${Lslope}·((${Ds}+${Dd})/2) + ${Ld}·${Dd}) ${u}`;
+      const axis = toUserLen(sectionAxisFt);
+      const avgFt = sectionsAvgDepthFt(sectionAxisFt, effShallowLenFt, effDeepLenFt, shallowDepthFt, deepDepthFt);
+      const avgUser = (lengthUnit === 'm' ? avgFt / FT_PER_M : avgFt).toFixed(1);
+      d = `[(${Ls}·${Ds} + ${Lslope}·((${Ds}+${Dd})÷2) + ${Ld}·${Dd}) ÷ ${axis}] = ${avgUser} ${u} avg`;
+    } else {
+      d = `${x(avgDepth)} ${u}`;
     }
-    const d = depthMode === 'avg'
-      ? `${x(avgDepth)} ${u}`
-      : `((${x(shallowDepth)} + ${x(deepDepth)}) ÷ 2) = ${(resolvedDepthFt && lengthUnit === 'ft' ? resolvedDepthFt.toFixed(1) : (resolvedDepthFt / FT_PER_M).toFixed(1))} ${u}`;
     if (shape === 'rectangle') return `L × W × Depth × 7.48 → ${x(length)} × ${x(width)} × ${d}`;
     if (shape === 'round') return `π × (Ø ÷ 2)² × Depth × 7.48 → π × (${x(diameter)} ÷ 2)² × ${d}`;
     if (shape === 'oval') return `π × (L÷2) × (W÷2) × Depth × 7.48 → π × (${x(length)}÷2) × (${x(width)}÷2) × ${d}`;
@@ -1185,7 +1219,7 @@ const PoolVolumeCalculatorInner = () => {
     if (shape === 'grecian') return `(L × W − 2c²) × Depth × 7.48 → (${x(length)} × ${x(width)} − 2 × ${x(diameter)}²) × ${d}`;
     if (shape === 'octagon') return `2(√2 − 1) × W² × Depth × 7.48 → 0.8284 × ${x(diameter)}² × ${d}`;
     return `Sum of each section's volume (L × W × D or π × r² × D), then × 7.48`;
-  }, [shape, length, width, diameter, avgDepth, shallowDepth, deepDepth, depthMode, lengthUnit, resolvedDepthFt, effShallowLenFt, effDeepLenFt, totalLenFt]);
+  }, [shape, length, width, diameter, avgDepth, shallowDepth, deepDepth, depthMode, lengthUnit, sectionAxisFt, effShallowLenFt, effDeepLenFt, shallowDepthFt, deepDepthFt]);
 
   const addSection = () => setSections((prev) => [...prev, newSection()]);
   const removeSection = (id: string) =>
@@ -1316,9 +1350,10 @@ const PoolVolumeCalculatorInner = () => {
                     type="button"
                     onClick={() => {
                       setShape(id);
-                      // 'sections' mode only applies to rectangle — downgrade
-                      // to 'avg' for other shapes so the picker stays valid.
-                      if (id !== 'rectangle' && depthMode === 'sections') {
+                      // Sloped sections only applies to shapes with a clear deep
+                      // axis — downgrade to 'avg' for kidney/roman so the picker
+                      // stays valid.
+                      if (!shapeSupportsSections(id) && depthMode === 'sections') {
                         setDepthMode('avg');
                       }
                     }}
@@ -1467,9 +1502,9 @@ const PoolVolumeCalculatorInner = () => {
                   <p className={`${labelClass} !mb-0`}>Depth</p>
                   <div className="inline-flex rounded-lg border border-line bg-card p-1 flex-wrap">
                     {(
-                      shape === 'rectangle'
-                        ? (['avg', 'slope', 'sections'] as DepthMode[])
-                        : (['avg', 'slope'] as DepthMode[])
+                      shapeSupportsSections(shape)
+                        ? (['avg', 'sections'] as DepthMode[])
+                        : (['avg'] as DepthMode[])
                     ).map((mode) => (
                       <button
                         key={mode}
@@ -1481,7 +1516,6 @@ const PoolVolumeCalculatorInner = () => {
                         }`}
                       >
                         {mode === 'avg' && 'Average'}
-                        {mode === 'slope' && 'Shallow + Deep'}
                         {mode === 'sections' && 'Sloped sections'}
                       </button>
                     ))}
@@ -1494,24 +1528,9 @@ const PoolVolumeCalculatorInner = () => {
                     onChange={(e) => setAvgDepth(e.target.value)} placeholder={`Average depth in ${unitL} — e.g. 5`} className={fieldClass} />
                 )}
 
-                {depthMode === 'slope' && (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="shallow" className="text-xs text-muted block mb-1">Shallow end ({unitL})</label>
-                      <input id="shallow" type="number" inputMode="decimal" min="0" value={shallowDepth}
-                        onChange={(e) => setShallowDepth(e.target.value)} placeholder="e.g. 3" className={fieldClass} />
-                    </div>
-                    <div>
-                      <label htmlFor="deep" className="text-xs text-muted block mb-1">Deep end ({unitL})</label>
-                      <input id="deep" type="number" inputMode="decimal" min="0" value={deepDepth}
-                        onChange={(e) => setDeepDepth(e.target.value)} placeholder="e.g. 8" className={fieldClass} />
-                    </div>
-                  </div>
-                )}
-
-                {/* Sloped sections (rectangle only): the section-accurate model
-                    with a draggable side-profile diagram. */}
-                {depthMode === 'sections' && shape === 'rectangle' && (
+                {/* Sloped sections: the section model with a draggable
+                    side-profile diagram (rectangle/round/oval/grecian/octagon). */}
+                {depthMode === 'sections' && shapeSupportsSections(shape) && (
                   <div className="space-y-3">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -1527,7 +1546,7 @@ const PoolVolumeCalculatorInner = () => {
                     </div>
 
                     <div className="rounded-xl border border-line bg-card p-3 sm:p-4">
-                      {totalLenFt > 0 && shallowDepthFt > 0 && deepDepthFt > 0 ? (
+                      {sectionAxisFt > 0 && shallowDepthFt > 0 && deepDepthFt > 0 ? (
                         <>
                           {/* Section lengths — ABOVE the diagram so they're
                               readable and never hidden under your finger while
@@ -1538,7 +1557,7 @@ const PoolVolumeCalculatorInner = () => {
                             const ftToUser = (ft: number) => (unitL === 'm' ? ft / FT_PER_M : ft);
                             const userToFt = (v: number) => (unitL === 'm' ? v * FT_PER_M : v);
                             const round1 = (n: number) => Math.round(n * 10) / 10;
-                            const slopeFt = Math.max(0, totalLenFt - effShallowLenFt - effDeepLenFt);
+                            const slopeFt = Math.max(0, sectionAxisFt - effShallowLenFt - effDeepLenFt);
                             const cellCls =
                               'rounded-lg border border-line bg-card-2 px-2 py-2 text-center';
                             const labelCls =
@@ -1556,9 +1575,9 @@ const PoolVolumeCalculatorInner = () => {
                                 if (!Number.isFinite(n) || n < 0) return;
                                 const ft = userToFt(n);
                                 if (which === 'shallow') {
-                                  setShallowLenFt(Math.min(ft, Math.max(0, totalLenFt - effDeepLenFt)));
+                                  setShallowLenFt(Math.min(ft, Math.max(0, sectionAxisFt - effDeepLenFt)));
                                 } else {
-                                  setDeepLenFt(Math.min(ft, Math.max(0, totalLenFt - effShallowLenFt)));
+                                  setDeepLenFt(Math.min(ft, Math.max(0, sectionAxisFt - effShallowLenFt)));
                                 }
                               };
                             const fieldValue = (which: 'shallow' | 'deep', ft: number) =>
@@ -1618,8 +1637,7 @@ const PoolVolumeCalculatorInner = () => {
                             );
                           })()}
                           <SlopeProfile
-                            totalLenFt={totalLenFt}
-                            widthFt={widthFt}
+                            totalLenFt={sectionAxisFt}
                             shallowLenFt={effShallowLenFt}
                             deepLenFt={effDeepLenFt}
                             shallowDepthFt={shallowDepthFt}
@@ -1640,7 +1658,7 @@ const PoolVolumeCalculatorInner = () => {
                         </>
                       ) : (
                         <p className="text-sm text-subtle text-center py-8">
-                          Enter length, width, and both depths to see the side profile.
+                          Enter the pool size and both depths to see the side profile.
                         </p>
                       )}
                     </div>

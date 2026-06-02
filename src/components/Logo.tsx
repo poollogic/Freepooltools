@@ -18,7 +18,7 @@ export const Logo = ({ className }: { className?: string }) => {
 
   return (
     <span className={cn('inline-flex items-center gap-2.5 font-display font-bold', className)}>
-      <span className="logo-mark relative inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-brand-blue/25 via-brand-blue-dark/20 to-transparent ring-1 ring-brand-blue-light/30 shadow-[0_0_18px_-6px_rgba(74,147,209,0.6)]">
+      <span className="logo-mark relative inline-flex items-center justify-center w-9 h-9">
         <svg viewBox="0 0 24 24" className="w-[22px] h-[22px]" aria-hidden="true">
           <defs>
             <linearGradient id={dropGrad} x1="0" y1="0" x2="0.4" y2="1">
