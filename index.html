@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Free Pool Tools — Calculators for Pool Owners & Pros</title>
+    <meta name="description" content="Free pool calculators for homeowners and pool techs — pool volume, chlorine dosing, CYA, salt, and water balance. Instant, accurate, no email required." />
+    <meta name="theme-color" content="#07111c" />
+    <link rel="canonical" href="https://freepooltools.com/" />
+
+    <!-- No-flash theme: set the light/dark class before first paint, from a
+         saved preference or the OS setting. Must run before the CSS applies.
+         The choice is read from localStorage (no expiry) with a long-lived
+         cookie fallback, and BOTH are re-written on every load so the cookie's
+         expiry window keeps sliding forward — it effectively never expires for
+         a returning visitor, only changes when they toggle (or clear data). -->
+    <script>
+      (function () {
+        var KEY = 'fpt-theme';
+        var MAX_AGE = 34560000; /* 400 days — the browser cap; refreshed each visit */
+        try {
+          var cookie = (document.cookie.match('(?:^|; )' + KEY + '=([^;]*)') || [])[1];
+          var t = localStorage.getItem(KEY);
+          if (t !== 'light' && t !== 'dark') t = cookie;
+          if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          }
+          document.documentElement.classList.add(t);
+          try { localStorage.setItem(KEY, t); } catch (e) {}
+          document.cookie = KEY + '=' + t + '; Max-Age=' + MAX_AGE + '; Path=/; SameSite=Lax';
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+
+    <!-- Preload the above-the-fold Inter weights (body 400, UI 600, headings
+         700) so they download in parallel with the CSS. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-400.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-600.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-700.woff2" crossorigin />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

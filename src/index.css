@@ -1,0 +1,372 @@
+@import "tailwindcss";
+
+/* ── Typeface: Inter (the one standard font, self-hosted) ───────────
+   The whole site uses a single family — Inter — at three weights: 400 (body),
+   600 (semibold / UI), 700 (bold headings). Self-hosted Latin-subset woff2 in
+   public/fonts/ (no third-party font request), with font-display: swap so the
+   metric-matched fallback shows instantly while the woff2 loads. */
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/inter-400.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/inter-600.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/inter-700.woff2') format('woff2'); }
+
+/* Size-adjusted system fallback pre-scaled to Inter's metrics, so the swap is
+   near-invisible (minimal CLS) before the woff2 lands. */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  ascent-override: 90%;
+  descent-override: 22.5%;
+  line-gap-override: 0%;
+  size-adjust: 107%;
+}
+
+@theme {
+  /* One family for everything. --font-display stays defined (and equal to
+     --font-sans) so the existing `font-display` heading classes keep working
+     without touching every component. */
+  --font-sans: "Inter", "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
+
+  /* === Brand color tokens ===
+     Kept compatible with the reused calculator's class names (brand-orange,
+     brand-blue). Tune these to restyle the whole site. */
+  /* Accent (warm) */
+  --color-brand-orange: #ff720f;
+  --color-brand-orange-light: #ff8a3a;
+  --color-brand-orange-dark: #e06000;
+  /* Primary (pool blue) */
+  --color-brand-blue: #1669AE;
+  --color-brand-blue-light: #4a93d1;
+  --color-brand-blue-dark: #0f4d80;
+
+  --color-navy: #0a1628;
+  --color-navy-light: #15233b;
+  --color-navy-dark: #050b14;
+
+  /* ── Semantic UI tokens (DARK defaults) ──────────────────────────
+     Components reference ONLY these (bg-canvas, bg-card, text-fg, text-muted,
+     border-line, …). The .light block below remaps the same tokens to their
+     light values, so the chain is always: markup → token → color, with one
+     place to change per theme. Accent tokens (brand-*) are theme-independent. */
+  --color-canvas: #07111c;                     /* page background */
+  --color-card: rgba(255, 255, 255, 0.03);     /* surface 1 — cards, inputs */
+  --color-card-2: rgba(255, 255, 255, 0.05);   /* surface 2 — raised / hover */
+  --color-card-3: rgba(255, 255, 255, 0.08);   /* surface 3 — active / glass */
+  --color-fg: #ffffff;                         /* primary text / headings */
+  --color-muted: #9ca3af;                      /* body text */
+  --color-subtle: #6b7280;                     /* secondary / captions */
+  --color-faint: #4b5563;                      /* faint / disclaimers */
+  --color-line: rgba(255, 255, 255, 0.10);          /* hairline border */
+  --color-line-strong: rgba(255, 255, 255, 0.20);   /* stronger border */
+}
+
+/* ── Theme layer ───────────────────────────────────────────────────
+   Non-token CSS vars (mesh/glow/nav) + the LIGHT remap of the tokens above.
+   A no-flash inline script in index.html adds .light/.dark before first paint. */
+:root {
+  color-scheme: dark;
+  --mesh-base: #0a1628;
+  --mesh-c1: hsla(215, 98%, 15%, 1);
+  --mesh-c2: hsla(210, 100%, 10%, 1);
+  --glow-blue: rgba(22, 105, 174, 0.34);
+  --glow-orange: rgba(255, 114, 15, 0.10);
+  --nav-bg: rgba(12, 24, 42, 0.55);
+  --nav-bg-scrolled: rgba(10, 20, 38, 0.82);
+  --nav-border: linear-gradient(100deg, rgba(22, 105, 174, 0.55) 0%, rgba(255, 255, 255, 0.10) 50%, rgba(255, 114, 15, 0.42) 100%);
+  --nav-border-strong: linear-gradient(100deg, rgba(74, 147, 209, 0.85) 0%, rgba(255, 255, 255, 0.16) 50%, rgba(255, 138, 58, 0.70) 100%);
+  --nav-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+.light {
+  color-scheme: light;
+  --mesh-base: #eaf1fa;
+  --mesh-c1: hsla(210, 66%, 96%, 1);
+  --mesh-c2: hsla(212, 72%, 93%, 1);
+  --glow-blue: rgba(22, 105, 174, 0.10);
+  --glow-orange: rgba(255, 114, 15, 0.05);
+  --nav-bg: rgba(255, 255, 255, 0.72);
+  --nav-bg-scrolled: rgba(255, 255, 255, 0.92);
+  --nav-border: linear-gradient(100deg, rgba(22, 105, 174, 0.22) 0%, rgba(16, 42, 67, 0.05) 50%, rgba(255, 114, 15, 0.18) 100%);
+  --nav-border-strong: linear-gradient(100deg, rgba(22, 105, 174, 0.40) 0%, rgba(16, 42, 67, 0.08) 50%, rgba(255, 114, 15, 0.30) 100%);
+  --nav-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  /* Soft elevation so opaque cards lift off the page (dark relies on borders). */
+  --shadow-card: 0 1px 2px rgba(16, 42, 67, 0.05), 0 14px 32px -18px rgba(16, 42, 67, 0.28);
+  /* Opaque/white surfaces so cards read as cards — translucent dark looked muddy. */
+  --color-canvas: #f2f6fc;
+  --color-card: rgba(255, 255, 255, 0.88);
+  --color-card-2: rgba(255, 255, 255, 0.95);
+  --color-card-3: #ffffff;
+  --color-fg: #102a43;
+  --color-muted: #486181;
+  --color-subtle: #6b7c93;
+  --color-faint: #9aa9bd;
+  --color-line: rgba(16, 42, 67, 0.08);
+  --color-line-strong: rgba(16, 42, 67, 0.15);
+}
+
+/* Smooth flip — enabled only during a toggle (the .theme-transition class is
+   added/removed by useTheme) so transitions never fire on initial load. */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease, fill 0.3s ease, stroke 0.3s ease !important;
+}
+
+/* Force white text on SOLID accent fills (orange/blue buttons + active states)
+   in both themes — text-fg is dark ink in light mode, which fails on a colored
+   fill. Unlayered so it beats the text-fg utility. */
+.bg-brand-orange,
+.bg-brand-blue {
+  color: #fff;
+}
+
+/* Navbar shell — a gradient hairline border (the p-px wrapper) + a frosted bar,
+   both driven by the --nav-* tokens so each theme is tuned independently (vivid
+   + frosted-dark in dark, subtle + frosted-white in light). `.is-scrolled`
+   strengthens the border and opacifies the bar as the page scrolls. */
+.nav-shell {
+  background-image: var(--nav-border);
+}
+.nav-shell.is-scrolled {
+  background-image: var(--nav-border-strong);
+}
+.nav-bar {
+  background-color: var(--nav-bg);
+  box-shadow: var(--nav-highlight);
+}
+.nav-bar.is-scrolled {
+  background-color: var(--nav-bg-scrolled);
+}
+
+/* Article prose for /guides content — lets guide pages write plain <h2>/<p>/<ul>
+   and get consistent, themed typography (a mini typography layer). */
+.guide-prose {
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+.guide-prose > * + * {
+  margin-top: 1rem;
+}
+.guide-prose h2 {
+  @apply font-display font-bold text-fg text-2xl;
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.guide-prose h3 {
+  @apply font-display font-bold text-fg text-lg;
+  margin-top: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+.guide-prose p,
+.guide-prose li {
+  font-size: 16px;
+}
+.guide-prose ul {
+  @apply list-disc space-y-1.5;
+  padding-left: 1.25rem;
+}
+.guide-prose a {
+  @apply text-brand-orange font-semibold;
+}
+.guide-prose a:hover {
+  @apply text-brand-orange-dark;
+}
+.guide-prose strong {
+  @apply text-fg font-semibold;
+}
+
+@layer base {
+  /* Show the pointer cursor on every enabled button / button-role element. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  /* Shared section header — change here to restyle every section heading site-wide. */
+  .section-heading {
+    @apply text-3xl md:text-[2.5rem] font-display font-bold tracking-tight;
+  }
+  .section-subtext {
+    @apply text-base sm:text-lg text-muted leading-relaxed;
+  }
+
+  /* Global button system: `.btn` + a color modifier (`.btn-orange` / `.btn-blue`
+     / `.btn-glass`). Change `.btn` to restyle every button at once. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg
+           font-semibold text-[15px] transition-colors cursor-pointer;
+  }
+  .btn-orange {
+    @apply bg-brand-orange hover:bg-brand-orange-dark;
+    color: #fff;
+  }
+  .btn-blue {
+    @apply bg-brand-blue hover:bg-brand-blue-dark shadow-lg shadow-brand-blue/20;
+    color: #fff;
+  }
+  .btn-glass {
+    @apply text-fg bg-card-3 backdrop-blur-[10px] border border-line-strong
+           hover:bg-card-3 hover:border-line-strong;
+  }
+
+  .glass-panel {
+    @apply bg-card-2 backdrop-blur-[10px] border border-line shadow-[0_8px_32px_0_rgba(0,0,0,0.36)];
+  }
+
+  /* Themeable card elevation — barely-there in dark, a soft lift in light.
+     Named `.elevate` (not shadow-*) to avoid colliding with Tailwind's
+     shadow-{color} utilities, since `card` is also a color token. */
+  .elevate {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Ambient mesh background used behind page content. */
+  .bg-mesh {
+    background-color: var(--mesh-base);
+    background-image:
+      radial-gradient(at 0% 50%, var(--mesh-c1) 0, transparent 50%),
+      radial-gradient(at 50% 50%, var(--mesh-c2) 0, transparent 50%),
+      radial-gradient(at 100% 50%, var(--mesh-c1) 0, transparent 50%);
+  }
+
+  /* Top-of-page ambient glow. Layered radial gradients that fade fully to
+     transparent, so there's no clipped edge/seam. Replaces the old
+     fixed-height overflow-hidden blur-blob band, which cut the glow off with a
+     hard horizontal line. Cheap (no blur rasterization), so it runs on mobile
+     too. */
+  .page-glow {
+    background-image:
+      radial-gradient(58% 42% at 50% -10%, var(--glow-blue), transparent 70%),
+      radial-gradient(44% 30% at 50% -6%, var(--glow-orange), transparent 74%);
+  }
+
+  /* Page base so the iOS safe-area strip matches the theme. */
+  html,
+  body {
+    background-color: var(--color-canvas);
+  }
+
+  /* Hide scrollbars site-wide while keeping scroll behavior intact. */
+  html,
+  body,
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+/* ── Brand wordmark ────────────────────────────────────────────────
+   The "Pool" in FreePoolTools: a blue gradient with a slow left-to-right
+   sheen so the logo feels alive without being distracting. Pure CSS (not
+   inline style) so it survives the mobile force-static-motion safety net;
+   disabled under prefers-reduced-motion. */
+@keyframes wm-sheen {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.wm-pool {
+  background-image: linear-gradient(
+    110deg,
+    var(--color-brand-blue-light) 0%,
+    #8fd0f5 35%,
+    var(--color-brand-blue-light) 70%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: wm-sheen 6s ease-in-out infinite;
+  text-shadow: 0 0 18px rgba(74, 147, 209, 0.25);
+}
+@media (prefers-reduced-motion: reduce) {
+  .wm-pool { animation: none; }
+}
+
+/* Logo water-drop mark — a soft idle bob + a glow that intensifies on hover.
+   The `.logo-link` group drives the hover state. */
+@keyframes logo-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.5px); }
+}
+.logo-mark {
+  animation: logo-bob 4.5s ease-in-out infinite;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+.logo-link:hover .logo-mark {
+  filter: drop-shadow(0 0 10px rgba(74, 147, 209, 0.7));
+  transform: scale(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-mark { animation: none; }
+}
+
+/* Pool diagram caustics — a slow opacity pulse so the water shimmers gently.
+   Opacity-only (no transform), so it's cheap and isn't affected by the mobile
+   force-static-motion safety net. Disabled under reduced-motion. */
+@keyframes water-shimmer {
+  0%, 100% { opacity: 0.95; }
+  50% { opacity: 0.5; }
+}
+.water-ripple {
+  animation: water-shimmer 4.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .water-ripple { animation: none; }
+}
+
+/* Mobile motion safety net. App-level MotionConfig disables page animations on
+   mobile, but whileInView elements re-run their lifecycle on overlay open/close
+   without re-firing whileInView, which can leave them stuck invisible. Force
+   every motion-controlled element (inline opacity/transform) to its visible
+   state on mobile. Tailwind utilities use classes, not inline style, so
+   intentional opacity-/transform- utilities are untouched. */
+@media (max-width: 767px) {
+  .force-static-motion [style*="opacity"] {
+    opacity: 1 !important;
+  }
+  .force-static-motion [style*="transform"] {
+    transform: none !important;
+  }
+
+  /* Kill backdrop-filter on mobile — toggling/stacked blurs cause iOS Safari to
+     re-rasterize the whole page (load/scroll jank). Lean on solid backgrounds. */
+  *,
+  *::before,
+  *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .glass-panel {
+    background-color: var(--color-card-3);
+  }
+  .btn-glass {
+    background-color: var(--color-card-3);
+  }
+  /* Decorative ambient glow divs (blur-[...] rounded-full) are pure ambiance and
+     expensive to rasterize on mobile — hide them. */
+  [class*="blur-["].rounded-full {
+    display: none !important;
+  }
+
+  /* Opt-in exception to the mobile backdrop-filter ban above. A single STATIC,
+     small-radius blur is cheap; translate3d promotes it to its own GPU layer so
+     iOS isolates the blur instead of re-rasterizing the page. Use ONLY on
+     always-present, non-toggling elements (the fixed navbar). */
+  .mobile-blur {
+    -webkit-backdrop-filter: blur(6px) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
