@@ -24,6 +24,9 @@ const LsiCalculatorPage = lazy(() =>
 const PoolHeatingCostCalculatorPage = lazy(() =>
   import('@/pages/PoolHeatingCostCalculatorPage').then((m) => ({ default: m.PoolHeatingCostCalculatorPage })),
 );
+const PoolPumpRuntimeCalculatorPage = lazy(() =>
+  import('@/pages/PoolPumpRuntimeCalculatorPage').then((m) => ({ default: m.PoolPumpRuntimeCalculatorPage })),
+);
 // Guides are their own lazy chunks — opening a calculator never loads guide code.
 const GuidesHubPage = lazy(() =>
   import('@/pages/guides/GuidesHubPage').then((m) => ({ default: m.GuidesHubPage })),
@@ -58,6 +61,7 @@ export default function App() {
           <Route path="/salt-calculator" element={<SaltCalculatorPage />} />
           <Route path="/lsi-calculator" element={<LsiCalculatorPage />} />
           <Route path="/pool-heating-cost-calculator" element={<PoolHeatingCostCalculatorPage />} />
+          <Route path="/pool-pump-runtime-calculator" element={<PoolPumpRuntimeCalculatorPage />} />
           <Route path="/guides" element={<GuidesHubPage />} />
           <Route path="/guides/cyanuric-acid-and-chlorine" element={<CyaChlorineGuide />} />
           {/* Catch-all 404 — must be last. */}

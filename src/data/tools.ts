@@ -5,6 +5,7 @@ import {
   Waves,
   Thermometer,
   Beaker,
+  Timer,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -71,6 +72,13 @@ export const TOOLS: Tool[] = [
     title: 'Water Balance (LSI) Calculator',
     blurb: 'Check your Langelier Saturation Index so water isn’t scaling or corroding.',
     icon: Beaker,
+    status: 'live',
+  },
+  {
+    path: '/pool-pump-runtime-calculator',
+    title: 'Pump Runtime Calculator',
+    blurb: 'How many hours a day to run your pump for a full turnover — and what it costs.',
+    icon: Timer,
     status: 'live',
   },
 ];

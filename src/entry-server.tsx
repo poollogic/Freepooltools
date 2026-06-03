@@ -16,6 +16,7 @@ import { CyaCalculatorPage } from '@/pages/CyaCalculatorPage';
 import { SaltCalculatorPage } from '@/pages/SaltCalculatorPage';
 import { LsiCalculatorPage } from '@/pages/LsiCalculatorPage';
 import { PoolHeatingCostCalculatorPage } from '@/pages/PoolHeatingCostCalculatorPage';
+import { PoolPumpRuntimeCalculatorPage } from '@/pages/PoolPumpRuntimeCalculatorPage';
 import { GuidesHubPage } from '@/pages/guides/GuidesHubPage';
 import { CyaChlorineGuide } from '@/pages/guides/CyaChlorineGuide';
 import { NotFoundPage } from '@/pages/NotFoundPage';
@@ -31,6 +32,7 @@ export const PRERENDER_ROUTES = [
   '/salt-calculator',
   '/lsi-calculator',
   '/pool-heating-cost-calculator',
+  '/pool-pump-runtime-calculator',
   '/guides',
   '/guides/cyanuric-acid-and-chlorine',
 ];
@@ -49,6 +51,7 @@ const Routing = () => (
     <Route path="/salt-calculator" element={<SaltCalculatorPage />} />
     <Route path="/lsi-calculator" element={<LsiCalculatorPage />} />
     <Route path="/pool-heating-cost-calculator" element={<PoolHeatingCostCalculatorPage />} />
+    <Route path="/pool-pump-runtime-calculator" element={<PoolPumpRuntimeCalculatorPage />} />
     <Route path="/guides" element={<GuidesHubPage />} />
     <Route path="/guides/cyanuric-acid-and-chlorine" element={<CyaChlorineGuide />} />
     <Route path="*" element={<NotFoundPage />} />
