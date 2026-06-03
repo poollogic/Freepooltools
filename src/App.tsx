@@ -12,6 +12,9 @@ const PoolVolumeCalculatorPage = lazy(() =>
 const ChlorineCalculatorPage = lazy(() =>
   import('@/pages/ChlorineCalculatorPage').then((m) => ({ default: m.ChlorineCalculatorPage })),
 );
+const PoolShockCalculatorPage = lazy(() =>
+  import('@/pages/PoolShockCalculatorPage').then((m) => ({ default: m.PoolShockCalculatorPage })),
+);
 const CyaCalculatorPage = lazy(() =>
   import('@/pages/CyaCalculatorPage').then((m) => ({ default: m.CyaCalculatorPage })),
 );
@@ -57,6 +60,7 @@ export default function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/pool-volume-calculator" element={<PoolVolumeCalculatorPage />} />
           <Route path="/chlorine-calculator" element={<ChlorineCalculatorPage />} />
+          <Route path="/pool-shock-calculator" element={<PoolShockCalculatorPage />} />
           <Route path="/cya-calculator" element={<CyaCalculatorPage />} />
           <Route path="/salt-calculator" element={<SaltCalculatorPage />} />
           <Route path="/lsi-calculator" element={<LsiCalculatorPage />} />

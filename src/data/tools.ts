@@ -6,6 +6,7 @@ import {
   Thermometer,
   Beaker,
   Timer,
+  Zap,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -44,6 +45,13 @@ export const TOOLS: Tool[] = [
     title: 'Chlorine Calculator',
     blurb: 'How much liquid chlorine, bleach, or shock to add to hit your target free chlorine.',
     icon: FlaskConical,
+    status: 'live',
+  },
+  {
+    path: '/pool-shock-calculator',
+    title: 'Pool Shock Calculator',
+    blurb: 'Exactly how much shock to add to clear algae or chloramines — CYA-aware shock levels, any pool size.',
+    icon: Zap,
     status: 'live',
   },
   {

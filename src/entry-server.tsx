@@ -12,6 +12,7 @@ import { HomePage } from '@/pages/HomePage';
 import { AboutPage } from '@/pages/AboutPage';
 import { PoolVolumeCalculatorPage } from '@/pages/PoolVolumeCalculatorPage';
 import { ChlorineCalculatorPage } from '@/pages/ChlorineCalculatorPage';
+import { PoolShockCalculatorPage } from '@/pages/PoolShockCalculatorPage';
 import { CyaCalculatorPage } from '@/pages/CyaCalculatorPage';
 import { SaltCalculatorPage } from '@/pages/SaltCalculatorPage';
 import { LsiCalculatorPage } from '@/pages/LsiCalculatorPage';
@@ -28,6 +29,7 @@ export const PRERENDER_ROUTES = [
   '/about',
   '/pool-volume-calculator',
   '/chlorine-calculator',
+  '/pool-shock-calculator',
   '/cya-calculator',
   '/salt-calculator',
   '/lsi-calculator',
@@ -47,6 +49,7 @@ const Routing = () => (
     <Route path="/about" element={<AboutPage />} />
     <Route path="/pool-volume-calculator" element={<PoolVolumeCalculatorPage />} />
     <Route path="/chlorine-calculator" element={<ChlorineCalculatorPage />} />
+    <Route path="/pool-shock-calculator" element={<PoolShockCalculatorPage />} />
     <Route path="/cya-calculator" element={<CyaCalculatorPage />} />
     <Route path="/salt-calculator" element={<SaltCalculatorPage />} />
     <Route path="/lsi-calculator" element={<LsiCalculatorPage />} />
