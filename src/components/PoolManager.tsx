@@ -126,7 +126,7 @@ export const PoolManager = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-[2px]"
+      className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-3 sm:p-4 bg-black/40 overlay-blur"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}

@@ -141,7 +141,7 @@ export const Navbar = () => {
                   {open && (
                     <div
                       role="menu"
-                      className="absolute right-0 mt-2 w-64 rounded-xl border border-line bg-[var(--popover-bg)] backdrop-blur-[12px] shadow-xl shadow-black/20 elevate overflow-hidden z-50"
+                      className="absolute right-0 mt-2 w-64 rounded-xl border border-line glass-pop shadow-xl shadow-black/20 elevate overflow-hidden z-50"
                     >
                       {/* Pin/unpin the tool you're currently viewing. */}
                       {currentTool && (
