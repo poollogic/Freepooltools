@@ -458,15 +458,28 @@ const SlopeProfile: React.FC<SlopeProfileProps> = ({
   // Pool outline path — reused for the water fill AND as a clip so the ripple
   // texture never spills outside the water.
   const poolPath = `M ${PAD_X} ${POOL_TOP} L ${VB_W - PAD_X} ${POOL_TOP} L ${VB_W - PAD_X} ${yDeep} L ${deepStartX} ${yDeep} L ${shallowEndX} ${yShallow} L ${PAD_X} ${yShallow} Z`;
-  // A gentle horizontal wave across the full width at depth y (clipped to the
-  // pool, so it only shows where there's water).
-  const wave = (y: number) => {
-    const seg = 56;
-    let d = `M ${PAD_X} ${y} q ${seg / 2} -5 ${seg} 0`;
-    for (let x = PAD_X + seg; x < VB_W - PAD_X; x += seg) d += ` t ${seg} 0`;
+  // A wavy horizontal line at depth `y` with its own amplitude, wavelength
+  // (seg) and phase offset, so stacked lines read as organic ripples rather
+  // than identical sine waves. Drawn full-width; the poolClip trims it.
+  const wave = (y: number, amp: number, seg: number, phase: number) => {
+    let x = PAD_X - seg + (phase % seg);
+    let d = `M ${x.toFixed(1)} ${y.toFixed(1)} q ${(seg / 2).toFixed(1)} ${(-amp).toFixed(1)} ${seg.toFixed(1)} 0`;
+    for (x += seg; x < VB_W - PAD_X + seg; x += seg) d += ` t ${seg.toFixed(1)} 0`;
     return d;
   };
-  const waveYs = [POOL_TOP + 26, POOL_TOP + 58, POOL_TOP + 92, POOL_TOP + 128];
+  // Deterministic pseudo-random ripple set (stable across renders + SSR): many
+  // lines with varied amplitude / wavelength / phase / opacity for a natural,
+  // non-repeating water texture.
+  const ripples = useMemo(() => {
+    let s = 9;
+    const rnd = () => ((s = (s * 9301 + 49297) % 233280), s / 233280);
+    return Array.from({ length: 11 }, (_, i) => ({
+      d: wave(POOL_TOP + 20 + i * 14 + rnd() * 7, 2.5 + rnd() * 6, 40 + rnd() * 48, rnd() * 96),
+      opacity: Math.max(0.05, 0.26 - i * 0.018),
+      w: 1 + rnd() * 0.8,
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <svg
@@ -478,15 +491,15 @@ const SlopeProfile: React.FC<SlopeProfileProps> = ({
       style={{ touchAction: 'none' }}
     >
       <defs>
-        {/* Water body: bright near the surface, deepening toward the floor. */}
+        {/* Water body: a deep blue, darkening toward the floor for depth. */}
         <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#5bb3e6" stopOpacity="0.45" />
-          <stop offset="42%" stopColor="#1f7ec4" stopOpacity="0.42" />
-          <stop offset="100%" stopColor="#0f4d80" stopOpacity="0.58" />
+          <stop offset="0%" stopColor="#2a7ab4" stopOpacity="0.62" />
+          <stop offset="45%" stopColor="#124f82" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#06294c" stopOpacity="0.85" />
         </linearGradient>
         {/* Surface sheen fading down from the waterline. */}
         <linearGradient id="surfaceSheen" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#cdeeff" stopOpacity="0.85" />
+          <stop offset="0%" stopColor="#cdeeff" stopOpacity="0.7" />
           <stop offset="100%" stopColor="#cdeeff" stopOpacity="0" />
         </linearGradient>
         <clipPath id="poolClip">
@@ -503,9 +516,9 @@ const SlopeProfile: React.FC<SlopeProfileProps> = ({
           safety net; disabled under prefers-reduced-motion. */}
       <g clipPath="url(#poolClip)">
         <rect x={PAD_X} y={POOL_TOP} width={innerW} height="16" fill="url(#surfaceSheen)" />
-        <g className="water-ripple" stroke="#dff3ff" fill="none" strokeLinecap="round" strokeWidth="1.4">
-          {waveYs.map((y, i) => (
-            <path key={i} d={wave(y)} opacity={0.3 - i * 0.04} />
+        <g className="water-ripple" stroke="#cfeeff" fill="none" strokeLinecap="round">
+          {ripples.map((r, i) => (
+            <path key={i} d={r.d} opacity={r.opacity} strokeWidth={r.w} />
           ))}
         </g>
       </g>
