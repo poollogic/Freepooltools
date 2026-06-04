@@ -88,7 +88,7 @@ export const Navbar = () => {
               <ThemeToggle />
               <Link
                 to="/guides"
-                className="group inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
+                className="group hidden sm:inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
               >
                 <BookOpen className="w-4 h-4 text-brand-blue-light" />
                 <span className="hidden sm:inline">Guides</span>
