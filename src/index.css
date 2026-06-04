@@ -118,6 +118,28 @@
     color 0.3s ease, fill 0.3s ease, stroke 0.3s ease !important;
 }
 
+/* Theme-toggle knob — position, color, and which icon shows are all keyed off
+   the <html> theme class, which the inline script in index.html sets before the
+   first paint. So the knob renders in its final spot on load (no slide); the
+   transform transition only animates on an actual class change (a click). */
+.theme-knob {
+  transform: translateX(0);
+  background-image: linear-gradient(135deg, var(--color-brand-blue-light), var(--color-brand-blue));
+}
+html.light .theme-knob {
+  transform: translateX(1.75rem);
+  background-image: linear-gradient(135deg, #fcd34d, var(--color-brand-orange));
+}
+.theme-knob-sun {
+  display: none;
+}
+html.light .theme-knob-moon {
+  display: none;
+}
+html.light .theme-knob-sun {
+  display: block;
+}
+
 /* Force white text on SOLID accent fills (orange/blue buttons + active states)
    in both themes — text-fg is dark ink in light mode, which fails on a colored
    fill. Unlayered so it beats the text-fg utility. */
