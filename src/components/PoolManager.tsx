@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { X, Plus, Trash2, Pencil, Check, Download, Upload, Droplet, Waves } from 'lucide-react';
+import { X, Plus, Trash2, Pencil, Check, Download, Upload, Droplet, Waves, Search } from 'lucide-react';
 import {
   usePools,
   useActiveId,
@@ -38,7 +38,13 @@ export const PoolManager = ({ onClose }: { onClose: () => void }) => {
   const [eVol, setEVol] = useState('');
   const [eCya, setECya] = useState('');
   const [msg, setMsg] = useState('');
+  const [adding, setAdding] = useState(false); // is the add-a-pool form expanded
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const q = query.trim().toLowerCase();
+  const filtered = q ? pools.filter((p) => p.name.toLowerCase().includes(q)) : pools;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -84,6 +90,7 @@ export const PoolManager = ({ onClose }: { onClose: () => void }) => {
     setVol('');
     setCya('');
     setMsg('');
+    setAdding(false);
   };
 
   const startEdit = (id: string) => {
@@ -155,28 +162,52 @@ export const PoolManager = ({ onClose }: { onClose: () => void }) => {
         </div>
 
         <div className="overflow-y-auto px-5 py-4 space-y-4">
-          {/* Add a pool */}
-          <div className="rounded-xl border border-line bg-card-2 p-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-subtle mb-2">Save a pool</p>
-            <input
-              className={`${fieldClass} mb-2`}
-              placeholder="Name or address (e.g. 14 Lakeshore Dr)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && add()}
-            />
-            <div className="flex gap-2">
-              <input className={fieldClass} inputMode="decimal" placeholder="Volume (gal)" value={vol} onChange={(e) => setVol(e.target.value)} />
-              <input className={fieldClass} inputMode="decimal" placeholder="CYA (ppm)" value={cya} onChange={(e) => setCya(e.target.value)} />
-              <button
-                type="button"
-                onClick={add}
-                className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-brand-orange px-3 py-2 text-sm font-semibold text-white hover:bg-brand-orange-dark transition-colors"
-              >
-                <Plus className="w-4 h-4" /> Add
-              </button>
+          {/* Add a pool — collapsed behind a button once there are pools, so the
+              list stays the focus; expands to the full form on click. */}
+          {pools.length > 0 && !adding ? (
+            <button
+              type="button"
+              onClick={() => setAdding(true)}
+              className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-line bg-card-2 px-3 py-2.5 text-sm font-semibold text-muted hover:text-fg hover:border-line-strong transition-colors"
+            >
+              <Plus className="w-4 h-4" /> Add a pool
+            </button>
+          ) : (
+            <div className="rounded-xl border border-line bg-card-2 p-3">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-subtle">Save a pool</p>
+                {pools.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setAdding(false)}
+                    aria-label="Cancel adding a pool"
+                    className="inline-flex items-center justify-center w-6 h-6 rounded-md text-subtle hover:text-fg hover:bg-card-3 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              <input
+                className={`${fieldClass} mb-2`}
+                placeholder="Name or address (e.g. 14 Lakeshore Dr)"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && add()}
+                autoFocus={adding}
+              />
+              <div className="flex gap-2">
+                <input className={fieldClass} inputMode="decimal" placeholder="Volume (gal)" value={vol} onChange={(e) => setVol(e.target.value)} />
+                <input className={fieldClass} inputMode="decimal" placeholder="CYA (ppm)" value={cya} onChange={(e) => setCya(e.target.value)} />
+                <button
+                  type="button"
+                  onClick={add}
+                  className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-brand-orange px-3 py-2 text-sm font-semibold text-white hover:bg-brand-orange-dark transition-colors"
+                >
+                  <Plus className="w-4 h-4" /> Add
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* List */}
           {pools.length === 0 ? (
@@ -184,56 +215,98 @@ export const PoolManager = ({ onClose }: { onClose: () => void }) => {
               No saved pools yet. Add one above — or use the “Save this pool” button on any calculator.
             </p>
           ) : (
-            <ul className="space-y-2">
-              {pools.map((p) => {
-                const isActive = p.id === activeId;
-                const isEditing = p.id === editingId;
-                return (
-                  <li key={p.id} className={`rounded-xl border p-3 ${isActive ? 'border-brand-orange/40 bg-brand-orange/[0.06]' : 'border-line bg-card'}`}>
-                    {isEditing ? (
-                      <div className="space-y-2">
-                        <input className={fieldClass} value={eName} onChange={(e) => setEName(e.target.value)} placeholder="Name or address" />
-                        <div className="flex gap-2">
-                          <input className={fieldClass} inputMode="decimal" value={eVol} onChange={(e) => setEVol(e.target.value)} placeholder="Volume (gal)" />
-                          <input className={fieldClass} inputMode="decimal" value={eCya} onChange={(e) => setECya(e.target.value)} placeholder="CYA (ppm)" />
-                          <button type="button" onClick={saveEdit} aria-label="Save changes" className="shrink-0 inline-flex items-center justify-center w-9 rounded-lg bg-brand-blue text-white hover:bg-brand-blue-dark transition-colors">
-                            <Check className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-3">
-                        <Droplet className={`w-4 h-4 shrink-0 ${isActive ? 'text-brand-orange' : 'text-brand-blue-light'}`} />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-fg font-semibold text-sm truncate">{p.name}</p>
-                          <p className="text-subtle text-xs tabular-nums">
-                            {p.volumeGal != null ? `${p.volumeGal.toLocaleString()} gal` : 'no volume'}
-                            {p.cya != null ? ` · CYA ${p.cya}` : ''}
-                          </p>
-                        </div>
-                        {isActive ? (
-                          <span className="shrink-0 text-[11px] font-bold uppercase tracking-wide text-brand-orange">In use</span>
+            <>
+              {/* Search — only when there are enough pools to need it. */}
+              {pools.length > 4 && (
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-subtle" />
+                  <input
+                    className={`${fieldClass} pl-9`}
+                    placeholder="Search pools…"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    aria-label="Search pools"
+                  />
+                </div>
+              )}
+
+              {filtered.length === 0 ? (
+                <p className="text-sm text-subtle text-center py-6">No pools match “{query}”.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {filtered.map((p) => {
+                    const isActive = p.id === activeId;
+                    const isEditing = p.id === editingId;
+                    const isConfirming = p.id === confirmDelete;
+                    return (
+                      <li key={p.id} className={`rounded-xl border p-3 ${isActive ? 'border-brand-orange/40 bg-brand-orange/[0.06]' : 'border-line bg-card'}`}>
+                        {isEditing ? (
+                          <div className="space-y-2">
+                            <input className={fieldClass} value={eName} onChange={(e) => setEName(e.target.value)} placeholder="Name or address" />
+                            <div className="flex gap-2">
+                              <input className={fieldClass} inputMode="decimal" value={eVol} onChange={(e) => setEVol(e.target.value)} placeholder="Volume (gal)" />
+                              <input className={fieldClass} inputMode="decimal" value={eCya} onChange={(e) => setECya(e.target.value)} placeholder="CYA (ppm)" />
+                              <button type="button" onClick={saveEdit} aria-label="Save changes" className="shrink-0 inline-flex items-center justify-center w-9 rounded-lg bg-brand-blue text-white hover:bg-brand-blue-dark transition-colors">
+                                <Check className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        ) : isConfirming ? (
+                          <div className="flex items-center gap-3">
+                            <Trash2 className="w-4 h-4 text-red-400 shrink-0" />
+                            <p className="text-sm text-fg flex-1 min-w-0 truncate">
+                              Delete <span className="font-semibold">{p.name}</span>?
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => { deletePool(p.id); setConfirmDelete(null); }}
+                              className="shrink-0 rounded-lg bg-red-500/90 px-2.5 py-1 text-xs font-semibold text-white hover:bg-red-500 transition-colors"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDelete(null)}
+                              className="shrink-0 rounded-lg border border-line px-2.5 py-1 text-xs font-semibold text-muted hover:text-fg hover:bg-card-2 transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         ) : (
-                          <button
-                            type="button"
-                            onClick={() => setActivePool(p.id)}
-                            className="shrink-0 rounded-lg border border-line px-2.5 py-1 text-xs font-semibold text-muted hover:text-fg hover:bg-card-2 transition-colors"
-                          >
-                            Use
-                          </button>
+                          <div className="flex items-center gap-3">
+                            <Droplet className={`w-4 h-4 shrink-0 ${isActive ? 'text-brand-orange' : 'text-brand-blue-light'}`} />
+                            <div className="min-w-0 flex-1">
+                              <p className="text-fg font-semibold text-sm truncate">{p.name}</p>
+                              <p className="text-subtle text-xs tabular-nums">
+                                {p.volumeGal != null ? `${p.volumeGal.toLocaleString()} gal` : 'no volume'}
+                                {p.cya != null ? ` · CYA ${p.cya}` : ''}
+                              </p>
+                            </div>
+                            {isActive ? (
+                              <span className="shrink-0 text-[11px] font-bold uppercase tracking-wide text-brand-orange">In use</span>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => setActivePool(p.id)}
+                                className="shrink-0 rounded-lg border border-line px-2.5 py-1 text-xs font-semibold text-muted hover:text-fg hover:bg-card-2 transition-colors"
+                              >
+                                Use
+                              </button>
+                            )}
+                            <button type="button" onClick={() => startEdit(p.id)} aria-label={`Edit ${p.name}`} className="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg text-subtle hover:text-fg hover:bg-card-2 transition-colors">
+                              <Pencil className="w-3.5 h-3.5" />
+                            </button>
+                            <button type="button" onClick={() => setConfirmDelete(p.id)} aria-label={`Delete ${p.name}`} className="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg text-subtle hover:text-red-400 hover:bg-card-2 transition-colors">
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         )}
-                        <button type="button" onClick={() => startEdit(p.id)} aria-label={`Edit ${p.name}`} className="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg text-subtle hover:text-fg hover:bg-card-2 transition-colors">
-                          <Pencil className="w-3.5 h-3.5" />
-                        </button>
-                        <button type="button" onClick={() => deletePool(p.id)} aria-label={`Delete ${p.name}`} className="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg text-subtle hover:text-red-400 hover:bg-card-2 transition-colors">
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </>
           )}
 
           {msg && <p className="text-xs text-brand-blue-light">{msg}</p>}
