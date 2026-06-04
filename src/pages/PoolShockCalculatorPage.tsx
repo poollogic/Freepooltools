@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Info, Plus, AlertTriangle, Sun, ArrowRight } from 'lucide-react';
+import { Zap, Info, Plus, AlertTriangle, Sun, ArrowRight, Check } from 'lucide-react';
 import { PageShell } from '@/components/PageShell';
 import { ShareButton } from '@/components/ShareButton';
 import { RelatedTools } from '@/components/RelatedTools';
@@ -222,20 +222,31 @@ export const PoolShockCalculatorPage = () => {
 
   return (
     <PageShell>
-      {/* Hero + calculator */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-8">
-        <div className="inline-flex items-center gap-2 rounded-full border border-line bg-card px-3 py-1 text-xs font-semibold text-brand-orange mb-4">
-          <Zap className="w-3.5 h-3.5" /> Pool Shock Calculator
+      {/* Hero */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-8 text-center">
+        <div className="inline-flex items-center gap-2 mb-5 rounded-full border border-line bg-card-2 backdrop-blur-[10px] px-3.5 py-1.5">
+          <Zap className="w-3.5 h-3.5 text-brand-orange" />
+          <span className="text-muted font-semibold tracking-wide text-xs">Free Pool Tool</span>
         </div>
-        <h1 className="font-display font-bold text-fg text-3xl sm:text-4xl tracking-tight mb-3">
-          How much shock does your pool need?
+        <h1 className="font-display font-bold text-fg text-4xl sm:text-5xl leading-[1.05] tracking-tight mb-5">
+          Pool Shock Calculator
         </h1>
-        <p className="text-muted text-[15px] sm:text-base leading-relaxed max-w-2xl mb-8">
-          Enter your pool size and a few test numbers to get the exact amount of chlorine to shock
-          your pool — whether you’re clearing algae, killing the “chlorine smell” (chloramines), or
-          hitting a custom target. Doses use unstabilized chlorine and your CYA, the way the pros do it.
+        <p className="text-lg text-muted leading-relaxed max-w-2xl mx-auto">
+          Exactly how much shock to add to clear algae or chloramines — for any pool size, using
+          unstabilized chlorine and your CYA, the way the pros do it.
         </p>
+        <ul className="flex flex-wrap justify-center gap-2 mt-6">
+          {['Algae & chloramine modes', 'CYA-aware shock level', 'Any pool size', 'No email required'].map((label) => (
+            <li key={label} className="inline-flex items-center gap-1.5 rounded-full border border-line bg-card-2 backdrop-blur-[10px] px-3 py-1.5 text-xs font-semibold text-muted">
+              <Check className="w-3.5 h-3.5 text-brand-orange shrink-0" />
+              {label}
+            </li>
+          ))}
+        </ul>
+      </section>
 
+      {/* Calculator */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
         <div className="grid lg:grid-cols-[1fr_360px] gap-6">
           {/* Inputs */}
           <div className="rounded-2xl border border-line bg-card p-5 sm:p-6 elevate">
