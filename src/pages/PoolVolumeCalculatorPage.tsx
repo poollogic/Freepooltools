@@ -20,6 +20,8 @@ import {
   Save,
   FlaskConical,
   ArrowRight,
+  Code2,
+  Copy,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
@@ -828,20 +830,114 @@ const SimpleSpaDiagram: React.FC<SimpleSpaDiagramProps> = ({ topW, depth, unitLa
 // ── URL serialization ────────────────────────────────────────────
 const SHARE_KEYS = ['shape', 'l', 'w', 'd', 's', 'deep', 'shallow', 'u', 'v', 'mode'] as const;
 
-const PoolVolumeCalculatorInner = () => {
+// The copy-paste embed snippet pool companies add to their site. The iframe
+// auto-resizes via the tiny listener (matches the height message the embed
+// page posts), so it fits with no scrollbars.
+const EMBED_SNIPPET = `<iframe src="${SITE_ORIGIN}/embed/pool-volume-calculator" title="Pool Volume Calculator" loading="lazy" width="100%" height="640" style="border:0;width:100%;max-width:680px" scrolling="no"></iframe>
+<script>window.addEventListener("message",function(e){if(e.data&&e.data.type==="fpt-embed-height"){var f=document.querySelectorAll('iframe[src*="/embed/"]');for(var n=0;n<f.length;n++)if(f[n].contentWindow===e.source)f[n].style.height=e.data.height+"px"}});</script>`;
+
+/** "Embed this calculator" panel on the full page — gives pros the snippet. */
+const EmbedSnippet = () => {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(EMBED_SNIPPET);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard unavailable */
+    }
+  };
+  return (
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <div className="rounded-2xl border border-line bg-card p-5 sm:p-6">
+        <h2 className="font-display font-bold text-fg text-xl sm:text-2xl mb-2 flex items-center gap-2">
+          <Code2 className="w-5 h-5 text-brand-orange" /> Embed this calculator — free
+        </h2>
+        <p className="text-muted text-[15px] leading-relaxed mb-4">
+          Pool pros: add this calculator to your own website as a free tool for your customers.
+          Paste the code where you want it to appear — it auto-resizes to fit, on any device.
+        </p>
+        <div className="relative">
+          <pre className="overflow-x-auto rounded-xl border border-line bg-card-2 p-4 pt-12 sm:pt-4 sm:pr-24 text-xs text-muted leading-relaxed">
+            <code>{EMBED_SNIPPET}</code>
+          </pre>
+          <button
+            type="button"
+            onClick={copy}
+            className="absolute top-3 right-3 inline-flex items-center gap-1.5 rounded-lg bg-brand-orange px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-orange-dark transition-colors"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5" /> Copied
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5" /> Copy
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/** Attribution backlink shown in the embedded widget (dofollow → SEO value). */
+const PoweredByEmbed = () => (
+  <div className="max-w-5xl mx-auto px-4 pb-5 text-center">
+    <a
+      href={`${SITE_ORIGIN}/pool-volume-calculator/`}
+      target="_blank"
+      rel="noopener"
+      className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-brand-orange transition-colors"
+    >
+      <Droplet className="w-3.5 h-3.5 text-brand-orange" /> Powered by Free Pool Tools
+    </a>
+  </div>
+);
+
+const PoolVolumeCalculatorInner = ({ embed }: { embed: boolean }) => {
   // SEO meta via usePageMeta so title/description/canonical/OG land in the
   // PRERENDERED HTML (runs synchronously during renderToString). Previously
   // these were set in a client effect, which shipped the homepage's defaults
   // (wrong title + canonical → "/") in the static HTML Google indexes.
   // See CLAUDE.md #9. JSON-LD stays in the effect below (the documented
   // exception — usePageMeta doesn't emit JSON-LD).
-  usePageMeta({
-    title: 'Pool Volume Calculator: How Many Gallons Is My Pool?',
-    description:
-      'How many gallons is your pool? Get an instant volume in gallons or liters for any shape — rectangle, round, oval, kidney, freeform, or spa. Free, no sign-up.',
-    canonicalPath: '/pool-volume-calculator/',
-    jsonLd: [howToSchema, faqPageSchema, breadcrumbSchema],
-  });
+  usePageMeta(
+    embed
+      ? {
+          // The embedded copy points its canonical at the real page and is
+          // noindex,follow — so it never competes for rankings, but the
+          // "Powered by" backlink it carries is still followed.
+          title: 'Pool Volume Calculator | Free Pool Tools',
+          description: 'How many gallons is your pool? Instant volume for any shape — free.',
+          canonicalPath: '/pool-volume-calculator/',
+          noindex: true,
+        }
+      : {
+          title: 'Pool Volume Calculator: How Many Gallons Is My Pool?',
+          description:
+            'How many gallons is your pool? Get an instant volume in gallons or liters for any shape — rectangle, round, oval, kidney, freeform, or spa. Free, no sign-up.',
+          canonicalPath: '/pool-volume-calculator/',
+          jsonLd: [howToSchema, faqPageSchema, breadcrumbSchema],
+        },
+  );
+
+  // Embed: report content height to the host page so its <iframe> auto-fits
+  // (no scrollbars). Only runs inside a frame; the listener is in the snippet.
+  useEffect(() => {
+    if (!embed || typeof window === 'undefined' || window.parent === window) return;
+    const post = () =>
+      window.parent.postMessage(
+        { type: 'fpt-embed-height', height: Math.ceil(document.documentElement.scrollHeight) },
+        '*',
+      );
+    post();
+    const ro = new ResizeObserver(post);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [embed]);
 
   const [shape, setShape] = useState<Shape>('rectangle');
   const [lengthUnit, setLengthUnit] = useState<LenUnit>('ft');
@@ -1230,14 +1326,21 @@ const PoolVolumeCalculatorInner = () => {
   const unitL = lengthUnit; // shorthand
 
   return (
-    <div className="force-static-motion min-h-screen bg-canvas relative overflow-x-hidden selection:bg-[#ff720f] selection:text-white">
-      <div className="absolute md:fixed inset-0 bg-mesh opacity-50 pointer-events-none" />
-      <div className="absolute md:fixed inset-0 page-glow pointer-events-none" />
+    <div
+      className={
+        embed
+          ? 'bg-canvas text-fg pt-4 selection:bg-[#ff720f] selection:text-white'
+          : 'force-static-motion min-h-screen bg-canvas relative overflow-x-hidden selection:bg-[#ff720f] selection:text-white'
+      }
+    >
+      {!embed && <div className="absolute md:fixed inset-0 bg-mesh opacity-50 pointer-events-none" />}
+      {!embed && <div className="absolute md:fixed inset-0 page-glow pointer-events-none" />}
 
-      <div className="relative z-10">
-        <Navbar />
+      <div className={embed ? '' : 'relative z-10'}>
+        {!embed && <Navbar />}
 
-        {/* Hero */}
+        {/* Hero (hidden in the embedded widget) */}
+        {!embed && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-10 text-center">
           <div className="inline-flex items-center gap-2 mb-5 rounded-full border border-line bg-card-2 backdrop-blur-[10px] px-3.5 py-1.5">
             <Calculator className="w-3.5 h-3.5 text-brand-orange" />
@@ -1270,6 +1373,7 @@ const PoolVolumeCalculatorInner = () => {
             ))}
           </ul>
         </section>
+        )}
 
         {/* Calculator */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
@@ -2016,6 +2120,12 @@ const PoolVolumeCalculatorInner = () => {
           </div>
         </section>
 
+        {/* Embedded widget: attribution backlink + report height to the host. */}
+        {embed && <PoweredByEmbed />}
+
+        {/* Everything below the calculator is the SEO page — hidden in embeds. */}
+        {!embed && (
+          <>
         {/* Formula transparency panel — collapsed by default so the formula
             doesn't intimidate; still in the HTML (crawlable) and one tap away. */}
         {gallons > 0 && shape !== 'freeform' && calcMode !== 'spa' && (
@@ -2153,15 +2263,22 @@ const PoolVolumeCalculatorInner = () => {
           </div>
         </section>
 
+        {/* Embed-this-calculator — the link-earning widget for pool companies. */}
+        <EmbedSnippet />
+
         {/* Cross-links to the other tools — internal linking keeps users on-site
             and spreads crawl equity (the site monetizes pageviews, not leads). */}
         <RelatedTools currentPath="/pool-volume-calculator" />
 
         <Footer />
+          </>
+        )}
       </div>
 
     </div>
   );
 };
 
-export const PoolVolumeCalculatorPage = () => <PoolVolumeCalculatorInner />;
+export const PoolVolumeCalculatorPage = ({ embed = false }: { embed?: boolean } = {}) => (
+  <PoolVolumeCalculatorInner embed={embed} />
+);

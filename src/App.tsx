@@ -59,6 +59,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/pool-volume-calculator" element={<PoolVolumeCalculatorPage />} />
+          <Route path="/embed/pool-volume-calculator" element={<PoolVolumeCalculatorPage embed />} />
           <Route path="/chlorine-calculator" element={<ChlorineCalculatorPage />} />
           <Route path="/pool-shock-calculator" element={<PoolShockCalculatorPage />} />
           <Route path="/cya-calculator" element={<CyaCalculatorPage />} />

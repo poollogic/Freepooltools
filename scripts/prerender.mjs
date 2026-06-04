@@ -182,7 +182,9 @@ async function run() {
     console.error('✗ 404 render failed:', err.message);
   }
 
-  await writeSitemap(PRERENDER_ROUTES);
+  // Embeds are prerendered (so the widget has static HTML) but kept out of the
+  // sitemap — they're noindex and would just be duplicate-content noise.
+  await writeSitemap(PRERENDER_ROUTES.filter((r) => !r.startsWith('/embed')));
   console.log(`\nPrerendered ${count}/${PRERENDER_ROUTES.length} routes.`);
 }
 
