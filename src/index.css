@@ -75,8 +75,6 @@
   /* Near-opaque surface for floating menus/dropdowns so page content behind
      them never shows through (the card tokens are too translucent for this). */
   --popover-bg: rgba(13, 25, 44, 0.97);
-  /* Translucent variant for frosted-glass menus (paired with .glass-pop blur). */
-  --popover-glass: rgba(13, 25, 44, 0.72);
   --nav-border: linear-gradient(100deg, rgba(22, 105, 174, 0.55) 0%, rgba(255, 255, 255, 0.10) 50%, rgba(255, 114, 15, 0.42) 100%);
   --nav-border-strong: linear-gradient(100deg, rgba(74, 147, 209, 0.85) 0%, rgba(255, 255, 255, 0.16) 50%, rgba(255, 138, 58, 0.70) 100%);
   --nav-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.07);
@@ -92,7 +90,6 @@
   --nav-bg: rgba(255, 255, 255, 0.72);
   --nav-bg-scrolled: rgba(255, 255, 255, 0.92);
   --popover-bg: rgba(255, 255, 255, 0.98);
-  --popover-glass: rgba(255, 255, 255, 0.7);
   --nav-border: linear-gradient(100deg, rgba(22, 105, 174, 0.22) 0%, rgba(16, 42, 67, 0.05) 50%, rgba(255, 114, 15, 0.18) 100%);
   --nav-border-strong: linear-gradient(100deg, rgba(22, 105, 174, 0.40) 0%, rgba(16, 42, 67, 0.08) 50%, rgba(255, 114, 15, 0.30) 100%);
   --nav-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.65);
@@ -161,11 +158,6 @@ html.light .theme-knob-sun {
 .overlay-blur {
   -webkit-backdrop-filter: blur(8px) !important;
   backdrop-filter: blur(8px) !important;
-}
-.glass-pop {
-  background-color: var(--popover-glass);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
-  backdrop-filter: blur(16px) saturate(1.4) !important;
 }
 
 /* Navbar shell — a gradient hairline border (the p-px wrapper) + a frosted bar,

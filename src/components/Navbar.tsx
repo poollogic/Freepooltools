@@ -68,6 +68,13 @@ export const Navbar = () => {
 
   return (
     <header className="fixed top-0 inset-x-0 z-50">
+      {/* Frosts the page behind an open pinned-tools menu. Rendered here — OUTSIDE
+          the backdrop-filtered nav bar — because a backdrop-filter nested inside
+          another one can't blur the page. Decorative + click-through; the
+          document listener handles closing on outside click. */}
+      {open && (
+        <div className="fixed inset-0 bg-black/20 overlay-blur pointer-events-none" aria-hidden="true" />
+      )}
       <nav className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Gradient border wrapper — the 1px padding shows the gradient as a hairline. */}
         <div
@@ -141,7 +148,7 @@ export const Navbar = () => {
                   {open && (
                     <div
                       role="menu"
-                      className="absolute right-0 mt-2 w-64 rounded-xl border border-line glass-pop shadow-xl shadow-black/20 elevate overflow-hidden z-50"
+                      className="absolute right-0 mt-2 w-64 rounded-xl border border-line bg-[var(--popover-bg)] shadow-xl shadow-black/30 elevate overflow-hidden z-50"
                     >
                       {/* Pin/unpin the tool you're currently viewing. */}
                       {currentTool && (
