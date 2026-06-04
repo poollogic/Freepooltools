@@ -1,10 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutGrid, BookOpen, Pin, PinOff, X, Folder, ArrowRight } from 'lucide-react';
+import { LayoutGrid, BookOpen, Pin, PinOff, X, Folder, ArrowRight, ClipboardList } from 'lucide-react';
 import { Logo } from './Logo';
 import { ThemeToggle } from './ThemeToggle';
 import { TOOLS } from '@/data/tools';
 import { usePinnedTools, togglePinnedTool, removePinnedTool } from '@/lib/pinnedTools';
+
+// Lazy: the saved-pools manager only downloads when a tech opens it — it's never
+// in the calculator/critical bundle.
+const PoolManager = lazy(() => import('./PoolManager'));
 
 // Match a route path to a tool, tolerating a trailing slash (prerendered pages
 // are served at /path/).
@@ -44,6 +48,7 @@ export const Navbar = () => {
 
   const [open, setOpen] = useState(false);
   const folderRef = useRef<HTMLDivElement>(null);
+  const [poolsOpen, setPoolsOpen] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -79,22 +84,34 @@ export const Navbar = () => {
               <Logo hideMarkOnMobile />
             </Link>
 
-            <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex items-center gap-0.5 sm:gap-2">
               <ThemeToggle />
               <Link
                 to="/guides"
-                className="group inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
+                className="group inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
               >
                 <BookOpen className="w-4 h-4 text-brand-blue-light" />
                 <span className="hidden sm:inline">Guides</span>
               </Link>
               <Link
                 to="/"
-                className="group inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
+                className="group inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
               >
                 <LayoutGrid className="w-4 h-4 text-brand-blue-light group-hover:text-brand-blue-light" />
                 <span className="hidden sm:inline">All tools</span>
               </Link>
+
+              {/* My Pools — opens the lazy saved-pools manager. */}
+              <button
+                type="button"
+                onClick={() => setPoolsOpen(true)}
+                aria-label="My pools"
+                title="My saved pools"
+                className="group inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
+              >
+                <ClipboardList className="w-4 h-4 text-brand-blue-light" />
+                <span className="hidden sm:inline">My pools</span>
+              </button>
 
               {/* Pinned-tools folder — pushed to the far right. A single button
                   that opens a dropdown of shortcuts and lets you pin/unpin the
@@ -192,6 +209,13 @@ export const Navbar = () => {
           </div>
         </div>
       </nav>
+
+      {/* Saved-pools manager — lazy; only mounts (and downloads) when opened. */}
+      {poolsOpen && (
+        <Suspense fallback={null}>
+          <PoolManager onClose={() => setPoolsOpen(false)} />
+        </Suspense>
+      )}
     </header>
   );
 };
