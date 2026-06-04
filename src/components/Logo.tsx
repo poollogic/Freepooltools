@@ -10,7 +10,14 @@ import { cn } from '@/lib/utils';
  * Wrap in an element with the `logo-link` class (e.g. the nav <Link>) to enable
  * the hover-glow interaction.
  */
-export const Logo = ({ className }: { className?: string }) => {
+export const Logo = ({
+  className,
+  hideMarkOnMobile = false,
+}: {
+  className?: string;
+  /** Hide the water-drop mark on phones (wordmark only) to save header width. */
+  hideMarkOnMobile?: boolean;
+}) => {
   // Unique gradient ids so multiple logos on one page (nav + footer) don't clash.
   const id = useId();
   const dropGrad = `drop-${id}`;
@@ -18,7 +25,12 @@ export const Logo = ({ className }: { className?: string }) => {
 
   return (
     <span className={cn('inline-flex items-center gap-2.5 font-display font-bold', className)}>
-      <span className="logo-mark relative inline-flex items-center justify-center w-9 h-9">
+      <span
+        className={cn(
+          'logo-mark relative items-center justify-center w-9 h-9',
+          hideMarkOnMobile ? 'hidden sm:inline-flex' : 'inline-flex',
+        )}
+      >
         <svg viewBox="0 0 24 24" className="w-[22px] h-[22px]" aria-hidden="true">
           <defs>
             <linearGradient id={dropGrad} x1="0" y1="0" x2="0.4" y2="1">

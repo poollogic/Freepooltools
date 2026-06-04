@@ -76,12 +76,29 @@ export const Navbar = () => {
             }`}
           >
             <Link to="/" aria-label="Free Pool Tools home" className="logo-link text-[17px]">
-              <Logo />
+              <Logo hideMarkOnMobile />
             </Link>
 
             <div className="flex items-center gap-1 sm:gap-2">
-              {/* Pinned-tools folder — a single button that opens a dropdown of
-                  shortcuts and lets you pin/unpin the tool you're viewing. */}
+              <ThemeToggle />
+              <Link
+                to="/guides"
+                className="group inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
+              >
+                <BookOpen className="w-4 h-4 text-brand-blue-light" />
+                <span className="hidden sm:inline">Guides</span>
+              </Link>
+              <Link
+                to="/"
+                className="group inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
+              >
+                <LayoutGrid className="w-4 h-4 text-brand-blue-light group-hover:text-brand-blue-light" />
+                <span className="hidden sm:inline">All tools</span>
+              </Link>
+
+              {/* Pinned-tools folder — pushed to the far right. A single button
+                  that opens a dropdown of shortcuts and lets you pin/unpin the
+                  tool you're viewing. */}
               {showFolder && (
                 <div className="relative" ref={folderRef}>
                   <button
@@ -107,7 +124,7 @@ export const Navbar = () => {
                   {open && (
                     <div
                       role="menu"
-                      className="absolute right-0 mt-2 w-64 rounded-xl border border-line bg-card backdrop-blur-[12px] elevate overflow-hidden z-50"
+                      className="absolute right-0 mt-2 w-64 rounded-xl border border-line bg-[var(--popover-bg)] backdrop-blur-[12px] shadow-xl shadow-black/20 elevate overflow-hidden z-50"
                     >
                       {/* Pin/unpin the tool you're currently viewing. */}
                       {currentTool && (
@@ -171,22 +188,6 @@ export const Navbar = () => {
                   )}
                 </div>
               )}
-
-              <ThemeToggle />
-              <Link
-                to="/guides"
-                className="group inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
-              >
-                <BookOpen className="w-4 h-4 text-brand-blue-light" />
-                <span className="hidden sm:inline">Guides</span>
-              </Link>
-              <Link
-                to="/"
-                className="group inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
-              >
-                <LayoutGrid className="w-4 h-4 text-brand-blue-light group-hover:text-brand-blue-light" />
-                <span className="hidden sm:inline">All tools</span>
-              </Link>
             </div>
           </div>
         </div>
