@@ -7,6 +7,7 @@ import {
   Beaker,
   Timer,
   Zap,
+  PiggyBank,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -87,6 +88,13 @@ export const TOOLS: Tool[] = [
     title: 'Pump Runtime Calculator',
     blurb: 'How many hours a day to run your pump for a full turnover — and what it costs.',
     icon: Timer,
+    status: 'live',
+  },
+  {
+    path: '/variable-speed-pool-pump-savings-calculator',
+    title: 'VS Pump Savings Calculator',
+    blurb: 'Pick your current pump and see how much a modern variable-speed pump would save in energy.',
+    icon: PiggyBank,
     status: 'live',
   },
 ];
