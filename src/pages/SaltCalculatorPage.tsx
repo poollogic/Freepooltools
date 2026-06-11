@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Waves, Info, Check, Plus, AlertTriangle, Save } from 'lucide-react';
 import { PageShell } from '@/components/PageShell';
 import { ShareButton } from '@/components/ShareButton';
@@ -268,6 +269,13 @@ export const SaltCalculatorPage = () => {
                   <p className="text-subtle text-sm mt-2">≈ {Math.round(drain.fraction * 100)}% of your pool, to go from {currentNum.toLocaleString('en-US')} to {target.toLocaleString('en-US')} ppm</p>
                 ) : (
                   <p className="text-subtle text-sm mt-1">{currentNum > 0 && target >= currentNum ? 'Your target isn’t below your current salt — nothing to drain.' : 'Enter your volume and current salt above.'}</p>
+                )}
+                {showLower && (
+                  <p className="text-sm mt-2">
+                    <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose" className="text-brand-orange font-semibold hover:underline">
+                      How to drain your pool with a garden hose →
+                    </Link>
+                  </p>
                 )}
               </>
             )}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Droplet, Info, Check, Plus, AlertTriangle, Save, Waves } from 'lucide-react';
 import { PageShell } from '@/components/PageShell';
 import { ShareButton } from '@/components/ShareButton';
@@ -325,6 +326,13 @@ export const CyaCalculatorPage = () => {
                 ) : (
                   <p className="text-subtle text-sm mt-1">
                     {currentCyaNum > 0 && lowerTarget >= currentCyaNum ? 'Your target isn’t below your current CYA — nothing to drain.' : 'Enter your volume and current CYA above.'}
+                  </p>
+                )}
+                {showLower && (
+                  <p className="text-sm mt-2">
+                    <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose" className="text-brand-orange font-semibold hover:underline">
+                      How to drain your pool with a garden hose →
+                    </Link>
                   </p>
                 )}
               </>

@@ -21,6 +21,15 @@ const CyaCalculatorPage = lazy(() =>
 const SaltCalculatorPage = lazy(() =>
   import('@/pages/SaltCalculatorPage').then((m) => ({ default: m.SaltCalculatorPage })),
 );
+const MuriaticAcidCalculatorPage = lazy(() =>
+  import('@/pages/MuriaticAcidCalculatorPage').then((m) => ({ default: m.MuriaticAcidCalculatorPage })),
+);
+const PoolAlkalinityCalculatorPage = lazy(() =>
+  import('@/pages/PoolAlkalinityCalculatorPage').then((m) => ({ default: m.PoolAlkalinityCalculatorPage })),
+);
+const CalciumHardnessCalculatorPage = lazy(() =>
+  import('@/pages/CalciumHardnessCalculatorPage').then((m) => ({ default: m.CalciumHardnessCalculatorPage })),
+);
 const LsiCalculatorPage = lazy(() =>
   import('@/pages/LsiCalculatorPage').then((m) => ({ default: m.LsiCalculatorPage })),
 );
@@ -39,6 +48,9 @@ const GuidesHubPage = lazy(() =>
 );
 const CyaChlorineGuide = lazy(() =>
   import('@/pages/guides/CyaChlorineGuide').then((m) => ({ default: m.CyaChlorineGuide })),
+);
+const DrainPoolGuide = lazy(() =>
+  import('@/pages/guides/DrainPoolGuide').then((m) => ({ default: m.DrainPoolGuide })),
 );
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 
@@ -67,12 +79,16 @@ export default function App() {
           <Route path="/pool-shock-calculator" element={<PoolShockCalculatorPage />} />
           <Route path="/cya-calculator" element={<CyaCalculatorPage />} />
           <Route path="/salt-calculator" element={<SaltCalculatorPage />} />
+          <Route path="/muriatic-acid-calculator" element={<MuriaticAcidCalculatorPage />} />
+          <Route path="/pool-alkalinity-calculator" element={<PoolAlkalinityCalculatorPage />} />
+          <Route path="/calcium-hardness-calculator" element={<CalciumHardnessCalculatorPage />} />
           <Route path="/lsi-calculator" element={<LsiCalculatorPage />} />
           <Route path="/pool-heating-cost-calculator" element={<PoolHeatingCostCalculatorPage />} />
           <Route path="/pool-pump-runtime-calculator" element={<PoolPumpRuntimeCalculatorPage />} />
           <Route path="/variable-speed-pool-pump-savings-calculator" element={<VariableSpeedPumpSavingsCalculatorPage />} />
           <Route path="/guides" element={<GuidesHubPage />} />
           <Route path="/guides/cyanuric-acid-and-chlorine" element={<CyaChlorineGuide />} />
+          <Route path="/guides/how-to-drain-a-pool-with-a-garden-hose" element={<DrainPoolGuide />} />
           {/* Catch-all 404 — must be last. */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

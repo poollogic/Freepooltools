@@ -15,12 +15,16 @@ import { ChlorineCalculatorPage } from '@/pages/ChlorineCalculatorPage';
 import { PoolShockCalculatorPage } from '@/pages/PoolShockCalculatorPage';
 import { CyaCalculatorPage } from '@/pages/CyaCalculatorPage';
 import { SaltCalculatorPage } from '@/pages/SaltCalculatorPage';
+import { MuriaticAcidCalculatorPage } from '@/pages/MuriaticAcidCalculatorPage';
+import { PoolAlkalinityCalculatorPage } from '@/pages/PoolAlkalinityCalculatorPage';
+import { CalciumHardnessCalculatorPage } from '@/pages/CalciumHardnessCalculatorPage';
 import { LsiCalculatorPage } from '@/pages/LsiCalculatorPage';
 import { PoolHeatingCostCalculatorPage } from '@/pages/PoolHeatingCostCalculatorPage';
 import { PoolPumpRuntimeCalculatorPage } from '@/pages/PoolPumpRuntimeCalculatorPage';
 import { VariableSpeedPumpSavingsCalculatorPage } from '@/pages/VariableSpeedPumpSavingsCalculatorPage';
 import { GuidesHubPage } from '@/pages/guides/GuidesHubPage';
 import { CyaChlorineGuide } from '@/pages/guides/CyaChlorineGuide';
+import { DrainPoolGuide } from '@/pages/guides/DrainPoolGuide';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
 // Routes to prerender. Keep in sync with App.tsx's route table. These get their
@@ -34,12 +38,16 @@ export const PRERENDER_ROUTES = [
   '/pool-shock-calculator',
   '/cya-calculator',
   '/salt-calculator',
+  '/muriatic-acid-calculator',
+  '/pool-alkalinity-calculator',
+  '/calcium-hardness-calculator',
   '/lsi-calculator',
   '/pool-heating-cost-calculator',
   '/pool-pump-runtime-calculator',
   '/variable-speed-pool-pump-savings-calculator',
   '/guides',
   '/guides/cyanuric-acid-and-chlorine',
+  '/guides/how-to-drain-a-pool-with-a-garden-hose',
 ];
 
 // Rendered separately to dist/404.html — Cloudflare Pages serves it (with a 404
@@ -56,12 +64,16 @@ const Routing = () => (
     <Route path="/pool-shock-calculator" element={<PoolShockCalculatorPage />} />
     <Route path="/cya-calculator" element={<CyaCalculatorPage />} />
     <Route path="/salt-calculator" element={<SaltCalculatorPage />} />
+    <Route path="/muriatic-acid-calculator" element={<MuriaticAcidCalculatorPage />} />
+    <Route path="/pool-alkalinity-calculator" element={<PoolAlkalinityCalculatorPage />} />
+    <Route path="/calcium-hardness-calculator" element={<CalciumHardnessCalculatorPage />} />
     <Route path="/lsi-calculator" element={<LsiCalculatorPage />} />
     <Route path="/pool-heating-cost-calculator" element={<PoolHeatingCostCalculatorPage />} />
     <Route path="/pool-pump-runtime-calculator" element={<PoolPumpRuntimeCalculatorPage />} />
     <Route path="/variable-speed-pool-pump-savings-calculator" element={<VariableSpeedPumpSavingsCalculatorPage />} />
     <Route path="/guides" element={<GuidesHubPage />} />
     <Route path="/guides/cyanuric-acid-and-chlorine" element={<CyaChlorineGuide />} />
+    <Route path="/guides/how-to-drain-a-pool-with-a-garden-hose" element={<DrainPoolGuide />} />
     <Route path="*" element={<NotFoundPage />} />
   </Routes>
 );

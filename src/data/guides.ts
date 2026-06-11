@@ -20,6 +20,16 @@ export interface Guide {
 
 export const GUIDES: Guide[] = [
   {
+    slug: 'how-to-drain-a-pool-with-a-garden-hose',
+    path: '/guides/how-to-drain-a-pool-with-a-garden-hose',
+    title: 'How to Drain a Pool With a Garden Hose (Siphon Method)',
+    shortTitle: 'Draining with a hose',
+    excerpt:
+      'Partially drain your pool the free way — a garden-hose siphon, step by step with diagrams. Plus the one mistake that can wreck a pool: never fully drain it and leave it empty.',
+    updated: '2026-06-11',
+    status: 'live',
+  },
+  {
     slug: 'cyanuric-acid-and-chlorine',
     path: '/guides/cyanuric-acid-and-chlorine',
     title: 'Cyanuric Acid & Chlorine: the FC/CYA Relationship Explained',
