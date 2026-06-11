@@ -8,6 +8,9 @@ import {
   Timer,
   Zap,
   PiggyBank,
+  FlaskRound,
+  Scale,
+  Gem,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -67,6 +70,27 @@ export const TOOLS: Tool[] = [
     title: 'Salt Calculator',
     blurb: 'How much salt to add to reach your salt-chlorine generator’s target level.',
     icon: Waves,
+    status: 'live',
+  },
+  {
+    path: '/muriatic-acid-calculator',
+    title: 'Muriatic Acid Calculator',
+    blurb: 'How much acid to add to lower your pool’s pH or total alkalinity — any pool size.',
+    icon: FlaskRound,
+    status: 'live',
+  },
+  {
+    path: '/pool-alkalinity-calculator',
+    title: 'Alkalinity Calculator',
+    blurb: 'How much baking soda to add to raise total alkalinity — the buffer that holds pH steady.',
+    icon: Scale,
+    status: 'live',
+  },
+  {
+    path: '/calcium-hardness-calculator',
+    title: 'Calcium Hardness Calculator',
+    blurb: 'How much calcium chloride to add to raise calcium hardness into range.',
+    icon: Gem,
     status: 'live',
   },
   {
