@@ -68,7 +68,7 @@ export const GuideLayout = ({ title, description, path, updated, children, cta, 
   return (
     <PageShell>
       <article className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
-        <div className="max-w-3xl">
+        <div className="max-w-4xl mx-auto">
           <Link to="/guides" className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted hover:text-fg mb-6">
             <ArrowLeft className="w-4 h-4" /> All guides
           </Link>
