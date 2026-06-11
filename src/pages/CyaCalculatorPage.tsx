@@ -28,6 +28,14 @@ const num = (v: string) => {
 };
 const PRODUCT_IDS = ['granular', 'liquid'] as const;
 
+// Static dosage chart — common pool sizes × target CYA, starting from 0 ppm.
+// Derived from the same engine as the calculator so the numbers stay in sync.
+const CHART_SIZES = [5000, 10000, 15000, 20000, 25000, 30000] as const;
+const CHART_TARGETS = [30, 40, 50] as const;
+/** Pounds of granular (≈100% pure) stabilizer to go from 0 ppm to a target. */
+const chartDose = (volumeGal: number, targetCya: number) =>
+  `${(doseToRaiseCya(volumeGal, targetCya, 100) / 16).toFixed(1)} lb`;
+
 type State = {
   mode: 'raise' | 'lower';
   kind: PoolKind;
@@ -63,8 +71,8 @@ const SCHEMA = {
 
 const FAQS: { q: string; a: string }[] = [
   {
-    q: 'How much stabilizer do I add to my pool?',
-    a: 'Granular cyanuric acid is nearly pure, and about 13 oz raises CYA by 10 ppm in 10,000 gallons (≈1.3 oz per 1 ppm per 10,000 gal). Enter your volume, current CYA, and target, and the calculator scales that exactly. Add it slowly — CYA is hard to remove, so it’s better to under-shoot and top up.',
+    q: 'How much stabilizer for a 10,000 gallon pool?',
+    a: 'Starting from 0 ppm, a 10,000-gallon pool needs about 2.4 lb of granular stabilizer to reach 30 ppm, or roughly 4.1 lb to reach 50 ppm (the ideal range for a chlorine pool is 30–50 ppm). The rule of thumb is about 13 oz of cyanuric acid per 10,000 gallons for every 10 ppm you want to raise CYA. For other sizes, see the dosage chart below, or enter your exact volume and current CYA in the calculator. Add it slowly — CYA is hard to remove, so it’s better to under-shoot and top up.',
   },
   {
     q: 'What should my cyanuric acid level be?',
@@ -387,6 +395,59 @@ export const CyaCalculatorPage = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Stabilizer dosage chart (targets "cya chart" + "how much stabilizer for N gallon pool") */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <h2 className="font-display font-bold text-fg text-xl sm:text-2xl mb-3">Pool stabilizer dosage chart by pool size</h2>
+        <p className="text-muted leading-relaxed text-[15px] mb-5 max-w-3xl">
+          Prefer a quick reference? This cyanuric acid (CYA) chart shows roughly how much{' '}
+          <strong className="text-fg">granular stabilizer</strong> to add to a pool currently at{' '}
+          <strong className="text-fg">0 ppm</strong> to hit a target level. A{' '}
+          <strong className="text-fg">10,000-gallon pool</strong> needs about{' '}
+          <strong className="text-fg">2.4 lb</strong> to reach 30 ppm, or roughly{' '}
+          <strong className="text-fg">4.1 lb</strong> to reach 50 ppm — the ideal range for a chlorine pool is 30–50 ppm.
+        </p>
+        <div className="overflow-x-auto rounded-2xl border border-line bg-card elevate">
+          <table className="w-full text-[15px] text-left border-collapse">
+            <caption className="sr-only">
+              Granular pool stabilizer (cyanuric acid) needed by pool size and target CYA level, starting from 0 ppm.
+            </caption>
+            <thead>
+              <tr className="border-b border-line text-subtle">
+                <th scope="col" className="px-4 sm:px-5 py-3 font-semibold whitespace-nowrap">Pool size</th>
+                {CHART_TARGETS.map((t) => (
+                  <th key={t} scope="col" className="px-4 sm:px-5 py-3 font-semibold text-right whitespace-nowrap">
+                    To {t} ppm
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-line">
+              {CHART_SIZES.map((size) => {
+                const highlight = size === 10000;
+                return (
+                  <tr key={size} className={highlight ? 'bg-brand-blue/10' : undefined}>
+                    <th scope="row" className="px-4 sm:px-5 py-3 font-semibold text-fg whitespace-nowrap">
+                      {size.toLocaleString('en-US')} gal
+                    </th>
+                    {CHART_TARGETS.map((t) => (
+                      <td key={t} className="px-4 sm:px-5 py-3 text-right tabular-nums text-muted">
+                        {chartDose(size, t)}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-[11px] text-subtle mt-3 leading-relaxed max-w-3xl">
+          Amounts are granular cyanuric acid at ~100% purity, added to water currently at 0 ppm CYA (stabilizer is
+          usually sold in 4 lb bottles). Saltwater pools (SWG) target higher — around 70 ppm — so add roughly 40% more
+          than the 50 ppm column. Already have some CYA in the water? Use the calculator at the top of this page for your
+          exact volume and current reading.
+        </p>
       </section>
 
       {/* Why CYA matters */}
