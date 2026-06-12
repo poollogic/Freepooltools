@@ -40,6 +40,16 @@ export const GUIDES: Guide[] = [
     status: 'live',
   },
   {
+    slug: 'how-often-to-shock-your-pool',
+    path: '/guides/how-often-to-shock-your-pool',
+    title: 'How Often Should You Shock Your Pool?',
+    shortTitle: 'How often to shock',
+    excerpt:
+      'Every 1–2 weeks is the lazy default — the smarter schedule is six triggers: combined chlorine at 0.5 ppm, parties, storms, dull water, algae, and opening. Get a personalized schedule, plus when not to shock at all.',
+    updated: '2026-06-12',
+    status: 'live',
+  },
+  {
     slug: 'how-to-drain-a-pool-with-a-garden-hose',
     path: '/guides/how-to-drain-a-pool-with-a-garden-hose',
     title: 'How to Drain a Pool With a Garden Hose (Siphon Method)',
