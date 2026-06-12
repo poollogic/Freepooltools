@@ -25,6 +25,8 @@ import { VariableSpeedPumpSavingsCalculatorPage } from '@/pages/VariableSpeedPum
 import { GuidesHubPage } from '@/pages/guides/GuidesHubPage';
 import { CyaChlorineGuide } from '@/pages/guides/CyaChlorineGuide';
 import { DrainPoolGuide } from '@/pages/guides/DrainPoolGuide';
+import { SwimAfterShockGuide } from '@/pages/guides/SwimAfterShockGuide';
+import { GreenPoolGuide } from '@/pages/guides/GreenPoolGuide';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
 // Routes to prerender. Keep in sync with App.tsx's route table. These get their
@@ -48,6 +50,8 @@ export const PRERENDER_ROUTES = [
   '/guides',
   '/guides/cyanuric-acid-and-chlorine',
   '/guides/how-to-drain-a-pool-with-a-garden-hose',
+  '/guides/how-long-after-shocking-pool-can-you-swim',
+  '/guides/how-to-fix-a-green-pool',
 ];
 
 // Rendered separately to dist/404.html — Cloudflare Pages serves it (with a 404
@@ -74,6 +78,8 @@ const Routing = () => (
     <Route path="/guides" element={<GuidesHubPage />} />
     <Route path="/guides/cyanuric-acid-and-chlorine" element={<CyaChlorineGuide />} />
     <Route path="/guides/how-to-drain-a-pool-with-a-garden-hose" element={<DrainPoolGuide />} />
+    <Route path="/guides/how-long-after-shocking-pool-can-you-swim" element={<SwimAfterShockGuide />} />
+    <Route path="/guides/how-to-fix-a-green-pool" element={<GreenPoolGuide />} />
     <Route path="*" element={<NotFoundPage />} />
   </Routes>
 );

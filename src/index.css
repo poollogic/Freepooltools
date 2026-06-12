@@ -187,10 +187,29 @@ html.light .theme-knob-sun {
 .guide-prose > * + * {
   margin-top: 1rem;
 }
+/* Lead-in paragraph (the standfirst): larger and brighter than body copy so the
+   article opens with clear editorial hierarchy. Direct child only — never the
+   paragraphs inside step cards / figures. */
+.guide-prose > p:first-of-type {
+  font-size: 1.1875rem; /* 19px */
+  line-height: 1.6;
+  color: color-mix(in oklab, var(--color-fg) 66%, var(--color-muted));
+}
 .guide-prose h2 {
   @apply font-display font-bold text-fg text-2xl;
-  margin-top: 2.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 3rem;
+  margin-bottom: 0.625rem;
+}
+/* Small brand accent bar above each section heading — gives the page chapter-like
+   rhythm without heavy full-width rules. */
+.guide-prose h2::before {
+  content: "";
+  display: block;
+  width: 2.25rem;
+  height: 3px;
+  margin-bottom: 0.875rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--color-brand-orange), var(--color-brand-orange-light));
 }
 .guide-prose h3 {
   @apply font-display font-bold text-fg text-lg;

@@ -138,9 +138,9 @@ const formatCo2 = (lb: number) =>
 
 export const VariableSpeedPumpSavingsCalculatorPage = () => {
   usePageMeta({
-    title: 'Variable-Speed Pool Pump Savings Calculator — Cut Your Energy Bill',
+    title: 'Variable-Speed Pool Pump Savings Calculator — Energy & Cost',
     description:
-      'See how much a variable-speed pool pump would save you. Pick your current single-speed pump and run time, then compare the energy and yearly cost to a modern VS pump. Free, no sign-up.',
+      'Free variable-speed pool pump savings calculator — pick your current single-speed pump and run time, then see the yearly energy savings of a modern VS pump.',
     canonicalPath: '/variable-speed-pool-pump-savings-calculator/',
     jsonLd: [howToSchema, faqSchema, breadcrumbSchema],
   });

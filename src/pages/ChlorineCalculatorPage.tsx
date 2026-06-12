@@ -524,7 +524,7 @@ export const ChlorineCalculatorPage = () => {
             <div className="mt-4 rounded-2xl border border-line bg-card-2 p-5">
               <div className="flex items-center gap-2 mb-3">
                 <Beaker className="w-4 h-4 text-brand-blue-light" />
-                <h3 className="font-display font-bold text-fg text-base">Keeping it there — chlorine burns off</h3>
+                <p className="font-display font-bold text-fg text-base">Keeping it there — chlorine burns off</p>
               </div>
               <p className="text-sm text-muted leading-relaxed mb-4">
                 Chlorine is used up every day by sunlight, swimmers, and debris, so a single dose

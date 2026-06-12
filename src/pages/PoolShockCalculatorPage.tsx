@@ -132,9 +132,9 @@ const breadcrumbSchema = {
 
 export const PoolShockCalculatorPage = () => {
   usePageMeta({
-    title: 'Pool Shock Calculator: How Much Shock to Add | Free Pool Tools',
+    title: 'Pool Shock Calculator: How Much Shock to Add',
     description:
-      'Free pool shock calculator — exactly how much liquid chlorine or cal-hypo to shock your pool for algae or chloramines. CYA-aware shock levels, any pool size. No sign-up.',
+      'Free pool shock calculator — how much liquid chlorine or cal-hypo to shock your pool for algae or chloramines. CYA-aware shock levels, any size.',
     canonicalPath: '/pool-shock-calculator/',
     jsonLd: [howToSchema, faqSchema, breadcrumbSchema],
   });
@@ -488,7 +488,7 @@ export const PoolShockCalculatorPage = () => {
             on why you’re doing it:
           </p>
           <ul className="mt-3 space-y-2 text-[15px] text-muted">
-            <li className="flex gap-2"><span className="text-brand-orange font-bold">•</span><span><strong className="text-fg font-semibold">Algae:</strong> raise free chlorine to about 40% of your CYA (with a sensible floor around 12 ppm) and <em>hold</em> it there until the water clears — the SLAM method.</span></li>
+            <li className="flex gap-2"><span className="text-brand-orange font-bold">•</span><span><strong className="text-fg font-semibold">Algae:</strong> raise free chlorine to about 40% of your CYA (with a sensible floor around 12 ppm) and <em>hold</em> it there until the water clears — the SLAM method. Full walkthrough: <Link to="/guides/how-to-fix-a-green-pool" className="text-brand-orange font-semibold hover:text-brand-orange-dark">how to fix a green pool</Link>.</span></li>
             <li className="flex gap-2"><span className="text-brand-orange font-bold">•</span><span><strong className="text-fg font-semibold">Chloramines:</strong> raise to roughly 10× your combined chlorine to hit “breakpoint,” where the chloramines are destroyed.</span></li>
             <li className="flex gap-2"><span className="text-brand-orange font-bold">•</span><span><strong className="text-fg font-semibold">Routine / opening:</strong> a custom target (often 10–12 ppm) for a general clean-up.</span></li>
           </ul>
@@ -511,8 +511,11 @@ export const PoolShockCalculatorPage = () => {
           <p className="text-muted leading-relaxed text-[15px]">
             <strong className="text-fg font-semibold">Always shock with unstabilized chlorine</strong> — liquid
             chlorine or cal-hypo — at dusk or after dark, and never let CYA-adding tablets (trichlor/dichlor)
-            do your shocking. Wait until free chlorine drops to about 5 ppm or below before swimming, and
-            keep pets and people out of heavily shocked water.
+            do your shocking. Wait until free chlorine drops to about 5 ppm or below{' '}
+            <Link to="/guides/how-long-after-shocking-pool-can-you-swim" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              before swimming
+            </Link>
+            , and keep pets and people out of heavily shocked water.
           </p>
         </div>
       </section>

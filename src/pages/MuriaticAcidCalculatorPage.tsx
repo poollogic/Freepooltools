@@ -125,7 +125,7 @@ export const MuriaticAcidCalculatorPage = () => {
   usePageMeta({
     title: 'Muriatic Acid Calculator — Lower Pool pH & Alkalinity',
     description:
-      'Free muriatic acid calculator — exactly how much acid to add to lower your pool’s pH or total alkalinity, for any pool size. Full-strength, low-fume, or dry acid. No sign-up.',
+      'Free muriatic acid calculator — how much acid to add to lower your pool’s pH or total alkalinity, for any pool size. Full-strength, low-fume, or dry acid.',
     canonicalPath: '/muriatic-acid-calculator/',
     jsonLd: [howToSchema, faqSchema, breadcrumbSchema],
   });

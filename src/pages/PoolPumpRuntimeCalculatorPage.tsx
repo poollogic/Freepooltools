@@ -140,7 +140,7 @@ export const PoolPumpRuntimeCalculatorPage = () => {
   usePageMeta({
     title: 'Pool Pump Runtime Calculator — How Long to Run Your Pump',
     description:
-      'Free pool pump runtime calculator — how many hours a day to run your pump for a full turnover, plus the electricity cost. Single-speed and variable-speed (RPM-based) modes. No sign-up.',
+      'Free pool pump runtime calculator — how many hours a day to run your pump for a full turnover, plus electricity cost. Single-speed and variable-speed modes.',
     canonicalPath: '/pool-pump-runtime-calculator/',
     jsonLd: [howToSchema, faqSchema, breadcrumbSchema],
   });

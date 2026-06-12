@@ -128,9 +128,9 @@ const breadcrumbSchema = {
 
 export const LsiCalculatorPage = () => {
   usePageMeta({
-    title: 'Pool Water Balance (LSI) Calculator — Langelier Saturation Index',
+    title: 'Pool Water Balance (LSI) Calculator — Langelier Index',
     description:
-      'Free LSI calculator — check if your pool water is balanced, corrosive, or scaling from pH, alkalinity, calcium hardness & temperature. Slide in readings, no sign-up.',
+      'Free LSI calculator — see if your pool water is balanced, corrosive, or scaling from pH, alkalinity, calcium hardness & temperature. No sign-up.',
     canonicalPath: '/lsi-calculator/',
     jsonLd: [howToSchema, faqSchema, breadcrumbSchema],
   });

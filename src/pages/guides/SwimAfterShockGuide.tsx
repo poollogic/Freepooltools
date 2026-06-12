@@ -1,0 +1,326 @@
+import { type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+import { Clock, FlaskConical, Eye, RefreshCw, type LucideIcon } from 'lucide-react';
+import { GuideLayout } from '@/components/GuideLayout';
+import { GUIDES } from '@/data/guides';
+
+const guide = GUIDES.find((g) => g.slug === 'how-long-after-shocking-pool-can-you-swim')!;
+
+/** Free chlorine after a shock: spike, decay, and the ≤5 ppm safe-to-swim zone. */
+const DecayDiagram = () => (
+  <figure className="not-prose my-8 rounded-2xl border border-line bg-card-2 p-4 sm:p-6">
+    <svg
+      viewBox="0 0 520 300"
+      className="w-full h-auto"
+      role="img"
+      aria-label="Chart of free chlorine over the hours after shocking: it spikes to the shock level, then falls. The pool is safe to swim once the reading crosses back at or below 5 ppm — for a typical dose, somewhere between 8 and 24 hours."
+    >
+      {/* axes */}
+      <g className="text-line-strong" stroke="currentColor" strokeWidth="2">
+        <line x1="60" y1="30" x2="60" y2="260" />
+        <line x1="60" y1="260" x2="490" y2="260" />
+      </g>
+
+      {/* safe-to-swim zone (at or below 5 ppm) */}
+      <rect x="60" y="178" width="430" height="82" className="text-brand-blue" fill="currentColor" fillOpacity="0.12" />
+      <line x1="60" y1="178" x2="490" y2="178" className="text-brand-blue" stroke="currentColor" strokeWidth="2" strokeDasharray="6 5" />
+      <text x="480" y="196" textAnchor="end" fontSize="12.5" className="text-brand-blue" fill="currentColor" fontWeight="600">
+        safe to swim at or below 5 ppm
+      </text>
+
+      {/* FC decay curve */}
+      <path
+        d="M60 246 L72 246 L72 63 C 130 92, 200 140, 275 178 S 420 218, 490 227"
+        fill="none"
+        className="text-brand-orange"
+        stroke="currentColor"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* crossing point */}
+      <g className="text-fg">
+        <circle cx="275" cy="178" r="6" className="text-brand-orange" fill="currentColor" />
+        <circle cx="275" cy="178" r="2.5" fill="#fff" />
+        <text x="285" y="160" fontSize="12.5" fill="currentColor" fontWeight="600">a test confirms it — OK to swim</text>
+      </g>
+
+      {/* y-axis labels */}
+      <g fontSize="12" className="text-subtle" fill="currentColor">
+        <text x="52" y="67" textAnchor="end">12</text>
+        <text x="52" y="182" textAnchor="end">5</text>
+        <text x="52" y="264" textAnchor="end">0</text>
+        <text x="20" y="150" transform="rotate(-90 20 150)" textAnchor="middle">free chlorine (ppm)</text>
+      </g>
+      <text x="100" y="52" fontSize="12.5" className="text-muted" fill="currentColor">shock level</text>
+
+      {/* x-axis labels */}
+      <g fontSize="12" className="text-subtle" fill="currentColor">
+        <text x="72" y="278" textAnchor="middle">0</text>
+        <text x="203" y="278" textAnchor="middle">12 h</text>
+        <text x="347" y="278" textAnchor="middle">24 h</text>
+        <text x="490" y="278" textAnchor="end">36 h</text>
+        <text x="275" y="296" textAnchor="middle">hours after shocking</text>
+      </g>
+    </svg>
+    <figcaption className="mt-3 text-center text-xs text-subtle">
+      Every pool’s curve is different — sunlight, stabilizer (CYA), and the size of the dose all change how fast
+      chlorine falls. That’s why the answer is a <strong>test reading</strong>, not a number of hours.
+    </figcaption>
+  </figure>
+);
+
+/** Typical wait by shock product — assumes a routine dose, not an algae SLAM. */
+const WAIT_TIMES = [
+  {
+    product: 'Liquid chlorine / bleach',
+    detail: 'sodium hypochlorite',
+    wait: '8–24 hours',
+    note: 'Unstabilized — sunlight burns it off fastest, so it often drops back to safe levels overnight.',
+  },
+  {
+    product: 'Cal-hypo shock',
+    detail: 'calcium hypochlorite',
+    wait: '8–24 hours',
+    note: 'Make sure every granule has dissolved — undissolved cal-hypo on the floor can bleach liners and burn skin.',
+  },
+  {
+    product: 'Dichlor shock',
+    detail: 'stabilized granular',
+    wait: '8–24 hours, often longer',
+    note: 'Adds CYA with every dose, which shields chlorine from the sun — levels stay elevated longer.',
+  },
+  {
+    product: 'Non-chlorine shock',
+    detail: 'potassium monopersulfate (MPS)',
+    wait: '~15 minutes',
+    note: 'Oxidizes contaminants without raising free chlorine — most labels clear swimming after 15 minutes of circulation.',
+  },
+];
+
+const WaitTimeTable = () => (
+  <div className="not-prose my-8">
+    <div className="overflow-x-auto rounded-2xl border border-line bg-card elevate">
+      <table className="w-full text-[15px] text-left border-collapse">
+        <caption className="sr-only">Typical wait before swimming after each type of pool shock.</caption>
+        <thead>
+          <tr className="border-b border-line text-subtle">
+            <th scope="col" className="px-4 sm:px-5 py-3 font-semibold whitespace-nowrap">Shock type</th>
+            <th scope="col" className="px-4 sm:px-5 py-3 font-semibold whitespace-nowrap">Typical wait</th>
+            <th scope="col" className="px-4 sm:px-5 py-3 font-semibold">Worth knowing</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-line">
+          {WAIT_TIMES.map((row) => (
+            <tr key={row.product}>
+              <th scope="row" className="px-4 sm:px-5 py-3.5 font-semibold text-fg whitespace-nowrap align-top">
+                {row.product}
+                <span className="block font-normal text-subtle text-xs mt-0.5">{row.detail}</span>
+              </th>
+              <td className="px-4 sm:px-5 py-3.5 whitespace-nowrap align-top text-muted font-semibold tabular-nums">{row.wait}</td>
+              <td className="px-4 sm:px-5 py-3.5 align-top text-muted text-[14px] leading-relaxed">{row.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p className="text-[11px] text-subtle mt-3 leading-relaxed">
+      Typical waits assume a routine maintenance shock. A heavy algae treatment (the SLAM method) holds chlorine at
+      shock level for days — after one, expect 1–3+ days before readings return to a swimmable range. Always confirm
+      with a test.
+    </p>
+  </div>
+);
+
+type Check = { icon: LucideIcon; title: string; body: ReactNode };
+const CHECKS: Check[] = [
+  {
+    icon: FlaskConical,
+    title: 'Free chlorine ≤ 5 ppm',
+    body: (
+      <>Test the water — strips work, a drop kit is better. At or below <strong>5 ppm</strong> (and no higher than
+      your normal target range) you’re good. Still reading high? Stay out and re-test in a few hours.</>
+    ),
+  },
+  {
+    icon: Eye,
+    title: 'You can see the bottom',
+    body: (
+      <>Shock is usually a response to cloudy or green water. Water you can’t see through is a{' '}
+      <strong>drowning hazard</strong> no matter what the chemistry says — wait until the main drain is clearly
+      visible from the deck.</>
+    ),
+  },
+  {
+    icon: RefreshCw,
+    title: 'The pump has circulated it',
+    body: (
+      <>Run the pump continuously after shocking — at least one{' '}
+      <Link to="/pool-pump-runtime-calculator">full turnover</Link> — so the dose is mixed evenly and your test
+      reading reflects the whole pool, not a concentrated pocket near the return.</>
+    ),
+  },
+];
+
+const CheckList = () => (
+  <div className="not-prose my-8 grid gap-3 sm:grid-cols-3">
+    {CHECKS.map((check, i) => {
+      const Icon = check.icon;
+      return (
+        <div key={check.title} className="rounded-2xl border border-line bg-card p-4 sm:p-5 elevate">
+          <div className="flex items-center gap-2.5 mb-2.5">
+            <span className="grid place-items-center w-9 h-9 rounded-full bg-gradient-to-br from-brand-blue-light to-brand-blue text-white font-display font-bold text-sm shadow-sm shadow-brand-blue/30 ring-1 ring-white/15">
+              {i + 1}
+            </span>
+            <span aria-hidden className="grid place-items-center w-8 h-8 rounded-lg bg-brand-orange/10 text-brand-orange">
+              <Icon className="w-[18px] h-[18px]" />
+            </span>
+          </div>
+          <h3 className="font-display font-bold text-fg text-[15px] mb-1.5">{check.title}</h3>
+          <p className="text-muted text-[14px] leading-relaxed">{check.body}</p>
+        </div>
+      );
+    })}
+  </div>
+);
+
+const FAQS = [
+  {
+    q: 'Can I swim 12 hours after shocking my pool?',
+    a: 'Usually — but verify with a test instead of the clock. After a routine shock dose, free chlorine in an outdoor pool often falls back to 5 ppm or below within 8–24 hours, but sunlight, stabilizer (CYA), and the size of the dose all change that. If a test shows free chlorine at or below about 5 ppm and the water is clear, swimming at 12 hours is fine; if it still reads high, stay out and re-test in a few hours.',
+  },
+  {
+    q: 'What happens if you swim in a pool too soon after shocking it?',
+    a: 'At typical shock levels the result is irritation, not poisoning: stinging red eyes, itchy or dried-out skin, brittle hair, bleached swimwear, and sometimes coughing or wheezing in sensitive swimmers. Get out, rinse off in fresh water, and wash the swimsuit. The bigger danger is visibility — shock is usually used on cloudy or green water, and water you can’t see through is a drowning risk regardless of the chemistry.',
+  },
+  {
+    q: 'How long after non-chlorine shock can you swim?',
+    a: 'About 15 minutes. Non-chlorine shock (potassium monopersulfate, sold as “oxidizing shock” or MPS) doesn’t raise free chlorine — it oxidizes contaminants directly — so most labels clear swimming after roughly 15 minutes of circulation, just long enough for the granules to dissolve and disperse. Check your specific product’s label.',
+  },
+  {
+    q: 'Is it safe to swim with chlorine at 10 ppm?',
+    a: 'That’s the absolute ceiling, not a comfortable level. The CDC’s Model Aquatic Health Code sets 10 ppm as the maximum free chlorine a public pool may have while open, but most guidance — including ours — says to wait until it’s at or below about 5 ppm. Between 5 and 10 ppm, eye, skin, and airway irritation get increasingly likely, especially for kids and longer swims.',
+  },
+  {
+    q: 'Should the pump run while I wait?',
+    a: 'Yes — run it continuously from the moment you add shock until levels are back to normal. Circulation spreads the chlorine evenly so there are no concentrated pockets near the return, helps the filter remove whatever the shock just killed or oxidized, and makes your follow-up test reading represent the whole pool. A full turnover takes most pools 6–8 hours.',
+  },
+  {
+    q: 'If I shock at night, can I swim the next morning?',
+    a: 'Often, yes — and dusk is the right time to shock anyway, because sunlight burns off unstabilized chlorine before it can do its work. A routine dose added at night has usually dropped back near normal range by morning. But it’s still test-first: a heavy dose, high CYA, or cool overcast weather can keep free chlorine elevated well past sunrise.',
+  },
+];
+
+const SOURCES = [
+  { label: 'CDC — Healthy Swimming (pool chemical safety)', url: 'https://www.cdc.gov/healthy-swimming/' },
+  { label: 'CDC — Model Aquatic Health Code (free chlorine limits)', url: 'https://www.cdc.gov/model-aquatic-health-code/' },
+  { label: 'Trouble Free Pool — community wiki (SLAM method)', url: 'https://www.troublefreepool.com/wiki/' },
+];
+
+export const SwimAfterShockGuide = () => (
+  <GuideLayout
+    title={guide.title}
+    metaTitle="How Long After Shocking a Pool Can You Swim? (8–24 Hours)"
+    description="How long after shocking a pool can you swim? Usually 8–24 hours — once free chlorine is at or below 5 ppm and the water is clear. Wait times by shock type."
+    path={guide.path}
+    updated={guide.updated}
+    faqs={FAQS}
+    sources={SOURCES}
+    cta={{
+      to: '/pool-shock-calculator',
+      label: 'Shocking the pool? Dose it exactly.',
+      sub: 'The shock calculator gives the precise amount of liquid chlorine or cal-hypo for your pool — no guessing, no overdosing.',
+    }}
+  >
+    <p>
+      How long after shocking a pool can you swim? The honest answer is a{' '}
+      <strong>test reading, not a number of hours</strong>: it’s safe to swim once free chlorine has
+      fallen back to <strong>5 ppm or below</strong> and the water is clear. For a typical chlorine
+      shock that takes about <strong>8–24 hours</strong>; for non-chlorine (MPS) shock, only about{' '}
+      <strong>15 minutes</strong>. Here’s why the range is so wide — and how to know for sure instead
+      of guessing.
+    </p>
+
+    <div className="not-prose my-6 flex items-start gap-3 rounded-2xl border border-brand-blue/40 bg-brand-blue/10 p-4 sm:p-5">
+      <Clock className="w-6 h-6 text-brand-blue-light shrink-0 mt-0.5" />
+      <div className="text-[14px] sm:text-[15px] text-fg leading-relaxed">
+        <strong>Quick answer:</strong> after a chlorine-based shock, wait until a test shows free chlorine
+        at <strong>5 ppm or below</strong> and you can see the pool floor — usually <strong>8–24 hours</strong>.
+        After non-chlorine (MPS) shock, about <strong>15 minutes</strong>. When in doubt, test — never swim
+        on the clock alone.
+      </div>
+    </div>
+
+    <h2>How long should you wait to swim after shocking?</h2>
+    <p>
+      “Shocking” just means raising free chlorine far above its normal level — high enough to kill algae
+      or burn off chloramines. The water becomes safe again the moment that spike decays back into the
+      normal swimming range, and <em>only</em> a test can tell you when that’s happened. Two useful
+      reference points: the CDC’s Model Aquatic Health Code allows public pools to operate with free
+      chlorine up to <strong>10 ppm</strong>, and the widely used comfort threshold — the one we
+      recommend — is <strong>at or below 5 ppm</strong> before anyone swims.
+    </p>
+    <p>
+      The familiar “wait 24 hours” advice isn’t wrong, it’s just a worst-case blanket. Depending on the
+      dose, the sun, and your stabilizer level, the same pool might be swimmable in 6 hours — or still
+      too hot after two days. The chart below is what’s actually happening:
+    </p>
+
+    <DecayDiagram />
+
+    <h2>Swim wait times by shock type</h2>
+    <p>
+      The product you used sets the starting point. Chlorine-based shocks (liquid chlorine, cal-hypo,
+      dichlor) all spike free chlorine and need the full decay wait; non-chlorine shock doesn’t raise
+      chlorine at all, which is why its wait is measured in minutes.
+    </p>
+
+    <WaitTimeTable />
+
+    <h2>When is it safe to swim again? The three checks</h2>
+    <p>
+      Pass all three and the pool is genuinely ready — not “probably fine,” but verified:
+    </p>
+
+    <CheckList />
+
+    <h2>Why your wait time varies: sun, stabilizer, and dose</h2>
+    <p>
+      Three things control how fast free chlorine falls back to a swimmable level:
+    </p>
+
+    <h3>1. The size of the shock dose</h3>
+    <p>
+      A routine weekly shock might lift free chlorine to 10–12 ppm; an algae cleanup holds it far
+      higher, for days. Bigger spike, longer decay. Dosing right in the first place is half the battle —
+      the <Link to="/pool-shock-calculator">shock calculator</Link> gives the exact amount instead of
+      “a bag per 10,000 gallons.”
+    </p>
+
+    <h3>2. Sunlight vs. stabilizer (CYA)</h3>
+    <p>
+      UV destroys chlorine fast: an unstabilized outdoor pool in full sun can shed half its free
+      chlorine in a few hours. Cyanuric acid (CYA) shields chlorine from UV — great for everyday
+      sanitizing, but it also means a shocked pool with high CYA stays elevated much longer. More on
+      that trade-off in our <Link to="/guides/cyanuric-acid-and-chlorine">CYA &amp; chlorine guide</Link>.
+    </p>
+
+    <h3>3. What the chlorine is fighting</h3>
+    <p>
+      A clean pool just decays back down. A pool full of algae <em>consumes</em> chlorine — readings can
+      crash and then need re-dosing, which restarts the clock. That’s why{' '}
+      <Link to="/guides/how-to-fix-a-green-pool">fixing a green pool</Link> takes days, not hours.
+    </p>
+
+    <h2>What happens if you swim too soon after shocking?</h2>
+    <p>
+      Don’t panic. At residential shock levels, brief exposure causes <strong>irritation, not injury</strong>:
+      red stinging eyes, itchy skin, a chlorine smell that clings, faded swimwear. Have them get out,
+      rinse off thoroughly in fresh water, and rinse swimsuits before the chlorine sets in the fabric.
+      Anyone with asthma or breathing discomfort after swimming in heavily chlorinated water should get
+      fresh air and medical advice if symptoms persist. Then test the pool — and let the number, not
+      impatience, decide round two.
+    </p>
+  </GuideLayout>
+);

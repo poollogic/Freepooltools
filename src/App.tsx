@@ -52,6 +52,12 @@ const CyaChlorineGuide = lazy(() =>
 const DrainPoolGuide = lazy(() =>
   import('@/pages/guides/DrainPoolGuide').then((m) => ({ default: m.DrainPoolGuide })),
 );
+const SwimAfterShockGuide = lazy(() =>
+  import('@/pages/guides/SwimAfterShockGuide').then((m) => ({ default: m.SwimAfterShockGuide })),
+);
+const GreenPoolGuide = lazy(() =>
+  import('@/pages/guides/GreenPoolGuide').then((m) => ({ default: m.GreenPoolGuide })),
+);
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 
 // On route change, jump to top (unless navigating to an in-page #anchor).
@@ -89,6 +95,8 @@ export default function App() {
           <Route path="/guides" element={<GuidesHubPage />} />
           <Route path="/guides/cyanuric-acid-and-chlorine" element={<CyaChlorineGuide />} />
           <Route path="/guides/how-to-drain-a-pool-with-a-garden-hose" element={<DrainPoolGuide />} />
+          <Route path="/guides/how-long-after-shocking-pool-can-you-swim" element={<SwimAfterShockGuide />} />
+          <Route path="/guides/how-to-fix-a-green-pool" element={<GreenPoolGuide />} />
           {/* Catch-all 404 — must be last. */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

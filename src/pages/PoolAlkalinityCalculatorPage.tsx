@@ -98,7 +98,7 @@ export const PoolAlkalinityCalculatorPage = () => {
   usePageMeta({
     title: 'Pool Alkalinity Calculator — How Much Baking Soda to Add',
     description:
-      'Free pool alkalinity calculator — exactly how much baking soda (sodium bicarbonate) to add to raise total alkalinity to your target, for any pool size. No sign-up.',
+      'Free pool alkalinity calculator — how much baking soda (sodium bicarbonate) to add to raise total alkalinity to your target, for any pool size. No sign-up.',
     canonicalPath: '/pool-alkalinity-calculator/',
     jsonLd: [howToSchema, faqSchema, breadcrumbSchema],
   });

@@ -108,7 +108,7 @@ export const CalciumHardnessCalculatorPage = () => {
   usePageMeta({
     title: 'Calcium Hardness Calculator — How Much Calcium Chloride',
     description:
-      'Free calcium hardness calculator — exactly how much calcium chloride to add to raise your pool’s hardness to target, for any pool size. Flake or anhydrous. No sign-up.',
+      'Free calcium hardness calculator — how much calcium chloride to add to raise your pool’s hardness to target. Flake or anhydrous, any pool size.',
     canonicalPath: '/calcium-hardness-calculator/',
     jsonLd: [howToSchema, faqSchema, breadcrumbSchema],
   });

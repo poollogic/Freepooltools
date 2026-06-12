@@ -9,8 +9,11 @@ import { relatedGuides } from '@/data/guides';
 type Faq = { q: string; a: string };
 
 type GuideLayoutProps = {
-  /** Used for the <h1> and the meta/Article title. */
+  /** Used for the <h1>, breadcrumb, and Article headline. */
   title: string;
+  /** Overrides the <title> tag / OG title only (defaults to `title`) — lets the
+   *  SERP title carry a hook/answer while the H1 stays the clean question. */
+  metaTitle?: string;
   description: string;
   /** Path without trailing slash, e.g. '/guides/cyanuric-acid-and-chlorine'. */
   path: string;
@@ -26,7 +29,7 @@ type GuideLayoutProps = {
 const fmtDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-export const GuideLayout = ({ title, description, path, updated, children, cta, faqs, sources }: GuideLayoutProps) => {
+export const GuideLayout = ({ title, metaTitle, description, path, updated, children, cta, faqs, sources }: GuideLayoutProps) => {
   const url = `${SITE_ORIGIN}${path}/`;
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -57,7 +60,7 @@ export const GuideLayout = ({ title, description, path, updated, children, cta, 
     : null;
 
   usePageMeta({
-    title,
+    title: metaTitle ?? title,
     description,
     canonicalPath: `${path}/`,
     jsonLd: faqSchema ? [articleSchema, faqSchema, breadcrumbSchema] : [articleSchema, breadcrumbSchema],
@@ -103,7 +106,7 @@ export const GuideLayout = ({ title, description, path, updated, children, cta, 
                 {faqs.map((item) => (
                   <details key={item.q} className="group">
                     <summary className="list-none cursor-pointer flex items-start justify-between gap-4 px-5 sm:px-6 py-4 text-left">
-                      <span className="font-display font-normal text-fg text-[15px] sm:text-base leading-snug">{item.q}</span>
+                      <h3 className="font-display font-normal text-fg text-[15px] sm:text-base leading-snug">{item.q}</h3>
                       <span className="shrink-0 mt-0.5 text-subtle transition-transform duration-200 group-open:rotate-45 group-open:text-brand-orange">
                         <Plus className="w-5 h-5" />
                       </span>
@@ -132,16 +135,19 @@ export const GuideLayout = ({ title, description, path, updated, children, cta, 
 
           {more.length > 0 && (
             <section className="mt-12">
-              <h2 className="font-display font-bold text-fg text-lg mb-3">More guides</h2>
-              <ul className="space-y-2">
+              <h2 className="font-display font-bold text-fg text-lg mb-4">More guides</h2>
+              <div className="grid gap-3 sm:grid-cols-3">
                 {more.map((g) => (
-                  <li key={g.path}>
-                    <Link to={g.path} className="inline-flex items-center gap-1.5 text-brand-orange font-semibold hover:text-brand-orange-dark">
-                      {g.shortTitle} <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </li>
+                  <Link
+                    key={g.path}
+                    to={g.path}
+                    className="group flex items-center justify-between gap-3 rounded-xl border border-line bg-card p-4 elevate transition-colors hover:border-line-strong"
+                  >
+                    <span className="font-display font-semibold text-fg text-[15px] leading-snug">{g.shortTitle}</span>
+                    <ArrowRight className="w-4 h-4 shrink-0 text-brand-orange transition-transform group-hover:translate-x-0.5" />
+                  </Link>
                 ))}
-              </ul>
+              </div>
             </section>
           )}
         </div>

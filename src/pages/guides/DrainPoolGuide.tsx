@@ -198,12 +198,16 @@ const StepList = () => (
     {STEPS.map((step, i) => {
       const Icon = step.icon;
       return (
-        <div key={step.title} className="flex gap-4 rounded-2xl border border-line bg-card p-4 sm:p-5">
-          <div className="shrink-0 flex flex-col items-center gap-2">
-            <span className="w-9 h-9 rounded-full bg-brand-blue text-white font-display font-bold text-sm flex items-center justify-center">{i + 1}</span>
-            <Icon className="w-5 h-5 text-brand-orange" />
+        <div key={step.title} className="group flex gap-4 sm:gap-5 rounded-2xl border border-line bg-card p-4 sm:p-5 elevate transition-colors hover:border-line-strong">
+          <div className="shrink-0 flex flex-col items-center gap-2.5">
+            <span className="grid place-items-center w-10 h-10 rounded-full bg-gradient-to-br from-brand-blue-light to-brand-blue text-white font-display font-bold text-[15px] shadow-sm shadow-brand-blue/30 ring-1 ring-white/15">
+              {i + 1}
+            </span>
+            <span aria-hidden className="grid place-items-center w-8 h-8 rounded-lg bg-brand-orange/10 text-brand-orange">
+              <Icon className="w-[18px] h-[18px]" />
+            </span>
           </div>
-          <div>
+          <div className="min-w-0">
             <h3 className="font-display font-bold text-fg text-[15px] sm:text-base mb-1">{step.title}</h3>
             <p className="text-muted text-[14px] sm:text-[15px] leading-relaxed">{step.body}</p>
           </div>
@@ -249,7 +253,7 @@ const SOURCES = [
 export const DrainPoolGuide = () => (
   <GuideLayout
     title={guide.title}
-    description="How to partially drain a pool with a garden-hose siphon, step by step with diagrams — turn off the pump, start the siphon, and stop at your mark. Plus why you must never fully drain an in-ground pool."
+    description="How to drain a pool with a garden-hose siphon, step by step with diagrams — start the siphon, stop at your mark, and never fully drain an in-ground pool."
     path={guide.path}
     updated={guide.updated}
     faqs={FAQS}
