@@ -3,72 +3,106 @@ import { Link } from 'react-router-dom';
 import { Clock, FlaskConical, Eye, RefreshCw, type LucideIcon } from 'lucide-react';
 import { GuideLayout } from '@/components/GuideLayout';
 import { GUIDES } from '@/data/guides';
+import { useInViewAnim, animDelay } from '@/lib/useInViewAnim';
 
 const guide = GUIDES.find((g) => g.slug === 'how-long-after-shocking-pool-can-you-swim')!;
 
 /** Free chlorine after a shock: spike, decay, and the CYA-based safe-to-swim zone. */
-const DecayDiagram = () => (
-  <figure className="not-prose my-8 rounded-2xl border border-line bg-card-2 p-4 sm:p-6">
-    <svg
-      viewBox="0 0 520 300"
-      className="w-full h-auto"
-      role="img"
-      aria-label="Chart of free chlorine over the hours after shocking: it spikes to the shock level, then falls. The pool is safe to swim once the reading crosses back below the safe ceiling for your stabilizer level — for a typical dose, somewhere between 8 and 24 hours."
-    >
-      {/* axes */}
-      <g className="text-line-strong" stroke="currentColor" strokeWidth="2">
-        <line x1="60" y1="30" x2="60" y2="260" />
-        <line x1="60" y1="260" x2="490" y2="260" />
-      </g>
+const DecayDiagram = () => {
+  const { ref, cls } = useInViewAnim();
+  return (
+    <figure ref={ref} className={`not-prose my-8 rounded-2xl border border-line bg-card-2 p-4 sm:p-6 ${cls}`}>
+      <svg
+        viewBox="0 0 520 300"
+        className="w-full h-auto"
+        role="img"
+        aria-label="Chart of free chlorine over the hours after shocking: it spikes to the shock level, then falls. The pool is safe to swim once the reading crosses back below the safe ceiling for your stabilizer level — for a typical dose, somewhere between 8 and 24 hours."
+      >
+        <defs>
+          <linearGradient id="dgm-fc-area" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--color-brand-orange)" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="var(--color-brand-orange)" stopOpacity="0.02" />
+          </linearGradient>
+          <linearGradient id="dgm-safe-zone" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--color-brand-blue)" stopOpacity="0.06" />
+            <stop offset="100%" stopColor="var(--color-brand-blue)" stopOpacity="0.2" />
+          </linearGradient>
+        </defs>
 
-      {/* safe-to-swim zone (below the CYA-based ceiling) */}
-      <rect x="60" y="178" width="430" height="82" className="text-brand-blue" fill="currentColor" fillOpacity="0.12" />
-      <line x1="60" y1="178" x2="490" y2="178" className="text-brand-blue" stroke="currentColor" strokeWidth="2" strokeDasharray="6 5" />
-      <text x="480" y="196" textAnchor="end" fontSize="12.5" className="text-brand-blue" fill="currentColor" fontWeight="600">
-        safe to swim below your ceiling (set by your CYA)
-      </text>
+        {/* axes, ticks, and labels */}
+        <g className="dgm-fade">
+          <g className="text-line-strong" stroke="currentColor" strokeWidth="2">
+            <line x1="60" y1="30" x2="60" y2="260" />
+            <line x1="60" y1="260" x2="490" y2="260" />
+          </g>
+          <g className="text-subtle" stroke="currentColor" strokeWidth="1.5">
+            <line x1="203" y1="260" x2="203" y2="266" />
+            <line x1="347" y1="260" x2="347" y2="266" />
+            <line x1="488" y1="260" x2="488" y2="266" />
+          </g>
+          <g fontSize="12" className="text-subtle" fill="currentColor">
+            <text x="52" y="67" textAnchor="end">12</text>
+            <text x="52" y="264" textAnchor="end">0</text>
+            <text x="20" y="150" transform="rotate(-90 20 150)" textAnchor="middle">free chlorine (ppm)</text>
+            <text x="72" y="278" textAnchor="middle">0</text>
+            <text x="203" y="278" textAnchor="middle">12 h</text>
+            <text x="347" y="278" textAnchor="middle">24 h</text>
+            <text x="488" y="278" textAnchor="end">36 h</text>
+            <text x="275" y="296" textAnchor="middle">hours after shocking</text>
+          </g>
+        </g>
 
-      {/* FC decay curve */}
-      <path
-        d="M60 246 L72 246 L72 63 C 130 92, 200 140, 275 178 S 420 218, 490 227"
-        fill="none"
-        className="text-brand-orange"
-        stroke="currentColor"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+        {/* safe-to-swim zone (below the CYA-based ceiling) — left half stays
+            curve-free, so the label lives there */}
+        <g className="dgm-fade" style={animDelay(0.15)}>
+          <rect x="60" y="178" width="430" height="82" fill="url(#dgm-safe-zone)" />
+          <line x1="60" y1="178" x2="490" y2="178" className="text-brand-blue" stroke="currentColor" strokeWidth="2" strokeDasharray="6 5" />
+          <g fontSize="12.5" className="text-brand-blue" fill="currentColor" fontWeight="600">
+            <text x="80" y="206">safe to swim below this line —</text>
+            <text x="80" y="224">your ceiling, set by your CYA</text>
+          </g>
+        </g>
 
-      {/* crossing point */}
-      <g className="text-fg">
-        <circle cx="275" cy="178" r="6" className="text-brand-orange" fill="currentColor" />
-        <circle cx="275" cy="178" r="2.5" fill="#fff" />
-        <text x="285" y="160" fontSize="12.5" fill="currentColor" fontWeight="600">a test confirms it — OK to swim</text>
-      </g>
+        {/* area under the decay curve */}
+        <path
+          className="dgm-fade"
+          style={animDelay(0.9)}
+          d="M72 258 L72 63 C 130 92, 200 140, 275 178 C 340 207, 420 221, 488 227 L488 258 Z"
+          fill="url(#dgm-fc-area)"
+        />
 
-      {/* y-axis labels */}
-      <g fontSize="12" className="text-subtle" fill="currentColor">
-        <text x="52" y="67" textAnchor="end">12</text>
-        <text x="52" y="264" textAnchor="end">0</text>
-        <text x="20" y="150" transform="rotate(-90 20 150)" textAnchor="middle">free chlorine (ppm)</text>
-      </g>
-      <text x="100" y="52" fontSize="12.5" className="text-muted" fill="currentColor">shock level</text>
+        {/* FC decay curve (draws itself in) */}
+        <path
+          className="dgm-line text-brand-orange"
+          style={animDelay(0.3)}
+          pathLength={1}
+          d="M72 258 L72 63 C 130 92, 200 140, 275 178 C 340 207, 420 221, 488 227"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <text className="dgm-fade text-muted" style={animDelay(0.5)} x="84" y="52" fontSize="12.5" fill="currentColor" fontWeight="600">
+          shock level
+        </text>
 
-      {/* x-axis labels */}
-      <g fontSize="12" className="text-subtle" fill="currentColor">
-        <text x="72" y="278" textAnchor="middle">0</text>
-        <text x="203" y="278" textAnchor="middle">12 h</text>
-        <text x="347" y="278" textAnchor="middle">24 h</text>
-        <text x="490" y="278" textAnchor="end">36 h</text>
-        <text x="275" y="296" textAnchor="middle">hours after shocking</text>
-      </g>
-    </svg>
-    <figcaption className="mt-3 text-center text-xs text-subtle">
-      Every pool’s curve is different — sunlight, stabilizer (CYA), and the size of the dose all change how fast
-      chlorine falls. That’s why the answer is a <strong>test reading</strong>, not a number of hours.
-    </figcaption>
-  </figure>
-);
+        {/* crossing point: the moment a test says you're clear */}
+        <circle className="dgm-pulse text-brand-orange" cx="275" cy="178" r="9" fill="none" stroke="currentColor" strokeWidth="2.5" opacity="0" />
+        <g className="dgm-fade" style={animDelay(1.3)}>
+          <circle cx="275" cy="178" r="6.5" className="text-brand-orange" fill="currentColor" />
+          <circle cx="275" cy="178" r="2.5" fill="#fff" />
+          <line x1="284" y1="169" x2="298" y2="156" className="text-fg" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.5" />
+          <text x="302" y="152" fontSize="12.5" className="text-fg" fill="currentColor" fontWeight="600">a test confirms it — OK to swim</text>
+        </g>
+      </svg>
+      <figcaption className="mt-3 text-center text-xs text-subtle">
+        Every pool’s curve is different — sunlight, stabilizer (CYA), and the size of the dose all change how fast
+        chlorine falls. That’s why the answer is a <strong>test reading</strong>, not a number of hours.
+      </figcaption>
+    </figure>
+  );
+};
 
 /** Safe-swim ceiling scales with stabilizer: ≈40% of CYA (the shock/SLAM level).
  *  Targets match the chlorine calculator's FC table — keep the two in sync. */

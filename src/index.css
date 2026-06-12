@@ -234,6 +234,62 @@ html.light .theme-knob-sun {
   @apply text-fg font-semibold;
 }
 
+/* ---- Animated guide diagrams ----
+   useInViewAnim() arms a <figure> with .diagram-anim after hydration (so
+   prerendered / no-JS HTML stays fully visible) and adds .in-view when the
+   figure scrolls into the viewport. The hidden base states live inside the
+   reduced-motion gate so those users always get the static diagram.
+   Per-element stagger comes from --d (see animDelay()). */
+@media (prefers-reduced-motion: no-preference) {
+  .diagram-anim .dgm-line {
+    stroke-dasharray: 1 1; /* paths set pathLength=1 */
+    stroke-dashoffset: 1;
+  }
+  .diagram-anim .dgm-fade {
+    opacity: 0;
+  }
+  .diagram-anim.in-view .dgm-line {
+    animation: dgm-draw 1.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: var(--d, 0s);
+  }
+  .diagram-anim.in-view .dgm-fade {
+    animation: dgm-fade 0.55s ease-out forwards;
+    animation-delay: var(--d, 0s);
+  }
+  .diagram-anim.in-view .dgm-pulse {
+    animation: dgm-pulse 2.2s ease-out infinite;
+    animation-delay: var(--d, 1.8s);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+@keyframes dgm-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dgm-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes dgm-pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.9;
+  }
+  70%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
 @layer base {
   /* Show the pointer cursor on every enabled button / button-role element. */
   button:not(:disabled),

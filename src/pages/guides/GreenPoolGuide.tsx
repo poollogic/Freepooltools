@@ -13,82 +13,104 @@ import {
 } from 'lucide-react';
 import { GuideLayout } from '@/components/GuideLayout';
 import { GUIDES } from '@/data/guides';
+import { useInViewAnim, animDelay } from '@/lib/useInViewAnim';
 
 const guide = GUIDES.find((g) => g.slug === 'how-to-fix-a-green-pool')!;
 
 /** Why one big dose fails: a single dump decays to zero and the algae regrows,
  *  while SLAM re-doses to hold free chlorine at shock level until the kill is done. */
-const SlamDiagram = () => (
-  <figure className="not-prose my-8 rounded-2xl border border-line bg-card-2 p-4 sm:p-6">
-    <svg
-      viewBox="0 0 520 300"
-      className="w-full h-auto"
-      role="img"
-      aria-label="Chart comparing two ways to shock a green pool over four days. A single big dose of chlorine decays to zero within a day and the algae regrows. The SLAM method re-doses two to three times a day to hold free chlorine at shock level until the algae is dead."
-    >
-      {/* axes */}
-      <g className="text-line-strong" stroke="currentColor" strokeWidth="2">
-        <line x1="60" y1="30" x2="60" y2="260" />
-        <line x1="60" y1="260" x2="490" y2="260" />
-      </g>
+const SlamDiagram = () => {
+  const { ref, cls } = useInViewAnim();
+  return (
+    <figure ref={ref} className={`not-prose my-8 rounded-2xl border border-line bg-card-2 p-4 sm:p-6 ${cls}`}>
+      <svg
+        viewBox="0 0 520 300"
+        className="w-full h-auto"
+        role="img"
+        aria-label="Chart comparing two ways to shock a green pool over four days. A single big dose of chlorine decays to zero within a day and the algae regrows. The SLAM method re-doses two to three times a day to hold free chlorine at shock level until the algae is dead."
+      >
+        {/* axes, ticks, and labels */}
+        <g className="dgm-fade">
+          <g className="text-line-strong" stroke="currentColor" strokeWidth="2">
+            <line x1="60" y1="30" x2="60" y2="260" />
+            <line x1="60" y1="260" x2="490" y2="260" />
+          </g>
+          <g className="text-subtle" stroke="currentColor" strokeWidth="1.5">
+            <line x1="176" y1="260" x2="176" y2="266" />
+            <line x1="280" y1="260" x2="280" y2="266" />
+            <line x1="384" y1="260" x2="384" y2="266" />
+            <line x1="478" y1="260" x2="478" y2="266" />
+          </g>
+          <g fontSize="12" className="text-subtle" fill="currentColor">
+            <text x="20" y="150" transform="rotate(-90 20 150)" textAnchor="middle">free chlorine (ppm)</text>
+            <text x="72" y="278" textAnchor="middle">day 0</text>
+            <text x="176" y="278" textAnchor="middle">day 1</text>
+            <text x="280" y="278" textAnchor="middle">day 2</text>
+            <text x="384" y="278" textAnchor="middle">day 3</text>
+            <text x="478" y="278" textAnchor="middle">day 4</text>
+          </g>
+        </g>
 
-      {/* shock level line */}
-      <line x1="60" y1="120" x2="490" y2="120" className="text-fg" stroke="currentColor" strokeWidth="2" strokeDasharray="6 5" strokeOpacity="0.55" />
-      <text x="484" y="112" textAnchor="end" fontSize="12" className="text-muted" fill="currentColor" fontWeight="600">
-        shock level (≈40% of CYA)
-      </text>
+        {/* shock level line */}
+        <g className="dgm-fade" style={animDelay(0.15)}>
+          <line x1="60" y1="120" x2="490" y2="120" className="text-fg" stroke="currentColor" strokeWidth="2" strokeDasharray="6 5" strokeOpacity="0.55" />
+          <text x="480" y="140" textAnchor="end" fontSize="12" className="text-muted" fill="currentColor" fontWeight="600">
+            shock level (≈40% of CYA)
+          </text>
+        </g>
 
-      {/* single-dump curve (fails) */}
-      <path
-        d="M80 250 L80 84 C 110 130, 140 200, 180 236 C 230 252, 380 252, 488 250"
-        fill="none"
-        className="text-brand-orange"
-        stroke="currentColor"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-        strokeDasharray="8 6"
-      />
-      <text x="200" y="225" fontSize="12.5" className="text-brand-orange" fill="currentColor" fontWeight="600">
-        one big dump: gone in a day, algae regrows
-      </text>
+        {/* act one — the single dump fails */}
+        <path
+          className="dgm-fade text-brand-orange"
+          style={animDelay(0.35)}
+          d="M80 250 L80 84 C 110 130, 140 200, 180 236 C 230 252, 380 252, 488 250"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          strokeDasharray="8 6"
+        />
+        <text className="dgm-fade text-brand-orange" style={animDelay(0.6)} x="200" y="228" fontSize="12.5" fill="currentColor" fontWeight="600">
+          one big dump: gone in a day, algae regrows
+        </text>
 
-      {/* SLAM sawtooth (works) */}
-      <path
-        d="M72 250 L72 80 C 100 100, 125 125, 148 138 L148 84 C 180 102, 210 124, 234 136 L234 88 C 270 102, 300 118, 326 128 L326 92 C 370 100, 420 106, 488 108"
-        fill="none"
-        className="text-brand-blue-light"
-        stroke="currentColor"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <text x="120" y="60" fontSize="12.5" className="text-brand-blue-light" fill="currentColor" fontWeight="600">
-        SLAM: re-dose to hold the level until the kill is done
-      </text>
+        {/* act two — the SLAM sawtooth draws in and holds */}
+        <path
+          className="dgm-line text-brand-blue-light"
+          style={animDelay(0.9)}
+          pathLength={1}
+          d="M72 250 L72 80 C 100 100, 125 125, 148 138 L148 84 C 180 102, 210 124, 234 136 L234 88 C 270 102, 300 118, 326 128 L326 92 C 370 100, 420 106, 488 108"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <text className="dgm-fade text-brand-blue-light" style={animDelay(1.1)} x="100" y="58" fontSize="12.5" fill="currentColor" fontWeight="600">
+          SLAM: re-dose to hold the level until the kill is done
+        </text>
 
-      {/* re-dose arrows */}
-      <g className="text-brand-blue-light" fill="currentColor">
-        <path d="M143 110 l5 -10 l5 10 z" />
-        <path d="M229 112 l5 -10 l5 10 z" />
-        <path d="M321 112 l5 -10 l5 10 z" />
-      </g>
+        {/* re-dose arrows pop in as the line reaches each dip */}
+        <g className="text-brand-blue-light" fill="currentColor">
+          <path className="dgm-fade" style={animDelay(1.3)} d="M143 110 l5 -10 l5 10 z" />
+          <path className="dgm-fade" style={animDelay(1.55)} d="M229 112 l5 -10 l5 10 z" />
+          <path className="dgm-fade" style={animDelay(1.8)} d="M321 112 l5 -10 l5 10 z" />
+        </g>
 
-      {/* axis labels */}
-      <g fontSize="12" className="text-subtle" fill="currentColor">
-        <text x="20" y="150" transform="rotate(-90 20 150)" textAnchor="middle">free chlorine (ppm)</text>
-        <text x="72" y="278" textAnchor="middle">day 0</text>
-        <text x="176" y="278" textAnchor="middle">day 1</text>
-        <text x="280" y="278" textAnchor="middle">day 2</text>
-        <text x="384" y="278" textAnchor="middle">day 3</text>
-        <text x="478" y="278" textAnchor="middle">day 4</text>
-      </g>
-    </svg>
-    <figcaption className="mt-3 text-center text-xs text-subtle">
-      The #1 reason green pools stay green: algae <strong>consumes</strong> chlorine, so a single shock
-      crashes within hours. Holding the level with repeat doses is what finishes the bloom off.
-    </figcaption>
-  </figure>
-);
+        {/* endpoint: the level finally holds */}
+        <circle className="dgm-pulse text-brand-blue-light" style={animDelay(2.5)} cx="488" cy="108" r="9" fill="none" stroke="currentColor" strokeWidth="2.5" opacity="0" />
+        <g className="dgm-fade" style={animDelay(2.15)}>
+          <circle cx="488" cy="108" r="6" className="text-brand-blue-light" fill="currentColor" />
+          <circle cx="488" cy="108" r="2.2" fill="#fff" />
+        </g>
+      </svg>
+      <figcaption className="mt-3 text-center text-xs text-subtle">
+        The #1 reason green pools stay green: algae <strong>consumes</strong> chlorine, so a single shock
+        crashes within hours. Holding the level with repeat doses is what finishes the bloom off.
+      </figcaption>
+    </figure>
+  );
+};
 
 /** "How long will it take" — by starting color. Targets the time-to-clear queries. */
 const TIMELINE = [
