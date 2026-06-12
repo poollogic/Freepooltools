@@ -204,7 +204,8 @@ const STEPS: Step[] = [
     body: (
       <>You’re done when three things are true: the water is <strong>clear</strong>, free chlorine holds
       overnight (loses ≤1 ppm with the pump running and no sun), and combined chlorine is ≤0.5 ppm. Then
-      stop dosing and let chlorine fall naturally — swim once it’s back at or below 5 ppm (here’s{' '}
+      stop dosing and let chlorine fall naturally — since the shock level was set at ~40% of your CYA,
+      you’re already at the safe-swim ceiling, so it’s swimmable as soon as it dips below that (here’s{' '}
       <Link to="/guides/how-long-after-shocking-pool-can-you-swim">exactly when it’s safe</Link>).</>
     ),
   },
@@ -241,7 +242,7 @@ const FAQS = [
   },
   {
     q: 'Can you swim in a green pool?',
-    a: 'No. Green water means the sanitizer failed, so along with algae the pool can carry bacteria you can’t see — and cloudy green water is a drowning hazard because a swimmer below the surface is invisible. Wait until the water is clear and free chlorine has come back down to 5 ppm or below.',
+    a: 'No. Green water means the sanitizer failed, so along with algae the pool can carry bacteria you can’t see — and cloudy green water is a drowning hazard because a swimmer below the surface is invisible. Wait until the water is clear and free chlorine is back at or below the safe level for your CYA — about 40% of your stabilizer reading, or 5 ppm in an unstabilized pool.',
   },
   {
     q: 'Why is my pool still green after shocking it?',

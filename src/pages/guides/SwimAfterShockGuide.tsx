@@ -6,14 +6,14 @@ import { GUIDES } from '@/data/guides';
 
 const guide = GUIDES.find((g) => g.slug === 'how-long-after-shocking-pool-can-you-swim')!;
 
-/** Free chlorine after a shock: spike, decay, and the ≤5 ppm safe-to-swim zone. */
+/** Free chlorine after a shock: spike, decay, and the CYA-based safe-to-swim zone. */
 const DecayDiagram = () => (
   <figure className="not-prose my-8 rounded-2xl border border-line bg-card-2 p-4 sm:p-6">
     <svg
       viewBox="0 0 520 300"
       className="w-full h-auto"
       role="img"
-      aria-label="Chart of free chlorine over the hours after shocking: it spikes to the shock level, then falls. The pool is safe to swim once the reading crosses back at or below 5 ppm — for a typical dose, somewhere between 8 and 24 hours."
+      aria-label="Chart of free chlorine over the hours after shocking: it spikes to the shock level, then falls. The pool is safe to swim once the reading crosses back below the safe ceiling for your stabilizer level — for a typical dose, somewhere between 8 and 24 hours."
     >
       {/* axes */}
       <g className="text-line-strong" stroke="currentColor" strokeWidth="2">
@@ -21,11 +21,11 @@ const DecayDiagram = () => (
         <line x1="60" y1="260" x2="490" y2="260" />
       </g>
 
-      {/* safe-to-swim zone (at or below 5 ppm) */}
+      {/* safe-to-swim zone (below the CYA-based ceiling) */}
       <rect x="60" y="178" width="430" height="82" className="text-brand-blue" fill="currentColor" fillOpacity="0.12" />
       <line x1="60" y1="178" x2="490" y2="178" className="text-brand-blue" stroke="currentColor" strokeWidth="2" strokeDasharray="6 5" />
       <text x="480" y="196" textAnchor="end" fontSize="12.5" className="text-brand-blue" fill="currentColor" fontWeight="600">
-        safe to swim at or below 5 ppm
+        safe to swim below your ceiling (set by your CYA)
       </text>
 
       {/* FC decay curve */}
@@ -49,7 +49,6 @@ const DecayDiagram = () => (
       {/* y-axis labels */}
       <g fontSize="12" className="text-subtle" fill="currentColor">
         <text x="52" y="67" textAnchor="end">12</text>
-        <text x="52" y="182" textAnchor="end">5</text>
         <text x="52" y="264" textAnchor="end">0</text>
         <text x="20" y="150" transform="rotate(-90 20 150)" textAnchor="middle">free chlorine (ppm)</text>
       </g>
@@ -69,6 +68,46 @@ const DecayDiagram = () => (
       chlorine falls. That’s why the answer is a <strong>test reading</strong>, not a number of hours.
     </figcaption>
   </figure>
+);
+
+/** Safe-swim ceiling scales with stabilizer: ≈40% of CYA (the shock/SLAM level).
+ *  Targets match the chlorine calculator's FC table — keep the two in sync. */
+const CEILINGS = [
+  { cya: '0 (no stabilizer)', ceiling: '5 ppm', target: '1–4 ppm' },
+  { cya: '30 ppm', ceiling: '12 ppm', target: '4–6 ppm' },
+  { cya: '50 ppm', ceiling: '20 ppm', target: '6–8 ppm' },
+  { cya: '70 ppm', ceiling: '28 ppm', target: '8–10 ppm' },
+];
+
+const CeilingTable = () => (
+  <div className="not-prose my-8">
+    <div className="overflow-x-auto rounded-2xl border border-line bg-card elevate">
+      <table className="w-full text-[15px] text-left border-collapse">
+        <caption className="sr-only">Safe-to-swim free chlorine ceiling and normal target range by stabilizer (CYA) level.</caption>
+        <thead>
+          <tr className="border-b border-line text-subtle">
+            <th scope="col" className="px-4 sm:px-5 py-3 font-semibold whitespace-nowrap">Your CYA</th>
+            <th scope="col" className="px-4 sm:px-5 py-3 font-semibold whitespace-nowrap">Safe-swim ceiling</th>
+            <th scope="col" className="px-4 sm:px-5 py-3 font-semibold whitespace-nowrap">Normal target</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-line">
+          {CEILINGS.map((row) => (
+            <tr key={row.cya}>
+              <th scope="row" className="px-4 sm:px-5 py-3.5 font-semibold text-fg whitespace-nowrap">{row.cya}</th>
+              <td className="px-4 sm:px-5 py-3.5 text-muted font-semibold tabular-nums">{row.ceiling}</td>
+              <td className="px-4 sm:px-5 py-3.5 text-muted tabular-nums">{row.target}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p className="text-[11px] text-subtle mt-3 leading-relaxed">
+      Ceiling ≈ 40% of CYA — the same shock/SLAM level our calculators use. The unstabilized row is the
+      classic “5 ppm rule” (health codes cap operating pools at 10 ppm, assuming no CYA). Full target
+      table by CYA is on the chlorine calculator.
+    </p>
+  </div>
 );
 
 /** Typical wait by shock product — assumes a routine dose, not an algae SLAM. */
@@ -137,10 +176,11 @@ type Check = { icon: LucideIcon; title: string; body: ReactNode };
 const CHECKS: Check[] = [
   {
     icon: FlaskConical,
-    title: 'Free chlorine ≤ 5 ppm',
+    title: 'Chlorine below your ceiling',
     body: (
-      <>Test the water — strips work, a drop kit is better. At or below <strong>5 ppm</strong> (and no higher than
-      your normal target range) you’re good. Still reading high? Stay out and re-test in a few hours.</>
+      <>Test the water — strips work, a drop kit is better. Safe means free chlorine at or below{' '}
+      <strong>~40% of your CYA</strong> (5 ppm if you run no stabilizer); comfortable means back in your
+      normal target range. Still high? Re-test in a few hours.</>
     ),
   },
   {
@@ -188,7 +228,7 @@ const CheckList = () => (
 const FAQS = [
   {
     q: 'Can I swim 12 hours after shocking my pool?',
-    a: 'Usually — but verify with a test instead of the clock. After a routine shock dose, free chlorine in an outdoor pool often falls back to 5 ppm or below within 8–24 hours, but sunlight, stabilizer (CYA), and the size of the dose all change that. If a test shows free chlorine at or below about 5 ppm and the water is clear, swimming at 12 hours is fine; if it still reads high, stay out and re-test in a few hours.',
+    a: 'Usually — but verify with a test instead of the clock. After a routine shock dose, free chlorine in an outdoor pool often falls back into normal range within 8–24 hours, but sunlight, stabilizer (CYA), and the size of the dose all change that. If a test shows free chlorine at or below about 40% of your CYA (or 5 ppm or less in a pool with no stabilizer) and the water is clear, swimming at 12 hours is fine; if it still reads above that, stay out and re-test in a few hours.',
   },
   {
     q: 'What happens if you swim in a pool too soon after shocking it?',
@@ -200,7 +240,7 @@ const FAQS = [
   },
   {
     q: 'Is it safe to swim with chlorine at 10 ppm?',
-    a: 'That’s the absolute ceiling, not a comfortable level. The CDC’s Model Aquatic Health Code sets 10 ppm as the maximum free chlorine a public pool may have while open, but most guidance — including ours — says to wait until it’s at or below about 5 ppm. Between 5 and 10 ppm, eye, skin, and airway irritation get increasingly likely, especially for kids and longer swims.',
+    a: 'It depends on your stabilizer. With CYA at 30 ppm or more, 10 ppm of free chlorine is below the safe-swim ceiling (about 40% of CYA) — most of it is buffered by the stabilizer and inactive, so it’s far gentler than the number suggests. In an unstabilized pool (indoor pools, hot tubs), 10 ppm is the absolute maximum — the CDC’s Model Aquatic Health Code caps operating pools there — so stay out until it falls to about 5 ppm or below.',
   },
   {
     q: 'Should the pump run while I wait?',
@@ -222,7 +262,7 @@ export const SwimAfterShockGuide = () => (
   <GuideLayout
     title={guide.title}
     metaTitle="How Long After Shocking a Pool Can You Swim? (8–24 Hours)"
-    description="How long after shocking a pool can you swim? Usually 8–24 hours — once free chlorine is at or below 5 ppm and the water is clear. Wait times by shock type."
+    description="How long after shocking a pool can you swim? Usually 8–24 hours — but the safe chlorine level depends on your stabilizer (CYA), not a flat 5 ppm."
     path={guide.path}
     updated={guide.updated}
     faqs={FAQS}
@@ -236,8 +276,9 @@ export const SwimAfterShockGuide = () => (
     <p>
       How long after shocking a pool can you swim? The honest answer is a{' '}
       <strong>test reading, not a number of hours</strong>: it’s safe to swim once free chlorine has
-      fallen back to <strong>5 ppm or below</strong> and the water is clear. For a typical chlorine
-      shock that takes about <strong>8–24 hours</strong>; for non-chlorine (MPS) shock, only about{' '}
+      fallen back below the safe ceiling for your stabilizer level — about <strong>40% of your CYA</strong>,
+      or 5 ppm if you run no stabilizer — and the water is clear. For a typical chlorine shock that takes
+      about <strong>8–24 hours</strong>; for non-chlorine (MPS) shock, only about{' '}
       <strong>15 minutes</strong>. Here’s why the range is so wide — and how to know for sure instead
       of guessing.
     </p>
@@ -246,21 +287,38 @@ export const SwimAfterShockGuide = () => (
       <Clock className="w-6 h-6 text-brand-blue-light shrink-0 mt-0.5" />
       <div className="text-[14px] sm:text-[15px] text-fg leading-relaxed">
         <strong>Quick answer:</strong> after a chlorine-based shock, wait until a test shows free chlorine
-        at <strong>5 ppm or below</strong> and you can see the pool floor — usually <strong>8–24 hours</strong>.
-        After non-chlorine (MPS) shock, about <strong>15 minutes</strong>. When in doubt, test — never swim
-        on the clock alone.
+        back at or below <strong>~40% of your CYA</strong> (e.g. 20 ppm at CYA 50 — or 5 ppm in a pool with
+        no stabilizer) and you can see the pool floor — usually <strong>8–24 hours</strong>. After
+        non-chlorine (MPS) shock, about <strong>15 minutes</strong>. When in doubt, test — never swim on
+        the clock alone.
       </div>
     </div>
 
     <h2>How long should you wait to swim after shocking?</h2>
     <p>
       “Shocking” just means raising free chlorine far above its normal level — high enough to kill algae
-      or burn off chloramines. The water becomes safe again the moment that spike decays back into the
-      normal swimming range, and <em>only</em> a test can tell you when that’s happened. Two useful
-      reference points: the CDC’s Model Aquatic Health Code allows public pools to operate with free
-      chlorine up to <strong>10 ppm</strong>, and the widely used comfort threshold — the one we
-      recommend — is <strong>at or below 5 ppm</strong> before anyone swims.
+      or burn off chloramines. The water becomes safe again once that spike falls back below a safe
+      ceiling, and here’s the part almost every “wait 24 hours” article gets wrong:{' '}
+      <strong>the ceiling depends on your stabilizer (CYA) level, not a universal number.</strong>
     </p>
+    <p>
+      CYA buffers chlorine: it holds most of the free chlorine in an inactive reserve, so only a small
+      fraction is actually working on swimmers’ skin and eyes at any moment. That’s why 10 ppm in a
+      stabilized backyard pool is gentler than 4 ppm in an unstabilized indoor pool. The familiar “wait
+      until 5 ppm” rule comes from health codes written for <em>unstabilized</em> commercial pools — the
+      CDC’s Model Aquatic Health Code caps operating pools at 10 ppm and assumes no CYA. Applied to a
+      stabilized pool it isn’t just conservative, it’s wrong: with CYA at 50, your <em>normal</em>{' '}
+      chlorine target is 6–8 ppm, so “wait for 5” would mean waiting until your pool is under-chlorinated.
+    </p>
+    <p>
+      The accurate rule — the same chemistry behind our{' '}
+      <Link to="/pool-shock-calculator">shock calculator</Link> — is that water is safe to swim once free
+      chlorine is at or below about <strong>40% of your CYA</strong> (the shock ceiling), and back to
+      everyday comfort once it’s in the normal target range for your{' '}
+      <Link to="/chlorine-calculator">chlorine level</Link>:
+    </p>
+
+    <CeilingTable />
     <p>
       The familiar “wait 24 hours” advice isn’t wrong, it’s just a worst-case blanket. Depending on the
       dose, the sun, and your stabilizer level, the same pool might be swimmable in 6 hours — or still

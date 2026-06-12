@@ -86,7 +86,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'How long after shocking can I swim?',
-    a: 'Wait until free chlorine falls back to a safe swimming range — generally at or below about 5 ppm (or no more than roughly your normal target for your CYA). After a big shock that can take a day or two, depending on sun and CYA. Always retest before anyone gets in; swimming in heavily shocked water can irritate skin and eyes and damage swimwear.',
+    a: 'Wait until free chlorine falls back below the safe ceiling for your stabilizer level — about 40% of your CYA (the shock level), or 5 ppm or less in a pool with no CYA — and the water is clear. After a big shock that can take from hours to a day or two, depending on sun and CYA. Always retest before anyone gets in; swimming in over-shocked water can irritate skin and eyes and damage swimwear.',
   },
   {
     q: 'Should I shock during the day or at night?',
@@ -511,11 +511,12 @@ export const PoolShockCalculatorPage = () => {
           <p className="text-muted leading-relaxed text-[15px]">
             <strong className="text-fg font-semibold">Always shock with unstabilized chlorine</strong> — liquid
             chlorine or cal-hypo — at dusk or after dark, and never let CYA-adding tablets (trichlor/dichlor)
-            do your shocking. Wait until free chlorine drops to about 5 ppm or below{' '}
+            do your shocking. Wait until free chlorine drops back below the safe level for your CYA —
+            about 40% of your stabilizer reading, or 5 ppm if unstabilized —{' '}
             <Link to="/guides/how-long-after-shocking-pool-can-you-swim" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               before swimming
             </Link>
-            , and keep pets and people out of heavily shocked water.
+            , and keep pets and people out of over-shocked water.
           </p>
         </div>
       </section>
