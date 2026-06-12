@@ -19,6 +19,8 @@ type GuideLayoutProps = {
   path: string;
   /** ISO date. */
   updated: string;
+  /** Optional "· N min read" shown next to the updated date. */
+  readMinutes?: number;
   children: ReactNode;
   /** Primary "use the calculator" call-to-action. */
   cta?: { to: string; label: string; sub?: string };
@@ -29,7 +31,7 @@ type GuideLayoutProps = {
 const fmtDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-export const GuideLayout = ({ title, metaTitle, description, path, updated, children, cta, faqs, sources }: GuideLayoutProps) => {
+export const GuideLayout = ({ title, metaTitle, description, path, updated, readMinutes, children, cta, faqs, sources }: GuideLayoutProps) => {
   const url = `${SITE_ORIGIN}${path}/`;
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -82,7 +84,10 @@ export const GuideLayout = ({ title, metaTitle, description, path, updated, chil
           <h1 className="font-display font-bold text-fg text-3xl sm:text-4xl leading-tight tracking-tight mb-3">
             {title}
           </h1>
-          <p className="text-subtle text-sm mb-8">Updated {fmtDate(updated)}</p>
+          <p className="text-subtle text-sm mb-8">
+            Updated {fmtDate(updated)}
+            {readMinutes ? <> &nbsp;·&nbsp; {readMinutes} min read</> : null}
+          </p>
 
           <div className="guide-prose">{children}</div>
 

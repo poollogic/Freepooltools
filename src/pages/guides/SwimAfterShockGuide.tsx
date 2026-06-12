@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, FlaskConical, Eye, RefreshCw, type LucideIcon } from 'lucide-react';
+import { Clock, FlaskConical, Eye, RefreshCw, ShieldCheck, Zap, CheckCircle2, type LucideIcon } from 'lucide-react';
 import { GuideLayout } from '@/components/GuideLayout';
 import { GUIDES } from '@/data/guides';
 import { useInViewAnim, animDelay } from '@/lib/useInViewAnim';
@@ -107,10 +107,10 @@ const DecayDiagram = () => {
 /** Safe-swim ceiling scales with stabilizer: ≈40% of CYA (the shock/SLAM level).
  *  Targets match the chlorine calculator's FC table — keep the two in sync. */
 const CEILINGS = [
-  { cya: '0 (no stabilizer)', ceiling: '5 ppm', target: '1–4 ppm' },
-  { cya: '30 ppm', ceiling: '12 ppm', target: '4–6 ppm' },
-  { cya: '50 ppm', ceiling: '20 ppm', target: '6–8 ppm' },
-  { cya: '70 ppm', ceiling: '28 ppm', target: '8–10 ppm' },
+  { cya: '0 (no stabilizer)', ceiling: '5 ppm', target: '1–4 ppm', common: false },
+  { cya: '30 ppm', ceiling: '12 ppm', target: '4–6 ppm', common: false },
+  { cya: '50 ppm', ceiling: '20 ppm', target: '6–8 ppm', common: true },
+  { cya: '70 ppm', ceiling: '28 ppm', target: '8–10 ppm', common: false },
 ];
 
 const CeilingTable = () => (
@@ -127,9 +127,16 @@ const CeilingTable = () => (
         </thead>
         <tbody className="divide-y divide-line">
           {CEILINGS.map((row) => (
-            <tr key={row.cya}>
-              <th scope="row" className="px-4 sm:px-5 py-3.5 font-semibold text-fg whitespace-nowrap">{row.cya}</th>
-              <td className="px-4 sm:px-5 py-3.5 text-muted font-semibold tabular-nums">{row.ceiling}</td>
+            <tr key={row.cya} className={row.common ? 'bg-brand-blue/10' : 'transition-colors hover:bg-card-2'}>
+              <th scope="row" className="px-4 sm:px-5 py-3.5 font-semibold text-fg whitespace-nowrap">
+                {row.cya}
+                {row.common && (
+                  <span className="ml-2 inline-flex rounded-full border border-brand-blue/30 bg-brand-blue/10 px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide text-brand-blue align-middle">
+                    most common
+                  </span>
+                )}
+              </th>
+              <td className="px-4 sm:px-5 py-3.5 text-fg font-semibold tabular-nums">{row.ceiling}</td>
               <td className="px-4 sm:px-5 py-3.5 text-muted tabular-nums">{row.target}</td>
             </tr>
           ))}
@@ -150,24 +157,28 @@ const WAIT_TIMES = [
     product: 'Liquid chlorine / bleach',
     detail: 'sodium hypochlorite',
     wait: '8–24 hours',
+    fast: false,
     note: 'Unstabilized — sunlight burns it off fastest, so it often drops back to safe levels overnight.',
   },
   {
     product: 'Cal-hypo shock',
     detail: 'calcium hypochlorite',
     wait: '8–24 hours',
+    fast: false,
     note: 'Make sure every granule has dissolved — undissolved cal-hypo on the floor can bleach liners and burn skin.',
   },
   {
     product: 'Dichlor shock',
     detail: 'stabilized granular',
     wait: '8–24 hours, often longer',
+    fast: false,
     note: 'Adds CYA with every dose, which shields chlorine from the sun — levels stay elevated longer.',
   },
   {
     product: 'Non-chlorine shock',
     detail: 'potassium monopersulfate (MPS)',
     wait: '~15 minutes',
+    fast: true,
     note: 'Oxidizes contaminants without raising free chlorine — most labels clear swimming after 15 minutes of circulation.',
   },
 ];
@@ -186,12 +197,20 @@ const WaitTimeTable = () => (
         </thead>
         <tbody className="divide-y divide-line">
           {WAIT_TIMES.map((row) => (
-            <tr key={row.product}>
+            <tr key={row.product} className="transition-colors hover:bg-card-2">
               <th scope="row" className="px-4 sm:px-5 py-3.5 font-semibold text-fg whitespace-nowrap align-top">
                 {row.product}
                 <span className="block font-normal text-subtle text-xs mt-0.5">{row.detail}</span>
               </th>
-              <td className="px-4 sm:px-5 py-3.5 whitespace-nowrap align-top text-muted font-semibold tabular-nums">{row.wait}</td>
+              <td className="px-4 sm:px-5 py-3.5 whitespace-nowrap align-top">
+                <span
+                  className={`inline-flex rounded-full px-2.5 py-1 text-[13px] font-semibold tabular-nums ${
+                    row.fast ? 'bg-brand-blue/10 text-brand-blue' : 'bg-brand-orange/10 text-brand-orange-dark'
+                  }`}
+                >
+                  {row.wait}
+                </span>
+              </td>
               <td className="px-4 sm:px-5 py-3.5 align-top text-muted text-[14px] leading-relaxed">{row.note}</td>
             </tr>
           ))}
@@ -237,27 +256,43 @@ const CHECKS: Check[] = [
   },
 ];
 
-const CheckList = () => (
-  <div className="not-prose my-8 grid gap-3 sm:grid-cols-3">
-    {CHECKS.map((check, i) => {
-      const Icon = check.icon;
-      return (
-        <div key={check.title} className="rounded-2xl border border-line bg-card p-4 sm:p-5 elevate">
-          <div className="flex items-center gap-2.5 mb-2.5">
-            <span className="grid place-items-center w-9 h-9 rounded-full bg-gradient-to-br from-brand-blue-light to-brand-blue text-white font-display font-bold text-sm shadow-sm shadow-brand-blue/30 ring-1 ring-white/15">
-              {i + 1}
-            </span>
-            <span aria-hidden className="grid place-items-center w-8 h-8 rounded-lg bg-brand-orange/10 text-brand-orange">
-              <Icon className="w-[18px] h-[18px]" />
-            </span>
-          </div>
-          <h3 className="font-display font-bold text-fg text-[15px] mb-1.5">{check.title}</h3>
-          <p className="text-muted text-[14px] leading-relaxed">{check.body}</p>
-        </div>
-      );
-    })}
-  </div>
-);
+const CheckList = () => {
+  const { ref, cls } = useInViewAnim<HTMLDivElement>();
+  return (
+    <div ref={ref} className={`not-prose my-8 ${cls}`}>
+      <div className="grid gap-3 sm:grid-cols-3">
+        {CHECKS.map((check, i) => {
+          const Icon = check.icon;
+          return (
+            <div
+              key={check.title}
+              className="dgm-fade rounded-2xl border border-line bg-card p-4 sm:p-5 elevate transition-colors hover:border-line-strong"
+              style={animDelay(i * 0.15)}
+            >
+              <div className="flex items-center gap-2.5 mb-2.5">
+                <span className="grid place-items-center w-9 h-9 rounded-full bg-gradient-to-br from-brand-blue-light to-brand-blue text-white font-display font-bold text-sm shadow-sm shadow-brand-blue/30 ring-1 ring-white/15">
+                  {i + 1}
+                </span>
+                <span aria-hidden className="grid place-items-center w-8 h-8 rounded-lg bg-brand-orange/10 text-brand-orange">
+                  <Icon className="w-[18px] h-[18px]" />
+                </span>
+              </div>
+              <h3 className="font-display font-bold text-fg text-[15px] mb-1.5">{check.title}</h3>
+              <p className="text-muted text-[14px] leading-relaxed">{check.body}</p>
+            </div>
+          );
+        })}
+      </div>
+      <p
+        className="dgm-fade mt-3 flex items-center justify-center gap-2 rounded-xl border border-brand-blue/30 bg-brand-blue/10 px-4 py-3 text-sm font-semibold text-fg"
+        style={animDelay(0.5)}
+      >
+        <CheckCircle2 className="w-4 h-4 text-brand-blue-light shrink-0" />
+        All three pass? You’re good to get in.
+      </p>
+    </div>
+  );
+};
 
 const FAQS = [
   {
@@ -299,6 +334,7 @@ export const SwimAfterShockGuide = () => (
     description="How long after shocking a pool can you swim? Usually 8–24 hours — but the safe chlorine level depends on your stabilizer (CYA), not a flat 5 ppm."
     path={guide.path}
     updated={guide.updated}
+    readMinutes={7}
     faqs={FAQS}
     sources={SOURCES}
     cta={{
@@ -317,14 +353,38 @@ export const SwimAfterShockGuide = () => (
       of guessing.
     </p>
 
-    <div className="not-prose my-6 flex items-start gap-3 rounded-2xl border border-brand-blue/40 bg-brand-blue/10 p-4 sm:p-5">
-      <Clock className="w-6 h-6 text-brand-blue-light shrink-0 mt-0.5" />
-      <div className="text-[14px] sm:text-[15px] text-fg leading-relaxed">
-        <strong>Quick answer:</strong> after a chlorine-based shock, wait until a test shows free chlorine
-        back at or below <strong>~40% of your CYA</strong> (e.g. 20 ppm at CYA 50 — or 5 ppm in a pool with
-        no stabilizer) and you can see the pool floor — usually <strong>8–24 hours</strong>. After
-        non-chlorine (MPS) shock, about <strong>15 minutes</strong>. When in doubt, test — never swim on
-        the clock alone.
+    <div className="not-prose my-8 overflow-hidden rounded-2xl border border-brand-blue/40 bg-gradient-to-br from-brand-blue/15 via-transparent to-brand-orange/10 elevate">
+      <div className="p-5 sm:p-6">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-blue/30 bg-brand-blue/10 px-3 py-1 mb-3">
+          <Clock className="w-3.5 h-3.5 text-brand-blue-light" />
+          <span className="text-[11px] font-bold tracking-[0.12em] uppercase text-brand-blue-light">Quick answer</span>
+        </span>
+        <p className="text-fg text-[15px] sm:text-base leading-relaxed">
+          After a chlorine-based shock, swim once a test shows free chlorine back at or below{' '}
+          <strong className="font-semibold">~40% of your CYA</strong> (e.g. 20 ppm at CYA 50 — or 5 ppm in
+          a pool with no stabilizer) and you can see the pool floor. When in doubt, test — never swim on
+          the clock alone.
+        </p>
+      </div>
+      <div className="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-line border-t border-line bg-card-2">
+        {[
+          { icon: Clock, value: '8–24 h', label: 'typical wait after a chlorine shock' },
+          { icon: ShieldCheck, value: '≈40% of CYA', label: 'your safe-swim chlorine ceiling' },
+          { icon: Zap, value: '15 min', label: 'after non-chlorine (MPS) shock' },
+        ].map((s) => {
+          const Icon = s.icon;
+          return (
+            <div key={s.value} className="flex items-center gap-3 px-5 py-4">
+              <span className="grid place-items-center w-9 h-9 rounded-xl bg-brand-orange/10 text-brand-orange shrink-0">
+                <Icon className="w-[18px] h-[18px]" />
+              </span>
+              <span className="min-w-0">
+                <span className="block font-display font-bold text-fg text-lg leading-tight">{s.value}</span>
+                <span className="block text-subtle text-xs mt-0.5 leading-snug">{s.label}</span>
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
 
