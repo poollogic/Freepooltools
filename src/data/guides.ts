@@ -74,9 +74,9 @@ export const GUIDES: Guide[] = [
     title: 'Why Won’t My Pool Hold Chlorine? (Causes & Fixes)',
     shortTitle: 'Pool won’t hold chlorine',
     excerpt:
-      'The usual culprit is cyanuric acid: too little and sunlight burns chlorine off in hours, too much and it goes sluggish. How to tell which — plus algae and high chlorine demand — and the fix.',
-    updated: '2026-06-01',
-    status: 'soon',
+      'One overnight test finds the cause: invisible algae eating it, sunlight destroying it (low CYA), or a test kit that’s lying. The five causes, the diagnosis, and the exact fix for each — and why “chlorine lock” isn’t one of them.',
+    updated: '2026-06-11',
+    status: 'live',
   },
   {
     slug: 'how-to-lower-cyanuric-acid',

@@ -420,7 +420,9 @@ export const GreenPoolGuide = () => (
       <Link to="/chlorine-calculator">chlorine calculator</Link> instead of habit. Make sure the pump runs
       long enough for a <Link to="/pool-pump-runtime-calculator">full daily turnover</Link>, and brush the
       spots circulation misses — steps, corners, behind ladders — weekly. A pool that holds 3–4 ppm against
-      a CYA of 40 simply doesn’t turn green.
+      a CYA of 40 simply doesn’t turn green. And if chlorine keeps vanishing even though the water looks
+      clear, diagnose it before the bloom shows up — see{' '}
+      <Link to="/guides/why-wont-my-pool-hold-chlorine">why your pool won’t hold chlorine</Link>.
     </p>
   </GuideLayout>
 );

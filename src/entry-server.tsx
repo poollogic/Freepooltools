@@ -27,6 +27,7 @@ import { CyaChlorineGuide } from '@/pages/guides/CyaChlorineGuide';
 import { DrainPoolGuide } from '@/pages/guides/DrainPoolGuide';
 import { SwimAfterShockGuide } from '@/pages/guides/SwimAfterShockGuide';
 import { GreenPoolGuide } from '@/pages/guides/GreenPoolGuide';
+import { HoldChlorineGuide } from '@/pages/guides/HoldChlorineGuide';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
 // Routes to prerender. Keep in sync with App.tsx's route table. These get their
@@ -52,6 +53,7 @@ export const PRERENDER_ROUTES = [
   '/guides/how-to-drain-a-pool-with-a-garden-hose',
   '/guides/how-long-after-shocking-pool-can-you-swim',
   '/guides/how-to-fix-a-green-pool',
+  '/guides/why-wont-my-pool-hold-chlorine',
 ];
 
 // Rendered separately to dist/404.html — Cloudflare Pages serves it (with a 404
@@ -80,6 +82,7 @@ const Routing = () => (
     <Route path="/guides/how-to-drain-a-pool-with-a-garden-hose" element={<DrainPoolGuide />} />
     <Route path="/guides/how-long-after-shocking-pool-can-you-swim" element={<SwimAfterShockGuide />} />
     <Route path="/guides/how-to-fix-a-green-pool" element={<GreenPoolGuide />} />
+    <Route path="/guides/why-wont-my-pool-hold-chlorine" element={<HoldChlorineGuide />} />
     <Route path="*" element={<NotFoundPage />} />
   </Routes>
 );
