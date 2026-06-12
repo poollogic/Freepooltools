@@ -30,6 +30,16 @@ export const GUIDES: Guide[] = [
     status: 'live',
   },
   {
+    slug: 'cloudy-pool-water',
+    path: '/guides/cloudy-pool-water',
+    title: 'Cloudy Pool Water: Causes & How to Clear It Fast',
+    shortTitle: 'Cloudy pool water',
+    excerpt:
+      'Cloudy water is millions of particles your filter can’t catch yet. The four causes — sanitizer, chemistry, filtration, fine debris — how to tell which one is yours, and the 2–3 day path back to clear.',
+    updated: '2026-06-12',
+    status: 'live',
+  },
+  {
     slug: 'how-to-drain-a-pool-with-a-garden-hose',
     path: '/guides/how-to-drain-a-pool-with-a-garden-hose',
     title: 'How to Drain a Pool With a Garden Hose (Siphon Method)',

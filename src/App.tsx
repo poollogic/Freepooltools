@@ -61,6 +61,9 @@ const GreenPoolGuide = lazy(() =>
 const HoldChlorineGuide = lazy(() =>
   import('@/pages/guides/HoldChlorineGuide').then((m) => ({ default: m.HoldChlorineGuide })),
 );
+const CloudyWaterGuide = lazy(() =>
+  import('@/pages/guides/CloudyWaterGuide').then((m) => ({ default: m.CloudyWaterGuide })),
+);
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 
 // On route change, jump to top (unless navigating to an in-page #anchor).
@@ -101,6 +104,7 @@ export default function App() {
           <Route path="/guides/how-long-after-shocking-pool-can-you-swim" element={<SwimAfterShockGuide />} />
           <Route path="/guides/how-to-fix-a-green-pool" element={<GreenPoolGuide />} />
           <Route path="/guides/why-wont-my-pool-hold-chlorine" element={<HoldChlorineGuide />} />
+          <Route path="/guides/cloudy-pool-water" element={<CloudyWaterGuide />} />
           {/* Catch-all 404 — must be last. */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

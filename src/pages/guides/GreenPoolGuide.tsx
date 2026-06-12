@@ -217,7 +217,8 @@ const STEPS: Step[] = [
     body: (
       <>Brush the whole pool once a day to re-expose anything settling. Dead algae clogs filters fast:
       backwash sand/DE or rinse cartridges whenever the pressure gauge reads ~8–10 psi over its clean
-      starting point. A choked filter is the most common reason a “killed” pool stays cloudy.</>
+      starting point. A choked filter is the most common reason a “killed” pool{' '}
+      <Link to="/guides/cloudy-pool-water">stays cloudy</Link>.</>
     ),
   },
   {
