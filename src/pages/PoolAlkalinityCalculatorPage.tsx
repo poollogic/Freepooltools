@@ -194,7 +194,7 @@ export const PoolAlkalinityCalculatorPage = () => {
           <p className="flex items-start gap-2 text-xs text-subtle leading-relaxed mt-1 mb-6">
             <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
             Most pools aim for {IDEAL.ta.low}–{IDEAL.ta.high} ppm total alkalinity. Need to bring it <em>down</em> instead?{' '}
-            <Link to="/muriatic-acid-calculator" className="text-brand-orange font-semibold hover:underline">Use the Muriatic Acid Calculator</Link>.
+            <Link to="/muriatic-acid-calculator/" className="text-brand-orange font-semibold hover:underline">Use the Muriatic Acid Calculator</Link>.
           </p>
 
           {/* Result */}

@@ -213,7 +213,7 @@ export const CalciumHardnessCalculatorPage = () => {
             <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
             <span>
               Most pools aim for {IDEAL.ch.low}–{IDEAL.ch.high} ppm (plaster pools 250–350). Calcium only comes down by{' '}
-              <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose" className="text-brand-orange font-semibold hover:underline">draining and refilling</Link>, so sneak up on your target.
+              <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose/" className="text-brand-orange font-semibold hover:underline">draining and refilling</Link>, so sneak up on your target.
             </span>
           </p>
 

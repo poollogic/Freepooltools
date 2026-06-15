@@ -146,7 +146,7 @@ export const HomePage = () => {
                 {soon ? (
                   <div className={`${base} opacity-70`}>{inner}</div>
                 ) : (
-                  <Link to={tool.path} className={`${base} hover:bg-card-2 hover:border-line-strong hover:-translate-y-0.5`}>
+                  <Link to={`${tool.path}/`} className={`${base} hover:bg-card-2 hover:border-line-strong hover:-translate-y-0.5`}>
                     {inner}
                   </Link>
                 )}
@@ -173,7 +173,7 @@ export const HomePage = () => {
           <p>
             Start with the{' '}
             <Link
-              to="/pool-volume-calculator"
+              to="/pool-volume-calculator/"
               className="text-brand-orange font-semibold hover:text-brand-orange-dark"
             >
               pool volume calculator
@@ -184,47 +184,47 @@ export const HomePage = () => {
           </p>
           <p>
             For everyday water chemistry, the{' '}
-            <Link to="/chlorine-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/chlorine-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               chlorine
             </Link>
             ,{' '}
-            <Link to="/pool-shock-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/pool-shock-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               shock
             </Link>
             , and{' '}
-            <Link to="/cya-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/cya-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               cyanuric acid
             </Link>{' '}
             calculators keep your sanitizer working, while the{' '}
-            <Link to="/pool-alkalinity-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/pool-alkalinity-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               alkalinity
             </Link>
             ,{' '}
-            <Link to="/calcium-hardness-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/calcium-hardness-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               calcium hardness
             </Link>
             ,{' '}
-            <Link to="/muriatic-acid-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/muriatic-acid-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               muriatic acid
             </Link>
             , and{' '}
-            <Link to="/lsi-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/lsi-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               water balance (LSI)
             </Link>{' '}
             tools keep the water from turning corrosive or scaling. Running a saltwater pool? The{' '}
-            <Link to="/salt-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/salt-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               salt calculator
             </Link>{' '}
             sizes your salt dose, and on the equipment side the{' '}
-            <Link to="/pool-pump-runtime-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/pool-pump-runtime-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               pump runtime
             </Link>
             ,{' '}
-            <Link to="/variable-speed-pool-pump-savings-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/variable-speed-pool-pump-savings-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               variable-speed pump savings
             </Link>
             , and{' '}
-            <Link to="/pool-heating-cost-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/pool-heating-cost-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               heating cost
             </Link>{' '}
             calculators help you run the pool for less.
@@ -235,7 +235,7 @@ export const HomePage = () => {
             as health-adjacent: the numbers are careful estimates for planning, and you should always
             confirm your water with a reliable test kit before adding chemicals. You can read more about
             the formulas and sources we use on our{' '}
-            <Link to="/about" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/about/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               methodology page
             </Link>
             . No sign-up, no app, no email — just open a tool and get your answer.

@@ -338,7 +338,7 @@ export const CyaCalculatorPage = () => {
                 )}
                 {showLower && (
                   <p className="text-sm mt-2">
-                    <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose" className="text-brand-orange font-semibold hover:underline">
+                    <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose/" className="text-brand-orange font-semibold hover:underline">
                       How to drain your pool with a garden hose →
                     </Link>
                   </p>
@@ -468,9 +468,9 @@ export const CyaCalculatorPage = () => {
         <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
           <Waves className="w-4 h-4 text-brand-blue-light" />
           <span className="text-muted">CYA sets your chlorine target — see the </span>
-          <a href="/chlorine-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">chlorine calculator</a>
+          <a href="/chlorine-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">chlorine calculator</a>
           <span className="text-subtle">·</span>
-          <a href="/guides/cyanuric-acid-and-chlorine" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+          <a href="/guides/cyanuric-acid-and-chlorine/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
             Full guide: CYA &amp; chlorine →
           </a>
         </div>

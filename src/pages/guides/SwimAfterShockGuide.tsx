@@ -250,7 +250,7 @@ const CHECKS: Check[] = [
     title: 'The pump has circulated it',
     body: (
       <>Run the pump continuously after shocking — at least one{' '}
-      <Link to="/pool-pump-runtime-calculator">full turnover</Link> — so the dose is mixed evenly and your test
+      <Link to="/pool-pump-runtime-calculator/">full turnover</Link> — so the dose is mixed evenly and your test
       reading reflects the whole pool, not a concentrated pocket near the return.</>
     ),
   },
@@ -338,7 +338,7 @@ export const SwimAfterShockGuide = () => (
     faqs={FAQS}
     sources={SOURCES}
     cta={{
-      to: '/pool-shock-calculator',
+      to: '/pool-shock-calculator/',
       label: 'Shocking the pool? Dose it exactly.',
       sub: 'The shock calculator gives the precise amount of liquid chlorine or cal-hypo for your pool — no guessing, no overdosing.',
     }}
@@ -406,10 +406,10 @@ export const SwimAfterShockGuide = () => (
     </p>
     <p>
       The accurate rule — the same chemistry behind our{' '}
-      <Link to="/pool-shock-calculator">shock calculator</Link> — is that water is safe to swim once free
+      <Link to="/pool-shock-calculator/">shock calculator</Link> — is that water is safe to swim once free
       chlorine is at or below about <strong>40% of your CYA</strong> (the shock ceiling), and back to
       everyday comfort once it’s in the normal target range for your{' '}
-      <Link to="/chlorine-calculator">chlorine level</Link>:
+      <Link to="/chlorine-calculator/">chlorine level</Link>:
     </p>
 
     <CeilingTable />
@@ -446,7 +446,7 @@ export const SwimAfterShockGuide = () => (
     <p>
       A routine weekly shock might lift free chlorine to 10–12 ppm; an algae cleanup holds it far
       higher, for days. Bigger spike, longer decay. Dosing right in the first place is half the battle —
-      the <Link to="/pool-shock-calculator">shock calculator</Link> gives the exact amount instead of
+      the <Link to="/pool-shock-calculator/">shock calculator</Link> gives the exact amount instead of
       “a bag per 10,000 gallons.”
     </p>
 
@@ -455,14 +455,14 @@ export const SwimAfterShockGuide = () => (
       UV destroys chlorine fast: an unstabilized outdoor pool in full sun can shed half its free
       chlorine in a few hours. Cyanuric acid (CYA) shields chlorine from UV — great for everyday
       sanitizing, but it also means a shocked pool with high CYA stays elevated much longer. More on
-      that trade-off in our <Link to="/guides/cyanuric-acid-and-chlorine">CYA &amp; chlorine guide</Link>.
+      that trade-off in our <Link to="/guides/cyanuric-acid-and-chlorine/">CYA &amp; chlorine guide</Link>.
     </p>
 
     <h3>3. What the chlorine is fighting</h3>
     <p>
       A clean pool just decays back down. A pool full of algae <em>consumes</em> chlorine — readings can
       crash and then need re-dosing, which restarts the clock. That’s why{' '}
-      <Link to="/guides/how-to-fix-a-green-pool">fixing a green pool</Link> takes days, not hours.
+      <Link to="/guides/how-to-fix-a-green-pool/">fixing a green pool</Link> takes days, not hours.
     </p>
 
     <h2>What happens if you swim too soon after shocking?</h2>

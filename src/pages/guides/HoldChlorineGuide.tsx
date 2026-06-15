@@ -169,7 +169,7 @@ const OCLT_STEPS: Step[] = [
     title: 'Dose after sunset',
     body: (
       <>Once the sun is off the water, bring free chlorine up to your normal target (the{' '}
-      <Link to="/chlorine-calculator">chlorine calculator</Link> gives the exact amount) and let the pump
+      <Link to="/chlorine-calculator/">chlorine calculator</Link> gives the exact amount) and let the pump
       run 30–60 minutes to mix it fully.</>
     ),
   },
@@ -195,7 +195,7 @@ const OCLT_STEPS: Step[] = [
     body: (
       <>Lost <strong>1 ppm or less</strong>? You pass — nothing is living in the water, and any daytime
       loss is a sunlight/CYA problem. Lost more? Something organic is eating chlorine in the dark:
-      time to <Link to="/pool-shock-calculator">SLAM</Link>.</>
+      time to <Link to="/pool-shock-calculator/">SLAM</Link>.</>
     ),
   },
 ];
@@ -275,7 +275,7 @@ export const HoldChlorineGuide = () => (
     faqs={FAQS}
     sources={SOURCES}
     cta={{
-      to: '/pool-shock-calculator',
+      to: '/pool-shock-calculator/',
       label: 'Failed the overnight test? SLAM it.',
       sub: 'The shock calculator gives the exact dose to hit and hold the shock level for your CYA.',
     }}
@@ -333,8 +333,8 @@ export const HoldChlorineGuide = () => (
       above 0.5 ppm, walls feel slippery, and the water has a faint haze. The fix is the same as for a
       fully green pool: raise free chlorine to the <strong>shock level for your CYA (≈40%)</strong> and
       hold it there until the demand breaks — the full process is in our{' '}
-      <Link to="/guides/how-to-fix-a-green-pool">green pool guide</Link>, and the{' '}
-      <Link to="/pool-shock-calculator">shock calculator</Link> gives the exact dose.
+      <Link to="/guides/how-to-fix-a-green-pool/">green pool guide</Link>, and the{' '}
+      <Link to="/pool-shock-calculator/">shock calculator</Link> gives the exact dose.
     </p>
 
     <h3>2. Little or no stabilizer — the sun is destroying it</h3>
@@ -344,8 +344,8 @@ export const HoldChlorineGuide = () => (
       the day. The signature here is the mirror image of algae: the pool <em>passes</em> the overnight
       test but chlorine is gone by late afternoon. Common after a fresh fill, a lot of rain/backwashing,
       or if you only use liquid chlorine (which adds no CYA). Check your level and dose with the{' '}
-      <Link to="/cya-calculator">CYA calculator</Link> — and read{' '}
-      <Link to="/guides/cyanuric-acid-and-chlorine">how CYA and chlorine work together</Link> if the
+      <Link to="/cya-calculator/">CYA calculator</Link> — and read{' '}
+      <Link to="/guides/cyanuric-acid-and-chlorine/">how CYA and chlorine work together</Link> if the
       relationship is new to you.
     </p>
 
@@ -363,7 +363,7 @@ export const HoldChlorineGuide = () => (
       The indirect version of the problem. Years of trichlor tablets push CYA past 80–100 ppm, where it
       buffers chlorine so heavily that a “fine” reading like 3 ppm does almost nothing. Algae gains
       ground, demand rises, and chlorine seems to disappear faster and faster. No additive removes CYA —
-      the fix is a <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose">partial drain and refill</Link>,
+      the fix is a <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose/">partial drain and refill</Link>,
       then keeping free chlorine matched to the new CYA level.
     </p>
 

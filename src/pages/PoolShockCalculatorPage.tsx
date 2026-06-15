@@ -184,7 +184,7 @@ export const PoolShockCalculatorPage = () => {
     warnings.push({
       tone: 'warn',
       text: `Your CYA (${num(cya)} ppm) is high, so the algae shock level is very high and hard to hold. Consider partially draining and refilling to lower CYA before shocking.`,
-      cta: { to: `/cya-calculator?v=${Math.round(volumeGal)}&u=gal&cya=${num(cya)}`, label: 'Lower CYA →' },
+      cta: { to: `/cya-calculator/?v=${Math.round(volumeGal)}&u=gal&cya=${num(cya)}`, label: 'Lower CYA →' },
     });
   }
   if (deltaFc <= 0 && volumeGal > 0) {
@@ -293,7 +293,7 @@ export const PoolShockCalculatorPage = () => {
             </div>
             <p className="text-xs text-subtle -mt-3 mb-5">
               Not sure how many gallons?{' '}
-              <Link to="/pool-volume-calculator" className="text-brand-orange font-semibold hover:underline">
+              <Link to="/pool-volume-calculator/" className="text-brand-orange font-semibold hover:underline">
                 Use the pool volume calculator →
               </Link>
             </p>
@@ -488,7 +488,7 @@ export const PoolShockCalculatorPage = () => {
             on why you’re doing it:
           </p>
           <ul className="mt-3 space-y-2 text-[15px] text-muted">
-            <li className="flex gap-2"><span className="text-brand-orange font-bold">•</span><span><strong className="text-fg font-semibold">Algae:</strong> raise free chlorine to about 40% of your CYA (with a sensible floor around 12 ppm) and <em>hold</em> it there until the water clears — the SLAM method. Full walkthrough: <Link to="/guides/how-to-fix-a-green-pool" className="text-brand-orange font-semibold hover:text-brand-orange-dark">how to fix a green pool</Link>.</span></li>
+            <li className="flex gap-2"><span className="text-brand-orange font-bold">•</span><span><strong className="text-fg font-semibold">Algae:</strong> raise free chlorine to about 40% of your CYA (with a sensible floor around 12 ppm) and <em>hold</em> it there until the water clears — the SLAM method. Full walkthrough: <Link to="/guides/how-to-fix-a-green-pool/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">how to fix a green pool</Link>.</span></li>
             <li className="flex gap-2"><span className="text-brand-orange font-bold">•</span><span><strong className="text-fg font-semibold">Chloramines:</strong> raise to roughly 10× your combined chlorine to hit “breakpoint,” where the chloramines are destroyed.</span></li>
             <li className="flex gap-2"><span className="text-brand-orange font-bold">•</span><span><strong className="text-fg font-semibold">Routine / opening:</strong> a custom target (often 10–12 ppm) for a general clean-up.</span></li>
           </ul>
@@ -513,7 +513,7 @@ export const PoolShockCalculatorPage = () => {
             chlorine or cal-hypo — at dusk or after dark, and never let CYA-adding tablets (trichlor/dichlor)
             do your shocking. Wait until free chlorine drops back below the safe level for your CYA —
             about 40% of your stabilizer reading, or 5 ppm if unstabilized —{' '}
-            <Link to="/guides/how-long-after-shocking-pool-can-you-swim" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/guides/how-long-after-shocking-pool-can-you-swim/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               before swimming
             </Link>
             , and keep pets and people out of over-shocked water.
@@ -540,7 +540,7 @@ export const PoolShockCalculatorPage = () => {
         <p className="text-xs text-subtle mt-4 flex items-center gap-1.5">
           <ArrowRight className="w-3.5 h-3.5" />
           For everyday chlorine top-ups (not shocking), use the{' '}
-          <Link to="/chlorine-calculator" className="text-brand-orange font-semibold hover:underline">chlorine calculator</Link>.
+          <Link to="/chlorine-calculator/" className="text-brand-orange font-semibold hover:underline">chlorine calculator</Link>.
         </p>
       </section>
 

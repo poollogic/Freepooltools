@@ -74,7 +74,7 @@ export const GuideLayout = ({ title, metaTitle, description, path, updated, read
     <PageShell>
       <article className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
         <div className="max-w-4xl mx-auto">
-          <Link to="/guides" className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted hover:text-fg mb-6">
+          <Link to="/guides/" className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted hover:text-fg mb-6">
             <ArrowLeft className="w-4 h-4" /> All guides
           </Link>
           <div className="inline-flex items-center gap-2 mb-4 rounded-full border border-line bg-card-2 px-3 py-1.5">
@@ -145,7 +145,7 @@ export const GuideLayout = ({ title, metaTitle, description, path, updated, read
                 {more.map((g) => (
                   <Link
                     key={g.path}
-                    to={g.path}
+                    to={`${g.path}/`}
                     className="group flex items-center justify-between gap-3 rounded-xl border border-line bg-card p-4 elevate transition-colors hover:border-line-strong"
                   >
                     <span className="font-display font-semibold text-fg text-[15px] leading-snug">{g.shortTitle}</span>

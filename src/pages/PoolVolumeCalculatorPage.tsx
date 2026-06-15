@@ -2127,7 +2127,7 @@ const PoolVolumeCalculatorInner = ({ embed }: { embed: boolean }) => {
                       {savedPool ? 'Saved to My Pool' : 'Save to My Pool'}
                     </button>
                     <Link
-                      to={`/chlorine-calculator?v=${Math.round(totalGallons)}&u=gal`}
+                      to={`/chlorine-calculator/?v=${Math.round(totalGallons)}&u=gal`}
                       className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blue text-white px-3 py-2 text-sm font-semibold hover:bg-brand-blue-dark transition-colors"
                     >
                       <FlaskConical className="w-4 h-4" />

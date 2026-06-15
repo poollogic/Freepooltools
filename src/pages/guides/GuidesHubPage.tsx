@@ -71,7 +71,7 @@ export const GuidesHubPage = () => {
                 {soon ? (
                   <div className={`${base} opacity-70`}>{inner}</div>
                 ) : (
-                  <Link to={g.path} className={`${base} hover:bg-card-2 hover:border-line-strong hover:-translate-y-0.5`}>
+                  <Link to={`${g.path}/`} className={`${base} hover:bg-card-2 hover:border-line-strong hover:-translate-y-0.5`}>
                     {inner}
                   </Link>
                 )}
@@ -97,47 +97,47 @@ export const GuidesHubPage = () => {
           </p>
           <p>
             If your water has turned, start with{' '}
-            <Link to="/guides/how-to-fix-a-green-pool" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/guides/how-to-fix-a-green-pool/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               how to fix a green pool
             </Link>{' '}
             or{' '}
-            <Link to="/guides/cloudy-pool-water" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/guides/cloudy-pool-water/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               cloudy pool water
             </Link>
             , then size the cleanup with the{' '}
-            <Link to="/pool-shock-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/pool-shock-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               shock calculator
             </Link>
             . If chlorine keeps vanishing, read{' '}
-            <Link to="/guides/why-wont-my-pool-hold-chlorine" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/guides/why-wont-my-pool-hold-chlorine/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               why won’t my pool hold chlorine
             </Link>{' '}
             and{' '}
-            <Link to="/guides/cyanuric-acid-and-chlorine" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/guides/cyanuric-acid-and-chlorine/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               cyanuric acid &amp; chlorine
             </Link>{' '}
             — the FC/CYA relationship is the single most misunderstood part of pool care — then check
             your numbers with the{' '}
-            <Link to="/chlorine-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/chlorine-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               chlorine
             </Link>{' '}
             and{' '}
-            <Link to="/cya-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/cya-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               CYA
             </Link>{' '}
             calculators.
           </p>
           <p>
             For routine upkeep,{' '}
-            <Link to="/guides/how-often-to-shock-your-pool" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/guides/how-often-to-shock-your-pool/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               how often should you shock your pool
             </Link>{' '}
             and{' '}
-            <Link to="/guides/how-long-after-shocking-pool-can-you-swim" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/guides/how-long-after-shocking-pool-can-you-swim/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               how long after shocking can you swim
             </Link>{' '}
             answer the two questions that come up every week, and{' '}
-            <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+            <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
               draining a pool with a garden hose
             </Link>{' '}
             walks through the siphon method when you need to lower the water. Read the guide first,

@@ -153,7 +153,7 @@ const STEPS: Step[] = [
     icon: Ruler,
     title: 'Mark your stop line',
     body: (
-      <>Decide how much to remove and mark the target level (a strip of tape on the tile works). Most reasons to drain — high CYA, salt, or calcium — only need a <strong>partial</strong> drain; our <Link to="/cya-calculator">CYA</Link>, <Link to="/salt-calculator">salt</Link>, and <Link to="/calcium-hardness-calculator">calcium</Link> calculators turn your target into exact gallons. Never plan to empty it (see the warning below).</>
+      <>Decide how much to remove and mark the target level (a strip of tape on the tile works). Most reasons to drain — high CYA, salt, or calcium — only need a <strong>partial</strong> drain; our <Link to="/cya-calculator/">CYA</Link>, <Link to="/salt-calculator/">salt</Link>, and <Link to="/calcium-hardness-calculator/">calcium</Link> calculators turn your target into exact gallons. Never plan to empty it (see the warning below).</>
     ),
   },
   {
@@ -253,13 +253,14 @@ const SOURCES = [
 export const DrainPoolGuide = () => (
   <GuideLayout
     title={guide.title}
+    metaTitle="How to Drain a Pool With a Garden Hose (Step by Step)"
     description="How to drain a pool with a garden-hose siphon, step by step with diagrams — start the siphon, stop at your mark, and never fully drain an in-ground pool."
     path={guide.path}
     updated={guide.updated}
     faqs={FAQS}
     sources={SOURCES}
     cta={{
-      to: '/cya-calculator',
+      to: '/cya-calculator/',
       label: 'How much water should you drain?',
       sub: 'Lowering CYA, salt, or calcium? The calculators turn your target into exact gallons to replace.',
     }}
@@ -322,9 +323,9 @@ export const DrainPoolGuide = () => (
     <p>
       Dilution is proportional: swap half the water and you roughly halve whatever you’re chasing
       down. The exact amount depends on your current level and target, so let the calculators do it —
-      the <Link to="/cya-calculator">CYA calculator</Link> (the usual reason to drain), the{' '}
-      <Link to="/salt-calculator">salt calculator</Link>, and the{' '}
-      <Link to="/calcium-hardness-calculator">calcium hardness calculator</Link> each turn your numbers
+      the <Link to="/cya-calculator/">CYA calculator</Link> (the usual reason to drain), the{' '}
+      <Link to="/salt-calculator/">salt calculator</Link>, and the{' '}
+      <Link to="/calcium-hardness-calculator/">calcium hardness calculator</Link> each turn your numbers
       into the gallons to drain and replace. Mark that level on the tile, siphon down to it, refill,
       and re-test.
     </p>

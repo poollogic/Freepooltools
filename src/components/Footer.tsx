@@ -25,7 +25,7 @@ export const Footer = () => (
             {LIVE_TOOLS.map((tool) => (
               <li key={tool.path}>
                 <Link
-                  to={tool.path}
+                  to={`${tool.path}/`}
                   className="text-muted hover:text-fg text-sm transition-colors"
                 >
                   {tool.title}
@@ -44,13 +44,13 @@ export const Footer = () => (
               </Link>
             </li>
             <li>
-              <Link to="/guides" className="text-muted hover:text-fg text-sm transition-colors">
+              <Link to="/guides/" className="text-muted hover:text-fg text-sm transition-colors">
                 Guides
               </Link>
             </li>
             <li>
               <Link
-                to="/about"
+                to="/about/"
                 className="text-muted hover:text-fg text-sm transition-colors"
               >
                 How we calculate

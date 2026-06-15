@@ -179,7 +179,7 @@ const STEPS: Step[] = [
     body: (
       <>Your stabilizer (CYA) level sets the target: the algae shock level is about <strong>40% of your
       CYA</strong>, with a floor around 12 ppm. If CYA tests above ~90–100 ppm, partially drain and refill
-      first — otherwise the shock level is impractically high. The <Link to="/cya-calculator">CYA
+      first — otherwise the shock level is impractically high. The <Link to="/cya-calculator/">CYA
       calculator</Link> turns your reading into exact gallons to swap.</>
     ),
   },
@@ -188,7 +188,7 @@ const STEPS: Step[] = [
     title: 'Get your exact chlorine dose',
     body: (
       <>No guessing, no “a bag per 10,000 gallons.” Enter your volume, CYA, and current chlorine into the{' '}
-      <Link to="/pool-shock-calculator">pool shock calculator</Link> and it gives the precise amount of{' '}
+      <Link to="/pool-shock-calculator/">pool shock calculator</Link> and it gives the precise amount of{' '}
       <strong>liquid chlorine or cal-hypo</strong> to hit shock level. Never shock with stabilized
       trichlor/dichlor — they push CYA even higher with every dose.</>
     ),
@@ -218,7 +218,7 @@ const STEPS: Step[] = [
       <>Brush the whole pool once a day to re-expose anything settling. Dead algae clogs filters fast:
       backwash sand/DE or rinse cartridges whenever the pressure gauge reads ~8–10 psi over its clean
       starting point. A choked filter is the most common reason a “killed” pool{' '}
-      <Link to="/guides/cloudy-pool-water">stays cloudy</Link>.</>
+      <Link to="/guides/cloudy-pool-water/">stays cloudy</Link>.</>
     ),
   },
   {
@@ -229,7 +229,7 @@ const STEPS: Step[] = [
       overnight (loses ≤1 ppm with the pump running and no sun), and combined chlorine is ≤0.5 ppm. Then
       stop dosing and let chlorine fall naturally — since the shock level was set at ~40% of your CYA,
       you’re already at the safe-swim ceiling, so it’s swimmable as soon as it dips below that (here’s{' '}
-      <Link to="/guides/how-long-after-shocking-pool-can-you-swim">exactly when it’s safe</Link>).</>
+      <Link to="/guides/how-long-after-shocking-pool-can-you-swim/">exactly when it’s safe</Link>).</>
     ),
   },
 ];
@@ -301,7 +301,7 @@ export const GreenPoolGuide = () => (
     faqs={FAQS}
     sources={SOURCES}
     cta={{
-      to: '/pool-shock-calculator',
+      to: '/pool-shock-calculator/',
       label: 'Get your exact shock dose',
       sub: 'Enter your gallons and CYA — the calculator gives the precise amount of liquid chlorine or cal-hypo to hit shock level.',
     }}
@@ -332,7 +332,7 @@ export const GreenPoolGuide = () => (
       diluted and contaminated the water, a heat wave plus heavy swimming burned chlorine off faster than
       it was replaced, or CYA crept so high (from years of trichlor tablets) that a “normal” chlorine
       reading was effectively doing nothing. That last trap is the sneakiest — our{' '}
-      <Link to="/guides/cyanuric-acid-and-chlorine">CYA &amp; chlorine guide</Link> explains why the same
+      <Link to="/guides/cyanuric-acid-and-chlorine/">CYA &amp; chlorine guide</Link> explains why the same
       3 ppm that protects one pool is useless in another.
     </p>
 
@@ -400,7 +400,7 @@ export const GreenPoolGuide = () => (
       5 ppm of free chlorine sounds healthy — but with CYA at 100, almost none of it is active. Stabilizer
       binds chlorine, and only the unbound fraction kills algae. This is why the shock level scales with
       CYA, and why a pool can be green at chlorine readings that look “high.” If your CYA is over ~90–100,
-      lower it with a partial <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose">drain and
+      lower it with a partial <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose/">drain and
       refill</Link> before fighting the algae.
     </p>
 
@@ -418,12 +418,12 @@ export const GreenPoolGuide = () => (
       Algae prevention is one sentence: <strong>keep free chlorine matched to your CYA, all the time.</strong>{' '}
       In practice that means testing a couple of times a week in summer, knowing your CYA (re-test it
       monthly — every trichlor tablet raises it), and dosing with the{' '}
-      <Link to="/chlorine-calculator">chlorine calculator</Link> instead of habit. Make sure the pump runs
-      long enough for a <Link to="/pool-pump-runtime-calculator">full daily turnover</Link>, and brush the
+      <Link to="/chlorine-calculator/">chlorine calculator</Link> instead of habit. Make sure the pump runs
+      long enough for a <Link to="/pool-pump-runtime-calculator/">full daily turnover</Link>, and brush the
       spots circulation misses — steps, corners, behind ladders — weekly. A pool that holds 3–4 ppm against
       a CYA of 40 simply doesn’t turn green. And if chlorine keeps vanishing even though the water looks
       clear, diagnose it before the bloom shows up — see{' '}
-      <Link to="/guides/why-wont-my-pool-hold-chlorine">why your pool won’t hold chlorine</Link>.
+      <Link to="/guides/why-wont-my-pool-hold-chlorine/">why your pool won’t hold chlorine</Link>.
     </p>
   </GuideLayout>
 );

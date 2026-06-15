@@ -28,13 +28,14 @@ const SOURCES = [
 export const CyaChlorineGuide = () => (
   <GuideLayout
     title={guide.title}
+    metaTitle="How Cyanuric Acid (CYA) Affects Chlorine + FC/CYA Chart"
     description="How cyanuric acid (CYA) protects chlorine from sunlight, why too much stops chlorine working, and how to use the FC/CYA ratio to set the right chlorine level."
     path={guide.path}
     updated={guide.updated}
     faqs={FAQS}
     sources={SOURCES}
     cta={{
-      to: '/chlorine-calculator',
+      to: '/chlorine-calculator/',
       label: 'Calculate your chlorine dose',
       sub: 'The chlorine calculator sets your target from your CYA automatically.',
     }}
@@ -71,7 +72,7 @@ export const CyaChlorineGuide = () => (
     </p>
     <p>
       Because nothing chemical removes CYA, the only way to bring it back down is to{' '}
-      <Link to="/cya-calculator">drain and dilute</Link>. So the goal is to keep CYA in a sweet
+      <Link to="/cya-calculator/">drain and dilute</Link>. So the goal is to keep CYA in a sweet
       spot, not to chase it up.
     </p>
 
@@ -100,9 +101,9 @@ export const CyaChlorineGuide = () => (
       hold your free chlorine at the target for that CYA level. If your CYA is low, your chlorine will
       keep vanishing in the sun; if it’s very high, raise your chlorine target or dilute the CYA back
       down. Our calculators do this math for you — the{' '}
-      <Link to="/chlorine-calculator">chlorine calculator</Link> reads your CYA and recommends the
+      <Link to="/chlorine-calculator/">chlorine calculator</Link> reads your CYA and recommends the
       right target automatically, and the{' '}
-      <Link to="/cya-calculator">stabilizer calculator</Link> tells you how much CYA to add or how
+      <Link to="/cya-calculator/">stabilizer calculator</Link> tells you how much CYA to add or how
       much water to drain.
     </p>
   </GuideLayout>

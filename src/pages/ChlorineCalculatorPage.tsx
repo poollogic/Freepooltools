@@ -211,7 +211,7 @@ export const ChlorineCalculatorPage = () => {
     warnings.push({
       tone: 'warn',
       text: 'Your cyanuric acid (CYA) is low for an outdoor pool. UV can destroy half your chlorine within ~17 minutes, so it will burn off fast — add stabilizer to bring CYA to 30–50 ppm.',
-      cta: { to: `/cya-calculator?mode=raise&v=${Math.round(volumeGal)}&u=gal&cya=${cyaNum}`, label: 'Raise CYA →' },
+      cta: { to: `/cya-calculator/?mode=raise&v=${Math.round(volumeGal)}&u=gal&cya=${cyaNum}`, label: 'Raise CYA →' },
     });
   }
   if (isOutdoor && num(targetFc) > 0 && num(targetFc) < rec.min) {
@@ -353,7 +353,7 @@ export const ChlorineCalculatorPage = () => {
                 </div>
               </div>
               <p className="text-[11px] text-subtle mt-1">
-                Not sure? <Link to="/pool-volume-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">Find your pool volume →</Link>
+                Not sure? <Link to="/pool-volume-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">Find your pool volume →</Link>
               </p>
             </div>
             <div>
@@ -375,7 +375,7 @@ export const ChlorineCalculatorPage = () => {
                   <p className="text-[11px] text-subtle mt-1.5 leading-relaxed">
                     CYA shields chlorine from sunlight — essential outdoors. It also sets your correct
                     chlorine target: <strong className="text-muted">higher CYA needs more chlorine</strong>. Ideal range 30–50 ppm.{' '}
-                    <a href="/guides/cyanuric-acid-and-chlorine" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+                    <a href="/guides/cyanuric-acid-and-chlorine/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
                       Learn more →
                     </a>
                   </p>
@@ -569,7 +569,7 @@ export const ChlorineCalculatorPage = () => {
                     CYA only leaves by draining water, so it climbs all season — switch to liquid
                     chlorine or cal-hypo once it passes ~50–60 ppm.{' '}
                     <Link
-                      to={`/cya-calculator?mode=lower&v=${Math.round(volumeGal)}&u=gal&cya=${cyaNum}`}
+                      to={`/cya-calculator/?mode=lower&v=${Math.round(volumeGal)}&u=gal&cya=${cyaNum}`}
                       className="font-semibold text-brand-orange hover:text-brand-orange-dark whitespace-nowrap"
                     >
                       Lower CYA →

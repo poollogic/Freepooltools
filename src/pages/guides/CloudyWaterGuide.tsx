@@ -108,7 +108,7 @@ const STEPS: Step[] = [
     title: 'Fix chlorine first',
     body: (
       <>If free chlorine is low for your CYA, treat the cloud as <strong>early algae</strong> and shock —
-      the <Link to="/pool-shock-calculator">shock calculator</Link> gives the exact dose. Sanitizer
+      the <Link to="/pool-shock-calculator/">shock calculator</Link> gives the exact dose. Sanitizer
       problems cause most cloudy water, and nothing else works until this is right.</>
     ),
   },
@@ -117,8 +117,8 @@ const STEPS: Step[] = [
     title: 'Correct the chemistry',
     body: (
       <>High pH (8.0+) weakens chlorine and pushes calcium out of solution as a fine white haze. Bring pH
-      down with <Link to="/muriatic-acid-calculator">muriatic acid</Link> and check your overall balance
-      with the <Link to="/lsi-calculator">LSI calculator</Link> — a strongly positive index means the
+      down with <Link to="/muriatic-acid-calculator/">muriatic acid</Link> and check your overall balance
+      with the <Link to="/lsi-calculator/">LSI calculator</Link> — a strongly positive index means the
       cloud is scale-forming chemistry, not dirt.</>
     ),
   },
@@ -127,7 +127,7 @@ const STEPS: Step[] = [
     title: 'Run the filter around the clock',
     body: (
       <>Clearing a cloud is a filtration job: run the pump <strong>24/7</strong> until the water is clear,
-      then settle back to a <Link to="/pool-pump-runtime-calculator">full daily turnover</Link>. Clean or
+      then settle back to a <Link to="/pool-pump-runtime-calculator/">full daily turnover</Link>. Clean or
       backwash whenever the pressure gauge reads ~8–10 psi over its clean baseline — a loaded filter
       moves almost no water.</>
     ),
@@ -265,7 +265,7 @@ export const CloudyWaterGuide = () => (
     faqs={FAQS}
     sources={SOURCES}
     cta={{
-      to: '/pool-shock-calculator',
+      to: '/pool-shock-calculator/',
       label: 'Low chlorine behind your cloud?',
       sub: 'Most cloudy water starts as a sanitizer problem — the shock calculator gives the exact dose to knock it out.',
     }}
@@ -331,9 +331,9 @@ export const CloudyWaterGuide = () => (
       The most common cause. When free chlorine falls below what your CYA level demands, bacteria and
       early-stage algae multiply — and a faint milky haze is the first visible symptom,{' '}
       <em>before</em> any green. Treat it like the early algae it is: shock to the level for your CYA
-      with the <Link to="/pool-shock-calculator">shock calculator</Link>. If chlorine reads fine but
+      with the <Link to="/pool-shock-calculator/">shock calculator</Link>. If chlorine reads fine but
       keeps disappearing, run the overnight test in{' '}
-      <Link to="/guides/why-wont-my-pool-hold-chlorine">why won’t my pool hold chlorine</Link> — cloud
+      <Link to="/guides/why-wont-my-pool-hold-chlorine/">why won’t my pool hold chlorine</Link> — cloud
       plus vanishing chlorine is algae until proven otherwise.
     </p>
 
@@ -342,15 +342,15 @@ export const CloudyWaterGuide = () => (
       When pH climbs past ~8.0, two things happen: chlorine gets dramatically weaker, and dissolved
       calcium starts coming out of solution as microscopic carbonate particles — a white, chemical haze
       that no amount of shock fixes. High alkalinity and high calcium hardness push the same direction.
-      The <Link to="/lsi-calculator">LSI calculator</Link> tells you in one number whether your water is
+      The <Link to="/lsi-calculator/">LSI calculator</Link> tells you in one number whether your water is
       scale-forming (strongly positive = cloudy chemistry); the fix is usually{' '}
-      <Link to="/muriatic-acid-calculator">muriatic acid</Link> to bring pH and alkalinity down.
+      <Link to="/muriatic-acid-calculator/">muriatic acid</Link> to bring pH and alkalinity down.
     </p>
 
     <h3>3. Filtration falling short</h3>
     <p>
       A filter only clears water that moves through it. Too few pump hours (less than a{' '}
-      <Link to="/pool-pump-runtime-calculator">full daily turnover</Link>), a filter loaded to +8–10 psi
+      <Link to="/pool-pump-runtime-calculator/">full daily turnover</Link>), a filter loaded to +8–10 psi
       over its clean pressure, worn cartridges, or channeled sand all mean the cloud is winning the race.
       This is the cause when the water chemistry tests perfect but the haze never improves — and it’s the
       multiplier on every other cause.
@@ -399,7 +399,7 @@ export const CloudyWaterGuide = () => (
       daily, and the haze lifts as the kill completes. Cal-hypo users: part of your cloud is the calcium
       carrier dissolving — same answer, keep filtering. And remember the water has to be both{' '}
       <strong>clear and back at a safe chlorine level</strong> before anyone swims — here’s{' '}
-      <Link to="/guides/how-long-after-shocking-pool-can-you-swim">exactly when it’s safe</Link>.
+      <Link to="/guides/how-long-after-shocking-pool-can-you-swim/">exactly when it’s safe</Link>.
     </p>
   </GuideLayout>
 );

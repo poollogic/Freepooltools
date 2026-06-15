@@ -87,7 +87,7 @@ export const Navbar = () => {
             <div className="flex items-center gap-0.5 sm:gap-2">
               <ThemeToggle />
               <Link
-                to="/guides"
+                to="/guides/"
                 className="group hidden sm:inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-lg text-sm font-semibold text-muted hover:text-fg border border-transparent hover:border-line hover:bg-card-2 transition-colors"
               >
                 <BookOpen className="w-4 h-4 text-brand-blue-light" />
@@ -174,7 +174,7 @@ export const Navbar = () => {
                             return (
                               <li key={t.path} className="flex items-center group">
                                 <Link
-                                  to={t.path}
+                                  to={`${t.path}/`}
                                   onClick={() => setOpen(false)}
                                   className={`flex-1 min-w-0 flex items-center gap-2.5 pl-4 pr-2 py-2 text-sm transition-colors ${
                                     onThis ? 'text-fg font-semibold' : 'text-muted hover:text-fg hover:bg-card-2'

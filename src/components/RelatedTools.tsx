@@ -47,7 +47,7 @@ export const RelatedTools = ({ currentPath }: { currentPath: string }) => {
               {card}
             </div>
           ) : (
-            <Link key={tool.path} to={tool.path} className={`${classes} hover:bg-card-2 hover:border-line-strong hover:-translate-y-0.5`}>
+            <Link key={tool.path} to={`${tool.path}/`} className={`${classes} hover:bg-card-2 hover:border-line-strong hover:-translate-y-0.5`}>
               {card}
             </Link>
           );

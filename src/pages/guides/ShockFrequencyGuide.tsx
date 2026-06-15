@@ -136,7 +136,7 @@ const PlanPicker = () => {
         <p className="font-display font-bold text-fg text-2xl leading-tight mb-2">{plan.headline}</p>
         <p className="text-muted text-[14px] sm:text-[15px] leading-relaxed">
           {plan.body}{' '}
-          <Link to="/pool-shock-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+          <Link to="/pool-shock-calculator/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
             Get the exact dose →
           </Link>
         </p>
@@ -386,7 +386,7 @@ const TRIGGERS: Trigger[] = [
     body: (
       <>Lost sparkle, a faint haze, or slippery walls are <strong>early algae and biofilm</strong> — the
       stage where one shock still wins. Wait for green and you’re into a multi-day fight; see{' '}
-      <Link to="/guides/cloudy-pool-water">cloudy pool water</Link> for the full diagnosis.</>
+      <Link to="/guides/cloudy-pool-water/">cloudy pool water</Link> for the full diagnosis.</>
     ),
   },
   {
@@ -395,7 +395,7 @@ const TRIGGERS: Trigger[] = [
     body: (
       <>Visible green means a single shock won’t cut it — algae eats through one dose in hours. You need
       to raise chlorine to the level for your CYA and <em>hold</em> it: the{' '}
-      <Link to="/guides/how-to-fix-a-green-pool">green pool rescue</Link> walks through it.</>
+      <Link to="/guides/how-to-fix-a-green-pool/">green pool rescue</Link> walks through it.</>
     ),
   },
   {
@@ -483,7 +483,7 @@ export const ShockFrequencyGuide = () => (
     faqs={FAQS}
     sources={SOURCES}
     cta={{
-      to: '/pool-shock-calculator',
+      to: '/pool-shock-calculator/',
       label: 'Time to shock? Dose it exactly.',
       sub: 'Enter your gallons and CYA — the calculator gives the precise amount of liquid chlorine or cal-hypo.',
     }}
@@ -575,12 +575,12 @@ export const ShockFrequencyGuide = () => (
     <p>
       Here’s the part the bag of shock doesn’t mention: <strong>shocking is a correction, not
       maintenance</strong>. Chlorine that’s kept matched to your stabilizer level — tested a couple of
-      times a week, topped up with the <Link to="/chlorine-calculator">chlorine calculator</Link> —
+      times a week, topped up with the <Link to="/chlorine-calculator/">chlorine calculator</Link> —
       prevents the very problems shock exists to fix. Owners who run that routine often go an entire
       season shocking only at opening and after the odd storm or party. If your pool seems to{' '}
       <em>need</em> constant shocking, something upstream is broken — usually CYA too low (sun strips
       your chlorine daily) or an algae demand that one-off shocks never finish; our{' '}
-      <Link to="/guides/why-wont-my-pool-hold-chlorine">won’t-hold-chlorine guide</Link> finds which.
+      <Link to="/guides/why-wont-my-pool-hold-chlorine/">won’t-hold-chlorine guide</Link> finds which.
     </p>
 
     <h2>How to shock it right</h2>
@@ -588,10 +588,10 @@ export const ShockFrequencyGuide = () => (
       Quick recap of the rules that make a shock actually work: dose at <strong>dusk</strong> (sunlight
       destroys unstabilized chlorine), use <strong>liquid chlorine or cal-hypo</strong> — never
       stabilized trichlor/dichlor, which quietly ratchet up your CYA — size the dose with the{' '}
-      <Link to="/pool-shock-calculator">shock calculator</Link> (it scales the target to your CYA), and
+      <Link to="/pool-shock-calculator/">shock calculator</Link> (it scales the target to your CYA), and
       run the pump overnight. Then wait for the water to come back below the safe-swim ceiling before
       anyone gets in — here’s{' '}
-      <Link to="/guides/how-long-after-shocking-pool-can-you-swim">exactly how long that takes</Link>.
+      <Link to="/guides/how-long-after-shocking-pool-can-you-swim/">exactly how long that takes</Link>.
     </p>
 
     <h2>When NOT to shock</h2>
@@ -599,7 +599,7 @@ export const ShockFrequencyGuide = () => (
       <li>
         <strong>When CYA is sky-high.</strong> The shock level scales with stabilizer — at CYA 100+ the
         target is impractically high and the dose mostly wasted. Lower CYA first with a{' '}
-        <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose">partial drain and refill</Link>.
+        <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose/">partial drain and refill</Link>.
       </li>
       <li>
         <strong>On a calendar with stabilized shock.</strong> Weekly dichlor “maintenance shocks” are how
@@ -609,7 +609,7 @@ export const ShockFrequencyGuide = () => (
       <li>
         <strong>For a chemistry haze.</strong> Cloudiness from high pH pushing calcium out of solution
         isn’t alive — no amount of chlorine kills it. Check your{' '}
-        <Link to="/lsi-calculator">LSI</Link> before assuming the cloud needs shock.
+        <Link to="/lsi-calculator/">LSI</Link> before assuming the cloud needs shock.
       </li>
       <li>
         <strong>Right before swimmers arrive.</strong> A fresh shock means hours of waiting. If guests

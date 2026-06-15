@@ -272,7 +272,7 @@ export const SaltCalculatorPage = () => {
                 )}
                 {showLower && (
                   <p className="text-sm mt-2">
-                    <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose" className="text-brand-orange font-semibold hover:underline">
+                    <Link to="/guides/how-to-drain-a-pool-with-a-garden-hose/" className="text-brand-orange font-semibold hover:underline">
                       How to drain your pool with a garden hose →
                     </Link>
                   </p>
