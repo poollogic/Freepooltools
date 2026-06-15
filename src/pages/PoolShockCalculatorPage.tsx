@@ -4,6 +4,7 @@ import { Zap, Info, Plus, AlertTriangle, Sun, ArrowRight, Check } from 'lucide-r
 import { PageShell } from '@/components/PageShell';
 import { ShareButton } from '@/components/ShareButton';
 import { RelatedTools } from '@/components/RelatedTools';
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { usePageMeta } from '@/lib/usePageMeta';
 import { SITE_ORIGIN } from '@/lib/site';
 import { getProfile } from '@/lib/poolProfile';
@@ -544,6 +545,25 @@ export const PoolShockCalculatorPage = () => {
         </p>
       </section>
 
+      <RelatedGuides
+        guides={[
+          {
+            to: '/guides/how-often-to-shock-your-pool/',
+            title: 'How often to shock your pool',
+            excerpt: 'Six triggers that tell you it’s time to shock — and when shocking does more harm than good.',
+          },
+          {
+            to: '/guides/how-long-after-shocking-pool-can-you-swim/',
+            title: 'How long after shocking can you swim?',
+            excerpt: 'The honest answer is a test reading, not a clock: when it’s safe to get back in.',
+          },
+          {
+            to: '/guides/how-to-fix-a-green-pool/',
+            title: 'How to fix a green pool',
+            excerpt: 'Algae bloom? The step-by-step shock-to-clear rescue with exact doses for your pool.',
+          },
+        ]}
+      />
       <RelatedTools currentPath="/pool-shock-calculator" />
     </PageShell>
   );

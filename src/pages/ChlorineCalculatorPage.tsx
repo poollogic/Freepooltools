@@ -4,6 +4,7 @@ import { FlaskConical, Info, Check, Plus, AlertTriangle, Sun, Beaker, Save } fro
 import { PageShell } from '@/components/PageShell';
 import { ShareButton } from '@/components/ShareButton';
 import { RelatedTools } from '@/components/RelatedTools';
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { usePageMeta } from '@/lib/usePageMeta';
 import { SITE_ORIGIN } from '@/lib/site';
 import { usePoolProfile, getProfile, saveProfile, clearProfile } from '@/lib/poolProfile';
@@ -721,6 +722,25 @@ export const ChlorineCalculatorPage = () => {
         </div>
       </section>
 
+      <RelatedGuides
+        guides={[
+          {
+            to: '/guides/why-wont-my-pool-hold-chlorine/',
+            title: 'Why won’t my pool hold chlorine?',
+            excerpt: 'Chlorine gone by afternoon? The five causes — algae, low stabilizer, or a lying test kit — and the fix for each.',
+          },
+          {
+            to: '/guides/cyanuric-acid-and-chlorine/',
+            title: 'Cyanuric acid & chlorine',
+            excerpt: 'How stabilizer makes chlorine last in the sun — and why too much makes it stop working.',
+          },
+          {
+            to: '/guides/how-often-to-shock-your-pool/',
+            title: 'How often to shock your pool',
+            excerpt: 'When a normal dose isn’t enough and it’s time to shock instead — six triggers to watch for.',
+          },
+        ]}
+      />
       <RelatedTools currentPath="/chlorine-calculator" />
     </PageShell>
   );

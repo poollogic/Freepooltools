@@ -3,6 +3,7 @@ import { Beaker, Info, Plus, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { PageShell } from '@/components/PageShell';
 import { ShareButton } from '@/components/ShareButton';
 import { RelatedTools } from '@/components/RelatedTools';
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { SlotSlider } from '@/components/SlotSlider';
 import { usePageMeta } from '@/lib/usePageMeta';
 import { SITE_ORIGIN } from '@/lib/site';
@@ -397,6 +398,20 @@ export const LsiCalculatorPage = () => {
         </div>
       </section>
 
+      <RelatedGuides
+        guides={[
+          {
+            to: '/guides/cloudy-pool-water/',
+            title: 'Cloudy pool water',
+            excerpt: 'Scaling water (a high LSI) is a common cause of cloudiness — how to diagnose and clear it.',
+          },
+          {
+            to: '/guides/how-to-fix-a-green-pool/',
+            title: 'How to fix a green pool',
+            excerpt: 'Out-of-balance water invites algae. The shock-to-clear rescue, step by step.',
+          },
+        ]}
+      />
       <RelatedTools currentPath="/lsi-calculator" />
     </PageShell>
   );

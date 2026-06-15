@@ -4,6 +4,7 @@ import { Droplet, Info, Check, Plus, AlertTriangle, Save, Waves } from 'lucide-r
 import { PageShell } from '@/components/PageShell';
 import { ShareButton } from '@/components/ShareButton';
 import { RelatedTools } from '@/components/RelatedTools';
+import { RelatedGuides } from '@/components/RelatedGuides';
 import { usePageMeta } from '@/lib/usePageMeta';
 import { SITE_ORIGIN } from '@/lib/site';
 import {
@@ -492,6 +493,25 @@ export const CyaCalculatorPage = () => {
         </div>
       </section>
 
+      <RelatedGuides
+        guides={[
+          {
+            to: '/guides/cyanuric-acid-and-chlorine/',
+            title: 'Cyanuric acid & chlorine',
+            excerpt: 'Why your correct chlorine level depends on your CYA — the FC/CYA ratio in plain English.',
+          },
+          {
+            to: '/guides/why-wont-my-pool-hold-chlorine/',
+            title: 'Why won’t my pool hold chlorine?',
+            excerpt: 'Low stabilizer is a top reason chlorine burns off in the sun. The causes and fixes.',
+          },
+          {
+            to: '/guides/how-to-fix-a-green-pool/',
+            title: 'How to fix a green pool',
+            excerpt: 'Over-stabilized water lets algae win — here’s the rescue when the pool turns green.',
+          },
+        ]}
+      />
       <RelatedTools currentPath="/cya-calculator" />
     </PageShell>
   );
