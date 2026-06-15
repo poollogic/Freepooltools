@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { m, AnimatePresence } from 'motion/react';
+import { MotionProvider } from '@/components/MotionProvider';
 import {
   Calculator,
   Square,
@@ -2316,5 +2317,7 @@ const PoolVolumeCalculatorInner = ({ embed }: { embed: boolean }) => {
 };
 
 export const PoolVolumeCalculatorPage = ({ embed = false }: { embed?: boolean } = {}) => (
-  <PoolVolumeCalculatorInner embed={embed} />
+  <MotionProvider>
+    <PoolVolumeCalculatorInner embed={embed} />
+  </MotionProvider>
 );

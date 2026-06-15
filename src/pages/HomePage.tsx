@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { m } from 'motion/react';
 import { ArrowRight, Wrench, Check, Plus } from 'lucide-react';
 import { PageShell } from '@/components/PageShell';
+import { MotionProvider } from '@/components/MotionProvider';
 import { usePageMeta } from '@/lib/usePageMeta';
 import { TOOLS, LIVE_TOOLS } from '@/data/tools';
 import { SITE_ORIGIN } from '@/lib/site';
@@ -73,7 +74,8 @@ export const HomePage = () => {
   });
 
   return (
-    <PageShell>
+    <MotionProvider>
+      <PageShell>
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12 text-center">
         <div className="inline-flex items-center gap-2 mb-5 rounded-full border border-line bg-card-2 backdrop-blur-[10px] px-3.5 py-1.5">
@@ -266,6 +268,7 @@ export const HomePage = () => {
           ))}
         </div>
       </section>
-    </PageShell>
+      </PageShell>
+    </MotionProvider>
   );
 };

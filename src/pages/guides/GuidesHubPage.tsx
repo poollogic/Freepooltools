@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { m } from 'motion/react';
 import { BookOpen, ArrowRight } from 'lucide-react';
 import { PageShell } from '@/components/PageShell';
+import { MotionProvider } from '@/components/MotionProvider';
 import { usePageMeta } from '@/lib/usePageMeta';
 import { SITE_ORIGIN } from '@/lib/site';
 import { GUIDES, LIVE_GUIDES } from '@/data/guides';
@@ -28,7 +29,8 @@ export const GuidesHubPage = () => {
   });
 
   return (
-    <PageShell>
+    <MotionProvider>
+      <PageShell>
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-10 text-center">
         <div className="inline-flex items-center gap-2 mb-5 rounded-full border border-line bg-card-2 backdrop-blur-[10px] px-3.5 py-1.5">
           <BookOpen className="w-3.5 h-3.5 text-brand-orange" />
@@ -145,6 +147,7 @@ export const GuidesHubPage = () => {
           </p>
         </div>
       </section>
-    </PageShell>
+      </PageShell>
+    </MotionProvider>
   );
 };

@@ -5,7 +5,6 @@
 
 import { renderToString } from 'react-dom/server';
 import { StaticRouter, Routes, Route } from 'react-router-dom';
-import { LazyMotion, MotionConfig, domAnimation } from 'motion/react';
 import { resetSsrMeta, readSsrMeta } from '@/lib/serverMeta';
 
 import { HomePage } from '@/pages/HomePage';
@@ -102,11 +101,7 @@ export function render(url: string) {
   resetSsrMeta();
   const html = renderToString(
     <StaticRouter location={url}>
-      <MotionConfig reducedMotion="user">
-        <LazyMotion features={domAnimation} strict>
-          <Routing />
-        </LazyMotion>
-      </MotionConfig>
+      <Routing />
     </StaticRouter>,
   );
   return { html, meta: readSsrMeta() };
