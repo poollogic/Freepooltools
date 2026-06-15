@@ -98,6 +98,18 @@ const FAQS: { q: string; a: string }[] = [
     q: 'Is the LSI different for saltwater pools?',
     a: 'The chemistry is identical, but saltwater pools carry more total dissolved solids, which slightly shifts the constant in the formula (12.2 instead of 12.1). Toggle “Saltwater” above and the calculator accounts for it. Salt cells also tend to drive pH up over time, so salt pools are especially prone to scaling if you don’t keep pH and alkalinity in check.',
   },
+  {
+    q: 'How often should I check my pool’s LSI?',
+    a: 'For most pools, recompute the LSI whenever you do a full water test — about once a week in swim season, and any time you add a chemical that moves pH, alkalinity, or calcium. Because temperature is part of the index, it’s also worth re-checking at the seasonal extremes: the same chemistry that’s balanced in spring can turn scaling in the heat of summer or corrosive in cold water. Heated pools and spas, which run warm and lose pH control faster, deserve a more frequent look.',
+  },
+  {
+    q: 'Does the LSI matter for vinyl-liner and fiberglass pools?',
+    a: 'It matters most for plaster, pebble, tile, and grouted surfaces, because a negative (corrosive) LSI literally dissolves the calcium out of them. Vinyl-liner and fiberglass pools have no cement surface to protect, so they tolerate a low LSI better — but balance still matters: a scaling (positive) LSI deposits calcium on the liner, ladders, heater, and salt cell, and corrosive water still attacks metal parts and equipment. Keeping the LSI near zero protects the equipment even when the shell itself is forgiving.',
+  },
+  {
+    q: 'What happens if I ignore a bad LSI?',
+    a: 'Unbalanced water does its damage slowly, then suddenly. Sustained corrosive (negative) water etches and roughens plaster, dissolves grout, pits metal, and can leave the water permanently cloudy as it leaches calcium. Sustained scaling (positive) water lays down hard calcium-carbonate deposits on surfaces, inside heaters and filters, and on salt cells, cutting their efficiency and lifespan. Neither is an emergency on day one, but months out of range lead to expensive resurfacing and equipment repairs — which is exactly what keeping the LSI between −0.3 and +0.3 prevents.',
+  },
 ];
 
 const howToSchema = {
@@ -331,6 +343,41 @@ export const LsiCalculatorPage = () => {
           <code>LSI = 7.5 + 0.65 + 2.10 + 1.96 − 12.1 = +0.11</code> — comfortably balanced. Heat that
           same water to a 100 °F spa and the temperature factor jumps, pushing the LSI toward scaling —
           which is exactly why heaters and spas scale first.
+        </p>
+
+        <h2>Which number should you fix first?</h2>
+        <p>
+          Because the LSI adds four factors together, you can correct it from several directions — but
+          some levers are faster, cheaper, and safer than others. A sensible order of operations:
+        </p>
+        <ul>
+          <li>
+            <strong>pH first.</strong> It’s the quickest and cheapest lever, and it usually drifts most.
+            Bring an out-of-range pH back to roughly 7.4–7.6 with acid or aeration before you touch
+            anything else — often that alone pulls the LSI back into the balanced band.
+          </li>
+          <li>
+            <strong>Then total alkalinity.</strong> Alkalinity buffers pH, so a wildly off TA makes pH
+            impossible to hold. Nudge it toward 80–120 ppm (sodium bicarbonate to raise, acid to lower)
+            once pH is roughly where you want it.
+          </li>
+          <li>
+            <strong>Calcium hardness last.</strong> Calcium moves slowly and is the hardest reading to
+            lower (it only really comes down by draining and refilling), so set it once toward
+            200–400 ppm and leave it. Raising it with calcium chloride is easy; lowering it is not, so
+            err low.
+          </li>
+          <li>
+            <strong>Temperature you mostly can’t change.</strong> It’s in the formula because warm water
+            scales more readily, so in summer or a heated spa you simply aim for a slightly lower pH and
+            alkalinity to compensate. Re-run this calculator at your real water temperature rather than
+            air temperature.
+          </li>
+        </ul>
+        <p>
+          Change one thing at a time, give the pump a few hours to mix, then re-test and recompute. Pool
+          chemistry is connected — moving pH shifts the alkalinity reading too — so small, single steps
+          beat one big correction every time.
         </p>
       </section>
 

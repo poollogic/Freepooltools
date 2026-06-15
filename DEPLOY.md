@@ -18,7 +18,9 @@ files. No Workers/Functions required for v1.
 1. `build:client` — Vite builds the browser bundle into `dist/`.
 2. `build:ssr` — Vite bundles `src/entry-server.tsx` into `dist-ssr/`.
 3. `prerender` — `scripts/prerender.mjs` renders each route in
-   `PRERENDER_ROUTES` to `dist/<route>/index.html`, inlines the CSS, injects
+   `PRERENDER_ROUTES` to `dist/<route>/index.html`, keeps Vite's external
+   stylesheet `<link>` (CSS is shipped as a cached external file, not inlined,
+   so the HTML stays small and the text-to-HTML ratio stays healthy), injects
    per-page meta/OG, writes `dist/404.html`, and generates `sitemap.xml` +
    `robots.txt`.
 

@@ -331,6 +331,32 @@ export const SaltCalculatorPage = () => {
         </div>
       </section>
 
+      {/* Supporting content */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 guide-prose">
+        <h2>How a saltwater pool actually works</h2>
+        <p>
+          A “saltwater” pool isn’t chlorine-free — it makes its own chlorine. Dissolved salt (sodium
+          chloride) flows through a <strong>salt chlorine generator</strong>, where an electrified cell
+          splits it into chlorine that sanitizes the water and then recombines back into salt. Because
+          the salt is recycled rather than consumed, you don’t dose it daily like chlorine. You set the
+          level once, and it only drifts when water physically leaves the pool — splash-out, backwashing
+          the filter, draining for winter, or a leak — or gets diluted by heavy rain and top-offs. That
+          is why this calculator’s job is usually a one-time correction, not a routine chore.
+        </p>
+        <h2>Adding salt the right way</h2>
+        <p>
+          Use only salt sold for pools or water softeners — pure, non-iodized sodium chloride, with no
+          anti-caking or yellow-prussiate additives that can stain. Enter your pool volume and current
+          salt reading above, and the calculator tells you exactly how many pounds (or bags) to add to
+          reach your target. Pour it across the deep end with the pump running, brush any piles off the
+          bottom so they dissolve instead of sitting on plaster, and run the pump for 24 hours before you
+          trust a re-test. Hold off on running the salt cell until the salt has fully dissolved and mixed.
+          If you’re lowering an over-salted pool, there’s no chemical that removes salt — you dilute it by
+          draining and refilling, and the calculator shows roughly how much water to swap to hit your
+          number.
+        </p>
+      </section>
+
       {/* FAQ */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <h2 className="font-display font-bold text-fg text-xl sm:text-2xl mb-5">Common questions</h2>

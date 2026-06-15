@@ -28,8 +28,16 @@ const HOME_FAQS: { q: string; a: string }[] = [
     a: 'Yes. Every tool builds a shareable link that restores your exact inputs, so you can send a result to a customer, family member, or friend and they will see the same numbers.',
   },
   {
-    q: 'Which pool calculators are coming next?',
-    a: 'Chlorine dosing, cyanuric acid (CYA), salt, water balance (LSI), and pool heating cost calculators are on the way. The pool volume calculator is live now.',
+    q: 'Which pool calculators can I use here?',
+    a: 'All of them are live. You can work out your pool volume, chlorine dose, shock dose, cyanuric acid (CYA), salt, muriatic acid, total alkalinity, calcium hardness, and water balance (LSI), plus run the numbers on pump runtime, variable-speed pump savings, and pool heating cost. Each one is a dedicated page with the formula shown and a shareable result.',
+  },
+  {
+    q: 'Do I need to know my pool volume first?',
+    a: 'For the chemical-dosing tools, yes — every dose scales with how much water you have, so an accurate volume is the foundation. If you do not know your gallons, start with the pool volume calculator (it handles rectangles, rounds, ovals, and varying-depth pools), then carry that number into the chlorine, salt, alkalinity, and other calculators.',
+  },
+  {
+    q: 'Do these tools work for above-ground pools, spas, and hot tubs?',
+    a: 'Yes. The calculators are driven by water volume and your current readings, not the type of pool, so they work the same for in-ground and above-ground pools as well as spas and hot tubs. Just enter the right volume — small spas need much smaller chemical doses, and the math handles that automatically.',
   },
 ];
 
@@ -173,6 +181,64 @@ export const HomePage = () => {
             to find your gallons — it’s the foundation every chemical dose is based on. From there,
             our chemistry tools build on that volume to tell you exactly how much to add. Every
             result comes with the formula we used and a link you can share.
+          </p>
+          <p>
+            For everyday water chemistry, the{' '}
+            <Link to="/chlorine-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              chlorine
+            </Link>
+            ,{' '}
+            <Link to="/pool-shock-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              shock
+            </Link>
+            , and{' '}
+            <Link to="/cya-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              cyanuric acid
+            </Link>{' '}
+            calculators keep your sanitizer working, while the{' '}
+            <Link to="/pool-alkalinity-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              alkalinity
+            </Link>
+            ,{' '}
+            <Link to="/calcium-hardness-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              calcium hardness
+            </Link>
+            ,{' '}
+            <Link to="/muriatic-acid-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              muriatic acid
+            </Link>
+            , and{' '}
+            <Link to="/lsi-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              water balance (LSI)
+            </Link>{' '}
+            tools keep the water from turning corrosive or scaling. Running a saltwater pool? The{' '}
+            <Link to="/salt-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              salt calculator
+            </Link>{' '}
+            sizes your salt dose, and on the equipment side the{' '}
+            <Link to="/pool-pump-runtime-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              pump runtime
+            </Link>
+            ,{' '}
+            <Link to="/variable-speed-pool-pump-savings-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              variable-speed pump savings
+            </Link>
+            , and{' '}
+            <Link to="/pool-heating-cost-calculator" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              heating cost
+            </Link>{' '}
+            calculators help you run the pool for less.
+          </p>
+          <p>
+            Every calculator uses standard, published pool-industry formulas, and each one shows the math
+            behind its answer so you can check the work instead of trusting a black box. We treat dosing
+            as health-adjacent: the numbers are careful estimates for planning, and you should always
+            confirm your water with a reliable test kit before adding chemicals. You can read more about
+            the formulas and sources we use on our{' '}
+            <Link to="/about" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
+              methodology page
+            </Link>
+            . No sign-up, no app, no email — just open a tool and get your answer.
           </p>
         </div>
       </section>

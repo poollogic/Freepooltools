@@ -105,6 +105,18 @@ const COMMON_QUESTIONS: { q: string; a: string }[] = [
     q: 'How do I convert gallons to liters?',
     a: 'Multiply gallons by 3.785 to get liters. So a 20,000-gallon pool is about 75,700 liters. This calculator displays both — just toggle "Gallons" or "Liters" at the top.',
   },
+  {
+    q: 'Why does my pool volume matter so much for chemicals?',
+    a: 'Almost every pool-chemistry dose is “add X amount per 10,000 gallons,” so your volume is the multiplier behind every calculation. Guess too high and you under-dose and never reach your target; guess too low and you over-dose, waste chemicals, and can push levels into an unsafe range. Getting an accurate gallon figure once, here, makes every later result — chlorine, salt, alkalinity, acid, calcium — correct. That is why we recommend finding your volume first, then carrying that number into the dosing calculators.',
+  },
+  {
+    q: 'How accurate is a pool volume calculator?',
+    a: 'For a standard rectangle, round, or oval with a uniform slope, a calculator is accurate to within a few percent — easily good enough for dosing. The main source of error is average depth, not the surface dimensions, so measure your shallow and deep ends carefully. Free-form and kidney-shaped pools are the hardest to estimate; for those, approximate the shape with the closest option and break unusual sections into pieces. When in doubt, round volume up slightly rather than down so you do not under-treat the water.',
+  },
+  {
+    q: 'How many gallons is a round above-ground pool?',
+    a: 'For a round pool, gallons = diameter × diameter × average depth × 5.9 (with all measurements in feet). A 24-foot round pool at 4 feet deep holds about 13,500 gallons; a 27-foot round at 4.5 feet is roughly 19,300 gallons; a smaller 15-foot round at 3.5 feet is around 4,650 gallons. Select the round shape above and enter your diameter and wall height to get the exact figure for your pool.',
+  },
 ];
 
 const faqPageSchema = {
@@ -2167,7 +2179,9 @@ const PoolVolumeCalculatorInner = ({ embed }: { embed: boolean }) => {
               How to measure your pool accurately
             </h2>
             <p className="text-muted text-sm">
-              Four quick tips for getting the right numbers into the fields above.
+              Four quick tips for getting the right numbers into the fields above. The surface
+              dimensions are easy — it’s depth that trips most people up, and depth is what moves
+              your gallon count the most, so it’s worth measuring carefully rather than guessing.
             </p>
           </div>
 
@@ -2208,6 +2222,15 @@ const PoolVolumeCalculatorInner = ({ embed }: { embed: boolean }) => {
               </div>
             ))}
           </div>
+          <p className="text-muted text-[15px] leading-relaxed mt-6 max-w-3xl">
+            Why the fuss about depth? Because volume scales directly with it: in a 16-by-32-foot pool,
+            every extra foot of average depth adds nearly 3,800 gallons. Get the length and width a few
+            inches off and your total barely moves, but misjudge the average depth by a foot and you can
+            be off by 15–20% — enough to throw every chemical dose that depends on this number. If your
+            pool slopes, measure the shallow and deep ends and let the calculator average them; if it has
+            distinct flat and sloped sections, the sloped-sections mode is more accurate still. When you
+            genuinely can’t tell, round the depth down slightly so you don’t overstate your gallons.
+          </p>
         </section>
         )}
 

@@ -49,12 +49,44 @@ export const AboutPage = () => {
           </div>
 
           <div>
+            <h2 className="font-display font-bold text-fg text-xl mb-2">Water chemistry &amp; dosing</h2>
+            <p>
+              Our dosing tools follow the standard relationships used across the pool industry. Chlorine,
+              salt, alkalinity, calcium, and acid doses are all expressed as a rate per volume of water —
+              for example, roughly 10–11 fluid ounces of 12.5% liquid chlorine raises a 10,000-gallon
+              pool by about 1 ppm of free chlorine — then scaled to your exact gallons and target. Our
+              chlorine guidance is built around the free-chlorine-to-cyanuric-acid (FC/CYA) relationship,
+              which determines how much of your chlorine is actually active. Water balance uses the{' '}
+              <strong>Langelier Saturation Index (LSI)</strong>, combining pH, total alkalinity, calcium
+              hardness, temperature, and total dissolved solids into a single number, with the standard
+              industry lookup factors and a TDS constant of 12.1 for traditional pools (12.2 for
+              saltwater). Each calculator prints the exact formula it used beneath the result.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display font-bold text-fg text-xl mb-2">Sources &amp; standards</h2>
+            <p>
+              The math here reflects long-established references rather than anything we invented: the
+              Langelier Saturation Index for water balance, the cyanuric-acid stabilization research that
+              underpins modern FC/CYA targets, manufacturer-published available-chlorine strengths for
+              each product, and the geometry of pool volume. We favor conservative, widely accepted
+              ranges — for instance, free chlorine targeted to your CYA level, total alkalinity around
+              80–120 ppm, calcium hardness around 200–400 ppm, and an LSI between −0.3 and +0.3. Where
+              sources disagree at the edges, we err toward the safer recommendation.
+            </p>
+          </div>
+
+          <div>
             <h2 className="font-display font-bold text-fg text-xl mb-2">Accuracy & limitations</h2>
             <p>
               Real pools have steps, benches, and irregular floors that a formula can't see, so
               treat results as close estimates rather than exact figures. For chemistry, your test
               kit is the source of truth — these tools tell you roughly how much to add, not whether
-              you've added it correctly.
+              you've added it correctly. Add chemicals gradually, re-test after the pump has circulated
+              the water, and never mix chemicals together. When a reading is far out of range, make a
+              partial correction, let it settle, and measure again rather than chasing the number in one
+              large dose.
             </p>
           </div>
         </div>

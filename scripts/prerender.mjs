@@ -100,20 +100,22 @@ function injectBody(html, body) {
 }
 
 /**
- * Inline the build CSS into a <style> in <head> and drop the render-blocking
- * <link>, so first paint never waits on a stylesheet request. A <noscript>
- * <link> covers the JS-off case.
+ * We intentionally ship the build CSS as the external <link rel="stylesheet">
+ * that Vite emits, rather than inlining it into a <style> block.
+ *
+ * History: this script used to inline the whole CSS bundle to avoid a
+ * render-blocking stylesheet request on first paint. But on a multi-page tool
+ * site that backfires two ways: (1) the ~58KB bundle is re-sent inside *every*
+ * prerendered HTML page (no cross-page caching — a searcher landing on a
+ * different calculator re-downloads it every time), and (2) it crushed the
+ * text-to-HTML ratio to 3-9%, tripping Semrush's "low text-HTML ratio" warning
+ * on all 22 pages. An external, same-origin, HTTP/2, CDN-cached stylesheet is
+ * fetched once, cached across the whole site, keeps the HTML small, and is
+ * discovered immediately because Vite's <link> sits at the top of <head>.
+ *
+ * Do NOT re-inline the CSS here. If first-paint CSS ever needs tightening,
+ * extract genuine *critical* (above-the-fold) CSS only — never the full bundle.
  */
-function inlineCss(html, cssHref, cssText) {
-  const linkRe = new RegExp(
-    `<link rel="stylesheet"[^>]*href="${cssHref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]*>`,
-  );
-  if (!linkRe.test(html)) return html;
-  const replacement =
-    `<style>${cssText}</style>\n    ` +
-    `<noscript><link rel="stylesheet" crossorigin href="${cssHref}" /></noscript>`;
-  return html.replace(linkRe, replacement);
-}
 
 async function writeSitemap(routes) {
   const today = new Date().toISOString().slice(0, 10);
@@ -136,12 +138,8 @@ async function run() {
   const template = await fs.readFile(TEMPLATE, 'utf8');
   const { render, PRERENDER_ROUTES, NOT_FOUND_PATH } = await import(pathToFileURL(SERVER_ENTRY).href);
 
-  const cssHref = (template.match(/<link rel="stylesheet"[^>]*href="([^"]+)"/) || [])[1];
-  let cssText = '';
-  if (cssHref) {
-    cssText = await fs.readFile(path.join(CLIENT_DIST, cssHref.replace(/^\//, '')), 'utf8');
-  } else {
-    console.warn('⚠ No stylesheet <link> found in template — skipping CSS inline.');
+  if (!/<link rel="stylesheet"[^>]*href="[^"]+"/.test(template)) {
+    console.warn('⚠ No external stylesheet <link> in template — pages may render unstyled.');
   }
 
   let count = 0;
@@ -159,7 +157,6 @@ async function run() {
     let html = template;
     html = injectHead(html, meta);
     html = injectBody(html, body);
-    if (cssText) html = inlineCss(html, cssHref, cssText);
 
     const outDir = route === '/' ? CLIENT_DIST : path.join(CLIENT_DIST, route.replace(/^\//, ''));
     const outFile = path.join(outDir, 'index.html');
@@ -175,7 +172,6 @@ async function run() {
     let nfHtml = template;
     nfHtml = injectHead(nfHtml, nf.meta);
     nfHtml = injectBody(nfHtml, nf.html);
-    if (cssText) nfHtml = inlineCss(nfHtml, cssHref, cssText);
     await fs.writeFile(path.join(CLIENT_DIST, '404.html'), nfHtml);
     console.log('✓ 404 → dist/404.html');
   } catch (err) {
