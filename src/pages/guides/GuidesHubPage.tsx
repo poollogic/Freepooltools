@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
-import { m } from 'motion/react';
 import { BookOpen, ArrowRight } from 'lucide-react';
 import { PageShell } from '@/components/PageShell';
-import { MotionProvider } from '@/components/MotionProvider';
 import { usePageMeta } from '@/lib/usePageMeta';
 import { SITE_ORIGIN } from '@/lib/site';
 import { GUIDES, LIVE_GUIDES } from '@/data/guides';
@@ -29,8 +27,7 @@ export const GuidesHubPage = () => {
   });
 
   return (
-    <MotionProvider>
-      <PageShell>
+    <PageShell>
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-10 text-center">
         <div className="inline-flex items-center gap-2 mb-5 rounded-full border border-line bg-card-2 backdrop-blur-[10px] px-3.5 py-1.5">
           <BookOpen className="w-3.5 h-3.5 text-brand-orange" />
@@ -69,7 +66,7 @@ export const GuidesHubPage = () => {
             );
             const base = 'group flex flex-col h-full rounded-2xl border border-line bg-card p-6 elevate transition-all';
             return (
-              <m.div key={g.path} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}>
+              <div key={g.path} className="card-rise" style={{ animationDelay: `${i * 0.06}s` }}>
                 {soon ? (
                   <div className={`${base} opacity-70`}>{inner}</div>
                 ) : (
@@ -77,7 +74,7 @@ export const GuidesHubPage = () => {
                     {inner}
                   </Link>
                 )}
-              </m.div>
+              </div>
             );
           })}
         </div>
@@ -147,7 +144,6 @@ export const GuidesHubPage = () => {
           </p>
         </div>
       </section>
-      </PageShell>
-    </MotionProvider>
+    </PageShell>
   );
 };

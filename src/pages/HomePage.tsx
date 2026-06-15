@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
-import { m } from 'motion/react';
 import { ArrowRight, Wrench, Check, Plus } from 'lucide-react';
 import { PageShell } from '@/components/PageShell';
-import { MotionProvider } from '@/components/MotionProvider';
 import { usePageMeta } from '@/lib/usePageMeta';
 import { TOOLS, LIVE_TOOLS } from '@/data/tools';
 import { SITE_ORIGIN } from '@/lib/site';
@@ -74,8 +72,7 @@ export const HomePage = () => {
   });
 
   return (
-    <MotionProvider>
-      <PageShell>
+    <PageShell>
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12 text-center">
         <div className="inline-flex items-center gap-2 mb-5 rounded-full border border-line bg-card-2 backdrop-blur-[10px] px-3.5 py-1.5">
@@ -138,13 +135,7 @@ export const HomePage = () => {
               'group flex flex-col h-full rounded-2xl border border-line bg-card p-6 elevate transition-all';
 
             return (
-              <m.div
-                key={tool.path}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
-              >
+              <div key={tool.path} className="card-rise" style={{ animationDelay: `${i * 0.06}s` }}>
                 {soon ? (
                   <div className={`${base} opacity-70`}>{inner}</div>
                 ) : (
@@ -152,7 +143,7 @@ export const HomePage = () => {
                     {inner}
                   </Link>
                 )}
-              </m.div>
+              </div>
             );
           })}
         </div>
@@ -268,7 +259,6 @@ export const HomePage = () => {
           ))}
         </div>
       </section>
-      </PageShell>
-    </MotionProvider>
+    </PageShell>
   );
 };

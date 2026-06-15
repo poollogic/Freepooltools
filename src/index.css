@@ -263,6 +263,25 @@ html.light .theme-knob-sun {
     transform-origin: center;
   }
 }
+
+/* Grid cards: subtle staggered slide-up on load (stagger via inline
+   animation-delay). Transform-only — opacity stays 1 — so the cards are painted
+   immediately (never gates LCP) and there's no layout shift (CLS stays 0).
+   Replaces the old motion/JS fade-in, which left cards opacity:0 until the
+   motion chunk loaded and hurt LCP on the home + guides pages. */
+@media (prefers-reduced-motion: no-preference) {
+  .card-rise {
+    animation: card-rise 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+}
+@keyframes card-rise {
+  from {
+    transform: translateY(14px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
 @keyframes dgm-draw {
   to {
     stroke-dashoffset: 0;
