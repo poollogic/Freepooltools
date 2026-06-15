@@ -1,0 +1,35 @@
+# Free Pool Tools
+
+> Free, instant pool calculators and plain-English water-chemistry guides for pool owners and pool pros. Work out pool volume, chlorine and shock doses, salt, stabilizer (CYA), alkalinity, calcium hardness, acid, water balance (LSI), pump runtime, and heating costs — no email, no signup.
+
+Free Pool Tools (freepooltools.com) is a free reference site of pool calculators and guides. Calculators are CYA-aware where it matters, work for any pool shape and size, and return instant results with no signup. The guides explain the "why" behind pool water chemistry so the numbers make sense.
+
+## Calculators
+
+- [Pool Volume Calculator](https://freepooltools.com/pool-volume-calculator/): Instant gallons or liters for any shape — rectangle, round, oval, kidney, freeform, or spa.
+- [Chlorine Calculator](https://freepooltools.com/chlorine-calculator/): How much liquid chlorine, bleach, or shock to reach your target free chlorine — CYA-aware doses.
+- [Pool Shock Calculator](https://freepooltools.com/pool-shock-calculator/): How much liquid chlorine or cal-hypo to shock for algae or chloramines, at the right level for your CYA.
+- [Salt Calculator](https://freepooltools.com/salt-calculator/): How much salt to add to hit your salt system's target (2,700–3,400 ppm), or how much to drain to lower it.
+- [Stabilizer (CYA) Calculator](https://freepooltools.com/cya-calculator/): How much cyanuric acid to add, or water to drain to lower CYA, with targets for chlorine and saltwater pools.
+- [Alkalinity Calculator](https://freepooltools.com/pool-alkalinity-calculator/): How much baking soda (sodium bicarbonate) to raise total alkalinity to your target.
+- [Muriatic Acid Calculator](https://freepooltools.com/muriatic-acid-calculator/): How much acid to lower pool pH or total alkalinity, for any pool size.
+- [Calcium Hardness Calculator](https://freepooltools.com/calcium-hardness-calculator/): How much calcium chloride to raise hardness to target — flake or anhydrous.
+- [Water Balance (LSI) Calculator](https://freepooltools.com/lsi-calculator/): Whether your water is balanced, corrosive, or scaling, from pH, alkalinity, calcium hardness, and temperature.
+- [Pump Runtime Calculator](https://freepooltools.com/pool-pump-runtime-calculator/): How many hours a day to run your pump for a full turnover, plus the electricity cost.
+- [Variable-Speed Pump Savings Calculator](https://freepooltools.com/variable-speed-pool-pump-savings-calculator/): Yearly energy savings of switching from a single-speed pump to variable-speed.
+- [Pool Heating Cost Calculator](https://freepooltools.com/pool-heating-cost-calculator/): Cost, energy, and time to heat your pool by gas, propane, or electric heat pump.
+
+## Guides
+
+- [How to Fix a Green Pool Fast](https://freepooltools.com/guides/how-to-fix-a-green-pool/): Kill the algae with chlorine at the right shock level for your CYA, and hold it until the water clears.
+- [Cloudy Pool Water: Causes & Fixes](https://freepooltools.com/guides/cloudy-pool-water/): The four causes — chlorine, chemistry, filtration, particles — and how to tell which one you have.
+- [How Cyanuric Acid Affects Chlorine](https://freepooltools.com/guides/cyanuric-acid-and-chlorine/): How CYA protects chlorine from sunlight, and the FC/CYA ratio that keeps it working.
+- [How Often to Shock Your Pool](https://freepooltools.com/guides/how-often-to-shock-your-pool/): The default 1–2 week cadence, plus the six triggers for shocking sooner.
+- [How Long After Shocking Can You Swim?](https://freepooltools.com/guides/how-long-after-shocking-pool-can-you-swim/): Usually 8–24 hours — and why the safe level depends on your stabilizer (CYA).
+- [How to Drain a Pool With a Garden Hose](https://freepooltools.com/guides/how-to-drain-a-pool-with-a-garden-hose/): Setting up a garden-hose siphon step by step, with diagrams.
+- [Why Won't My Pool Hold Chlorine?](https://freepooltools.com/guides/why-wont-my-pool-hold-chlorine/): Find the cause with one overnight test — algae demand, low stabilizer, a bad test kit — and the fix for each.
+- [All Pool Care Guides](https://freepooltools.com/guides/): Plain-English guides to pool water chemistry.
+
+## About
+
+- [How We Calculate — Methodology & Sources](https://freepooltools.com/about/): The formulas, assumptions, and sources behind the calculators.
