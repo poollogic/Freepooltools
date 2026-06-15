@@ -377,7 +377,7 @@ export const ChlorineCalculatorPage = () => {
                     CYA shields chlorine from sunlight — essential outdoors. It also sets your correct
                     chlorine target: <strong className="text-muted">higher CYA needs more chlorine</strong>. Ideal range 30–50 ppm.{' '}
                     <a href="/guides/cyanuric-acid-and-chlorine/" className="text-brand-orange font-semibold hover:text-brand-orange-dark">
-                      Learn more →
+                      How CYA affects chlorine →
                     </a>
                   </p>
                 </div>
