@@ -178,9 +178,12 @@ async function run() {
     console.error('✗ 404 render failed:', err.message);
   }
 
-  // Embeds are prerendered (so the widget has static HTML) but kept out of the
-  // sitemap — they're noindex and would just be duplicate-content noise.
-  await writeSitemap(PRERENDER_ROUTES.filter((r) => !r.startsWith('/embed')));
+  // Embeds and the private /admin console are prerendered (so they have static
+  // HTML) but kept out of the sitemap — both are noindex (embeds are
+  // duplicate-content noise; /admin is private).
+  await writeSitemap(
+    PRERENDER_ROUTES.filter((r) => !r.startsWith('/embed') && !r.startsWith('/admin')),
+  );
   console.log(`\nPrerendered ${count}/${PRERENDER_ROUTES.length} routes.`);
 }
 

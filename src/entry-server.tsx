@@ -29,6 +29,7 @@ import { GreenPoolGuide } from '@/pages/guides/GreenPoolGuide';
 import { HoldChlorineGuide } from '@/pages/guides/HoldChlorineGuide';
 import { CloudyWaterGuide } from '@/pages/guides/CloudyWaterGuide';
 import { ShockFrequencyGuide } from '@/pages/guides/ShockFrequencyGuide';
+import { AdminPage } from '@/pages/AdminPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
 // Routes to prerender. Keep in sync with App.tsx's route table. These get their
@@ -57,6 +58,9 @@ export const PRERENDER_ROUTES = [
   '/guides/why-wont-my-pool-hold-chlorine',
   '/guides/cloudy-pool-water',
   '/guides/how-often-to-shock-your-pool',
+  // Private admin console: prerendered so /admin returns real HTML (200), but
+  // noindex + excluded from the sitemap (see scripts/prerender.mjs).
+  '/admin',
 ];
 
 // Rendered separately to dist/404.html — Cloudflare Pages serves it (with a 404
@@ -88,6 +92,7 @@ const Routing = () => (
     <Route path="/guides/why-wont-my-pool-hold-chlorine" element={<HoldChlorineGuide />} />
     <Route path="/guides/cloudy-pool-water" element={<CloudyWaterGuide />} />
     <Route path="/guides/how-often-to-shock-your-pool" element={<ShockFrequencyGuide />} />
+    <Route path="/admin" element={<AdminPage />} />
     <Route path="*" element={<NotFoundPage />} />
   </Routes>
 );

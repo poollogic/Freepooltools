@@ -67,6 +67,9 @@ const CloudyWaterGuide = lazy(() =>
 const ShockFrequencyGuide = lazy(() =>
   import('@/pages/guides/ShockFrequencyGuide').then((m) => ({ default: m.ShockFrequencyGuide })),
 );
+// Private outreach console — not linked anywhere public; noindex + kept out of
+// the sitemap. Its own lazy chunk so none of its code touches the public tools.
+const AdminPage = lazy(() => import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage })));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 
 // On route change, jump to top (unless navigating to an in-page #anchor).
@@ -109,6 +112,7 @@ export default function App() {
           <Route path="/guides/why-wont-my-pool-hold-chlorine" element={<HoldChlorineGuide />} />
           <Route path="/guides/cloudy-pool-water" element={<CloudyWaterGuide />} />
           <Route path="/guides/how-often-to-shock-your-pool" element={<ShockFrequencyGuide />} />
+          <Route path="/admin" element={<AdminPage />} />
           {/* Catch-all 404 — must be last. */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

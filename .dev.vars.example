@@ -1,0 +1,6 @@
+# Copy to .dev.vars (gitignored) for local testing with `npx wrangler pages dev dist`.
+# In production these are set in the Cloudflare Pages dashboard, NOT in this file.
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxx
+ADMIN_PASSWORD=choose-a-long-random-password
+SENDER_EMAIL=jonathan@freepooltools.com
+SENDER_NAME=Jonathan

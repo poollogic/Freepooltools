@@ -23,5 +23,8 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  // The Cloudflare Pages Function runs on the Workers runtime (not the app's DOM
+  // build) and is compiled by Cloudflare at deploy, so keep it out of `tsc`.
+  "exclude": ["node_modules", "dist", "dist-ssr", "functions"]
 }

@@ -2,7 +2,10 @@
 
 This is a prerendered (static) Vite + React site. The build produces a fully
 static `dist/` — every route is real HTML — so Cloudflare Pages just serves
-files. No Workers/Functions required for v1.
+files. The one exception is the private `/admin` outreach console, which posts
+to a single Cloudflare Pages Function at `/api/send-email` (see
+[docs/ADMIN.md](docs/ADMIN.md)); `public/_routes.json` scopes the Functions
+runtime to `/api/*` so everything else is still served as plain static files.
 
 ## Cloudflare Pages project settings
 
