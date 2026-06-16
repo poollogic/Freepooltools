@@ -382,6 +382,14 @@ html.light .theme-knob-sun {
     background-color: var(--color-canvas);
   }
 
+  /* Kill the scroll-chaining / rubber-band bounce (and pull-to-refresh) so the
+     app feels native and edges don't glow/bounce past content. */
+  html,
+  body,
+  #root {
+    overscroll-behavior: none;
+  }
+
   /* Hide scrollbars site-wide while keeping scroll behavior intact. */
   html,
   body,
